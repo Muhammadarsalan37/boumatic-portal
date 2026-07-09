@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BouMatic — GMOP Marketing</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+:root{--ac:#7c3aed;--al:#f5f3ff;--ad:#4c1d95;--gr:#16a34a;--gl:#dcfce7;--am:#d97706;--aml:#fef3c7;--rd:#dc2626;--rl:#fee2e2;--bl:#dbeafe;--bc:#1e40af;--bdr:#e5e7eb;--sf:#fff;--pg:#f9fafb;--tx:#111827;--t2:#6b7280;--t3:#9ca3af;--r:8px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--pg);color:var(--tx);font-size:13px}
+.lw{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#2e1065,#7c3aed);padding:20px}
+.lc{background:#fff;border-radius:16px;padding:36px 32px;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.ll{font-size:20px;font-weight:700;color:var(--ac);margin-bottom:2px}
+.ls{font-size:12px;color:var(--t2);margin-bottom:24px}
+.fr{margin-bottom:12px}
+.fr label{display:block;font-size:11px;font-weight:600;color:var(--t2);margin-bottom:3px;text-transform:uppercase}
+.fi{width:100%;padding:9px 11px;border:1.5px solid #d1d5db;border-radius:var(--r);font-family:inherit;font-size:13px}
+.fi:focus{outline:none;border-color:var(--ac)}
+.bl{width:100%;padding:11px;background:var(--ac);color:#fff;border:none;border-radius:var(--r);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.bl:hover{background:var(--ad)}
+.lerr{color:#dc2626;font-size:12px;margin-top:8px;text-align:center;display:none}
+.hint{font-size:11px;color:var(--t3);text-align:center;margin-top:10px}
+.app{display:flex;height:100vh;overflow:hidden}
+.sb{width:220px;min-width:220px;background:#2e1065;display:flex;flex-direction:column;overflow-y:auto}
+.sbr{padding:16px;border-bottom:1px solid rgba(255,255,255,.1)}
+.sbn{font-size:13px;font-weight:700;color:#fff}
+.sbs{font-size:10px;color:rgba(255,255,255,.4)}
+.sup{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.08)}
+.sav{width:30px;height:30px;border-radius:50%;background:var(--ac);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.sun{font-size:12px;font-weight:500;color:#fff}.sur{font-size:10px;color:rgba(255,255,255,.4)}
+.nsc{padding:10px 14px 3px;font-size:10px;font-weight:600;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.06em}
+.ni{display:flex;align-items:center;gap:8px;padding:7px 14px;cursor:pointer;color:rgba(255,255,255,.6);font-size:12px;border-left:3px solid transparent}
+.ni:hover{background:rgba(255,255,255,.07);color:#fff}
+.ni.active{background:rgba(124,58,237,.4);color:#fff;border-left-color:var(--ac)}
+.ni i{font-size:15px}
+.lo{margin:auto 12px 12px;padding:7px 10px;border:1px solid rgba(255,255,255,.18);border-radius:var(--r);background:transparent;color:rgba(255,255,255,.6);font-family:inherit;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:6px;width:calc(100%-24px)}
+.lo:hover{background:rgba(255,255,255,.1);color:#fff}
+.mn{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.tb{display:flex;align-items:center;gap:10px;padding:11px 20px;border-bottom:1px solid var(--bdr);background:#fff;position:sticky;top:0;z-index:5}
+.tb-m{display:none;background:none;border:none;font-size:20px;cursor:pointer;color:var(--t2)}
+.tb h1{font-size:15px;font-weight:600;flex:1}
+.ct{padding:18px 20px;flex:1}
+.sc{display:none}.sc.active{display:block}
+.sts{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.st{background:#fff;border:1px solid var(--bdr);border-radius:10px;padding:12px 14px}
+.sl{font-size:11px;color:var(--t2);margin-bottom:3px}
+.sv{font-size:22px;font-weight:700}
+.ss{font-size:11px;color:var(--t2);margin-top:2px}
+.cd{background:#fff;border:1px solid var(--bdr);border-radius:10px;margin-bottom:12px;overflow:hidden}
+.ch{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--bdr);gap:8px;flex-wrap:wrap}
+.cht{font-size:13px;font-weight:600}
+.cb{padding:14px}
+.tc{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;color:var(--t2);font-weight:500;font-size:11px;padding:7px 10px;border-bottom:1px solid var(--bdr);background:var(--pg)}
+td{padding:8px 10px;border-bottom:1px solid var(--bdr);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--pg)}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:var(--r);border:1px solid #d1d5db;background:#fff;color:var(--tx);font-size:12px;cursor:pointer;font-family:inherit;white-space:nowrap;font-weight:500}
+.btn:hover{background:var(--pg)}
+.bp{background:var(--ac);color:#fff;border-color:var(--ac)}.bp:hover{background:var(--ad)}
+.bg{background:var(--gl);color:#166534;border-color:#86efac}
+.br{color:#991b1b;border-color:#fca5a5}.br:hover{background:var(--rl)}
+.bsm{padding:3px 9px;font-size:11px}
+.bdg{display:inline-block;padding:2px 7px;border-radius:20px;font-size:11px;font-weight:600}
+.dg{background:var(--gl);color:#166534}.da{background:var(--aml);color:#92400e}.dr{background:var(--rl);color:#991b1b}.db{background:var(--bl);color:var(--bc)}.dp{background:var(--al);color:var(--ad)}.dgr{background:#f3f4f6;color:#374151}
+input,select,textarea{font-family:'Inter',sans-serif;font-size:13px;padding:8px 10px;border:1px solid #d1d5db;border-radius:var(--r);background:#fff;color:var(--tx);width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ac)}
+textarea{resize:vertical;min-height:65px}
+.fg{margin-bottom:11px}
+.fg label{display:block;font-size:11px;font-weight:600;color:var(--t2);margin-bottom:3px;text-transform:uppercase}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px}
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto}
+.ov.open{display:flex}
+.mo{background:#fff;border-radius:14px;border:1px solid var(--bdr);padding:22px;width:100%;max-width:520px;margin:auto}
+.molg{max-width:680px}
+.mt2{font-size:14px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.cx{background:none;border:none;font-size:18px;cursor:pointer;color:var(--t3);padding:0}
+.emp{text-align:center;padding:28px;color:var(--t3);font-size:12px}
+.pb{height:5px;background:#f3f4f6;border-radius:3px;overflow:hidden}
+.pf{height:100%;border-radius:3px}
+.sbb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:49}
+.sbb.open{display:block}
+.ev-card{background:#fff;border:1px solid var(--bdr);border-radius:10px;padding:14px;margin-bottom:10px}
+.ev-title{font-size:14px;font-weight:600;margin-bottom:4px}
+.ev-meta{font-size:11px;color:var(--t2);display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.ev-budget{display:flex;gap:12px;font-size:12px;margin-top:8px;flex-wrap:wrap}
+.ev-bitem{background:var(--pg);border-radius:6px;padding:6px 10px}
+.ev-bitem .lbl{font-size:10px;color:var(--t3);margin-bottom:2px}
+.ev-bitem .val{font-size:13px;font-weight:700}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-hdr{font-size:10px;font-weight:600;color:var(--t2);text-align:center;padding:4px}
+.cal-day{border:1px solid var(--bdr);border-radius:6px;min-height:64px;padding:4px;background:#fff;font-size:10px}
+.cal-day-num{font-weight:600;color:var(--t2);margin-bottom:2px}
+.cal-ev{border-radius:3px;padding:2px 4px;margin-bottom:2px;font-size:9px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs{display:flex;border-bottom:1px solid var(--bdr);margin-bottom:14px}
+.tab{padding:7px 14px;cursor:pointer;font-size:12px;font-weight:500;color:var(--t2);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab.active{color:var(--ac);border-bottom-color:var(--ac)}
+@media(max-width:768px){.sb{position:fixed;left:0;top:0;bottom:0;z-index:50;transform:translateX(-100%)}.sb.open{transform:translateX(0)}.tb-m{display:block}.sts{grid-template-columns:1fr 1fr}.tc,.g2,.g3{grid-template-columns:1fr}.ct{padding:14px}.ov{padding:12px}.mo{max-width:100%}}
+</style>
+</head>
+<body>
+<div class="lw" id="login-screen">
+<div class="lc">
+  <div class="ll"><i class="ti ti-speakerphone"></i> GMOP Marketing</div>
+  <div class="ls">BouMatic Global Marketing Operations Platform</div>
+  <div class="fr"><label>Username</label><input class="fi" id="l-user" placeholder="e.g. mkt.mgr"></div>
+  <div class="fr"><label>PIN</label><input class="fi" id="l-pin" type="password" placeholder="6-digit PIN" maxlength="6"></div>
+  <div class="lerr" id="l-err"><i class="ti ti-alert-circle"></i> Invalid username or PIN</div>
+  <button class="bl" onclick="doLogin()"><i class="ti ti-login"></i> Sign in</button>
+  <div class="hint">Marketing: mkt.mgr / 600001 · Admin: admin / 999999</div>
+</div>
+</div>
+
+<div class="app" id="app-screen" style="display:none">
+<div class="sb" id="sidebar">
+  <div class="sbr"><div class="sbn"><i class="ti ti-speakerphone"></i> GMOP</div><div class="sbs">Global Marketing Platform</div></div>
+  <div class="sup"><div class="sav" id="sb-av">?</div><div><div class="sun" id="sb-name">—</div><div class="sur" id="sb-role">—</div></div></div>
+  <div id="nav-links"></div>
+  <button class="lo" onclick="logout()"><i class="ti ti-logout"></i> Sign out</button>
+</div>
+<div class="sbb" id="sb-bg" onclick="closeSb()"></div>
+<div class="mn">
+  <div class="tb">
+    <button class="tb-m" onclick="toggleSb()"><i class="ti ti-menu-2"></i></button>
+    <h1 id="pg-title">Dashboard</h1>
+    <div id="tb-acts"></div>
+  </div>
+  <div class="ct">
+
+    <div id="s-dash" class="sc active">
+      <div class="sts" id="d-stats"></div>
+      <div class="tc">
+        <div class="cd"><div class="ch"><span class="cht">My tasks</span></div><div id="d-tasks"></div></div>
+        <div class="cd"><div class="ch"><span class="cht">Upcoming events</span></div><div id="d-events"></div></div>
+      </div>
+      <div class="cd"><div class="ch"><span class="cht">Budget overview</span></div>
+        <table><thead><tr><th>Project / Event</th><th>Region</th><th>Planned</th><th>Actual</th><th>Remaining</th><th>Utilization</th></tr></thead><tbody id="d-budget"></tbody></table>
+      </div>
+    </div>
+
+    <div id="s-projects" class="sc">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:12px;gap:8px">
+        <select id="pj-reg-f" onchange="renderProjects()" style="width:auto;font-size:12px;padding:5px 8px"><option value="">All regions</option><option>Global</option><option>Europe</option><option>North America</option><option>Asia Pacific</option></select>
+        <button class="btn bp bsm" onclick="openMo('m-add-proj')"><i class="ti ti-plus"></i>New project</button>
+      </div>
+      <div id="proj-list"></div>
+    </div>
+
+    <div id="s-events" class="sc">
+      <div style="display:flex;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+        <div class="tabs" style="margin:0;border:none"><div class="tab active" onclick="evView('list',this)">List</div><div class="tab" onclick="evView('cal',this)">Calendar</div></div>
+        <button class="btn bp bsm" onclick="openMo('m-add-ev')"><i class="ti ti-plus"></i>Add event</button>
+      </div>
+      <div id="ev-list-view"></div>
+      <div id="ev-cal-view" style="display:none"><div class="cal-grid" id="cal-grid"></div></div>
+    </div>
+
+    <div id="s-campaigns" class="sc">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+        <button class="btn bp bsm" onclick="openMo('m-add-camp')"><i class="ti ti-plus"></i>New campaign</button>
+      </div>
+      <table><thead><tr><th>Campaign</th><th>Project</th><th>Region</th><th>Goal</th><th>Budget</th><th>Start</th><th>End</th><th>Status</th></tr></thead><tbody id="camp-body"></tbody></table>
+    </div>
+
+    <div id="s-content" class="sc">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+        <button class="btn bp bsm" onclick="openMo('m-add-content')"><i class="ti ti-plus"></i>New content</button>
+      </div>
+      <table><thead><tr><th>Title</th><th>Type</th><th>Project</th><th>Owner</th><th>Due</th><th>Status</th></tr></thead><tbody id="content-body"></tbody></table>
+    </div>
+
+    <div id="s-testimonials" class="sc">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+        <button class="btn bp bsm" onclick="openMo('m-add-test')"><i class="ti ti-plus"></i>Add testimonial</button>
+      </div>
+      <div id="test-list"></div>
+    </div>
+
+    <div id="s-budget" class="sc">
+      <div class="sts" id="bgt-stats"></div>
+      <div class="cd"><div class="ch"><span class="cht">Budget breakdown</span></div>
+        <table><thead><tr><th>Item</th><th>Category</th><th>Region</th><th>Planned (€)</th><th>Actual (€)</th><th>Remaining</th><th>Status</th></tr></thead><tbody id="bgt-body"></tbody></table>
+      </div>
+    </div>
+
+    <div id="s-reports" class="sc">
+      <div class="sts" id="roi-stats"></div>
+      <div class="tc">
+        <div class="cd"><div class="ch"><span class="cht">KPI performance</span></div>
+          <table><thead><tr><th>KPI</th><th>Target</th><th>Actual</th><th>Status</th></tr></thead><tbody id="kpi-body"></tbody></table>
+        </div>
+        <div class="cd"><div class="ch"><span class="cht">Event ROI</span></div>
+          <table><thead><tr><th>Event</th><th>Cost (€)</th><th>Leads</th><th>Pipeline (€)</th><th>ROI</th></tr></thead><tbody id="roi-body"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- MODALS -->
+<div id="m-add-proj" class="ov"><div class="mo">
+  <div class="mt2">New marketing project<button class="cx" onclick="closeMo('m-add-proj')">×</button></div>
+  <div class="g2"><div class="fg"><label>Project name</label><input id="pjn" placeholder="Project title"></div><div class="fg"><label>Region</label><select id="pjr"><option>Global</option><option>Europe</option><option>North America</option><option>Asia Pacific</option></select></div></div>
+  <div class="g2"><div class="fg"><label>Start</label><input type="date" id="pjs"></div><div class="fg"><label>End</label><input type="date" id="pje"></div></div>
+  <div class="g2"><div class="fg"><label>Budget (€)</label><input type="number" id="pjb" placeholder="0"></div><div class="fg"><label>Status</label><select id="pjst"><option>Planning</option><option>Active</option><option>On hold</option><option>Done</option></select></div></div>
+  <div class="fg"><label>Description</label><textarea id="pjd"></textarea></div>
+  <button class="btn bp" style="width:100%;margin-top:4px" onclick="addProject()"><i class="ti ti-check"></i>Create</button>
+</div></div>
+
+<div id="m-add-ev" class="ov"><div class="mo molg">
+  <div class="mt2">Add event<button class="cx" onclick="closeMo('m-add-ev')">×</button></div>
+  <div class="g2"><div class="fg"><label>Event name</label><input id="evn" placeholder="EuroTier 2026"></div><div class="fg"><label>Type</label><select id="evt"><option>Trade show</option><option>Conference</option><option>Webinar</option><option>Customer visit</option><option>Internal</option></select></div></div>
+  <div class="g3"><div class="fg"><label>Location</label><input id="evl" placeholder="Hannover, Germany"></div><div class="fg"><label>Start date</label><input type="date" id="evs"></div><div class="fg"><label>End date</label><input type="date" id="eve"></div></div>
+  <div class="g2"><div class="fg"><label>Budget planned (€)</label><input type="number" id="evbp" placeholder="0"></div><div class="fg"><label>Region</label><select id="evr"><option>Global</option><option>Europe</option><option>North America</option><option>Asia Pacific</option></select></div></div>
+  <div class="fg"><label>Notes</label><textarea id="evnotes"></textarea></div>
+  <button class="btn bp" style="width:100%;margin-top:4px" onclick="addEvent()"><i class="ti ti-check"></i>Add event</button>
+</div></div>
+
+<div id="m-add-camp" class="ov"><div class="mo">
+  <div class="mt2">New campaign<button class="cx" onclick="closeMo('m-add-camp')">×</button></div>
+  <div class="fg"><label>Campaign name</label><input id="cn" placeholder="Campaign title"></div>
+  <div class="g2"><div class="fg"><label>Region</label><select id="cr"><option>Global</option><option>Europe</option><option>North America</option></select></div><div class="fg"><label>Budget (€)</label><input type="number" id="cb" placeholder="0"></div></div>
+  <div class="g2"><div class="fg"><label>Start</label><input type="date" id="cs"></div><div class="fg"><label>End</label><input type="date" id="ce"></div></div>
+  <div class="fg"><label>Goal / KPI</label><input id="cg" placeholder="e.g. 50 leads, 20% brand recall"></div>
+  <button class="btn bp" style="width:100%;margin-top:4px" onclick="addCampaign()"><i class="ti ti-check"></i>Create campaign</button>
+</div></div>
+
+<div id="m-add-content" class="ov"><div class="mo">
+  <div class="mt2">New content item<button class="cx" onclick="closeMo('m-add-content')">×</button></div>
+  <div class="fg"><label>Title</label><input id="ctn" placeholder="Content title"></div>
+  <div class="g2"><div class="fg"><label>Type</label><select id="ctt"><option>Blog post</option><option>Video</option><option>Brochure</option><option>Social media</option><option>Email</option><option>Case study</option><option>White paper</option></select></div><div class="fg"><label>Due date</label><input type="date" id="ctd"></div></div>
+  <div class="fg"><label>Status</label><select id="cts"><option>Brief</option><option>In production</option><option>Review</option><option>Approved</option><option>Published</option></select></div>
+  <button class="btn bp" style="width:100%;margin-top:4px" onclick="addContent()"><i class="ti ti-check"></i>Add content</button>
+</div></div>
+
+<div id="m-add-test" class="ov"><div class="mo">
+  <div class="mt2">Add testimonial<button class="cx" onclick="closeMo('m-add-test')">×</button></div>
+  <div class="g2"><div class="fg"><label>Customer name</label><input id="tn" placeholder="Farm / company name"></div><div class="fg"><label>Country</label><input id="tc" placeholder="Netherlands"></div></div>
+  <div class="fg"><label>Quote / summary</label><textarea id="tq" placeholder="What the customer said…"></textarea></div>
+  <div class="g2"><div class="fg"><label>Product referenced</label><input id="tp" placeholder="AMS Robot, Parts, etc."></div><div class="fg"><label>Status</label><select id="ts"><option>Draft</option><option>Approved</option><option>Published</option></select></div></div>
+  <button class="btn bp" style="width:100%;margin-top:4px" onclick="addTestimonial()"><i class="ti ti-check"></i>Add testimonial</button>
+</div></div>
+
+<script>
+const USERS=[
+  {id:1,username:'arsalan.m',pin:'100001',name:'Arsalan M.',dept:'Customer Service',role:'admin',region:'Global'},
+  {id:60,username:'mkt.mgr',pin:'600001',name:'Marketing Manager',dept:'Marketing',role:'manager',region:'Global'},
+  {id:61,username:'mkt.eu',pin:'600002',name:'Marketing EU',dept:'Marketing',role:'employee',region:'Europe'},
+  {id:99,username:'admin',pin:'999999',name:'HR Admin',dept:'HR',role:'admin',region:'Global'},
+];
+function av(name){return(name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}
+function sbdg(s){const m={Active:'dg',Done:'dg',Planning:'dgr','On hold':'da',Approved:'dg',Published:'dg',Draft:'dgr',Brief:'dgr','In production':'db',Review:'da','Trade show':'dp',Conference:'db',Webinar:'dg'};return`<span class="bdg ${m[s]||'dgr'}">${s}</span>`}
+function reg(r){const c={Global:'#7c3aed',Europe:'#0284c7','North America':'#d97706','Asia Pacific':'#16a34a'};return`<span class="bdg" style="background:${c[r]||'#f3f4f6'}22;color:${c[r]||'#6b7280'}">${r||'—'}</span>`}
+function fmt(n){return'€'+Number(n||0).toLocaleString()}
+let currentUser=null;
+
+let projects=[
+  {id:1,name:'GMOP Platform Build',region:'Global',start:'2026-05-01',end:'2026-12-31',budget:80000,spent:12000,status:'Active',desc:'Build the Global Marketing Operations Platform.'},
+  {id:2,name:'EuroTier 2026',region:'Europe',start:'2026-07-01',end:'2026-11-30',budget:120000,spent:18000,status:'Planning',desc:'BouMatic presence at EuroTier 2026 in Hannover.'},
+  {id:3,name:'AMS Robot Launch Campaign',region:'Global',start:'2026-06-01',end:'2026-10-31',budget:60000,spent:8000,status:'Active',desc:'Global launch campaign for new AMS robot model.'},
+  {id:4,name:'Testimonial Video Series',region:'Europe',start:'2026-04-01',end:'2026-08-31',budget:25000,spent:14000,status:'Active',desc:'Customer testimonial video series across key markets.'},
+];
+let nextPjId=10;
+
+let events=[
+  {id:1,name:'EuroTier 2026',type:'Trade show',location:'Hannover, Germany',start:'2026-11-18',end:'2026-11-21',region:'Europe',budgetPlanned:120000,budgetActual:0,leads:0,notes:'Largest dairy farming trade show in Europe.'},
+  {id:2,name:'FFA Annual Conference',type:'Conference',location:'Des Moines, USA',start:'2026-09-14',end:'2026-09-16',region:'North America',budgetPlanned:45000,budgetActual:0,leads:0,notes:''},
+  {id:3,name:'BouMatic Dealer Day NL',type:'Customer visit',location:'Amersfoort, NL',start:'2026-08-20',end:'2026-08-20',region:'Europe',budgetPlanned:12000,budgetActual:8400,leads:24,notes:'Annual dealer day for NL distributors.'},
+  {id:4,name:'AMS Webinar — Robot ordering',type:'Webinar',location:'Online',start:'2026-07-22',end:'2026-07-22',region:'Global',budgetPlanned:2000,budgetActual:1800,leads:67,notes:'Product webinar for CS and sales team.'},
+];
+let nextEvId=10;
+
+let campaigns=[
+  {id:1,name:'Robot Launch — Spring 2026',region:'Global',budget:60000,spent:8000,start:'2026-06-01',end:'2026-09-30',goal:'200 leads, 15 robot orders',status:'Active'},
+  {id:2,name:'Parts Upsell — EU Q3',region:'Europe',budget:20000,spent:4500,start:'2026-07-01',end:'2026-09-30',goal:'10% parts revenue increase',status:'Active'},
+  {id:3,name:'EuroTier Pre-show',region:'Europe',budget:15000,spent:0,start:'2026-09-01',end:'2026-11-17',goal:'500 booth appointments',status:'Planning'},
+];
+let nextCampId=10;
+
+let contentItems=[
+  {id:1,title:'AMS Robot brochure 2026',type:'Brochure',owner:'Marketing Manager',due:'2026-07-15',status:'In production'},
+  {id:2,title:'EuroTier stand design brief',type:'Brochure',owner:'Marketing Manager',due:'2026-08-01',status:'Brief'},
+  {id:3,title:'Customer success story — Alltech',type:'Case study',owner:'Marketing EU',due:'2026-07-30',status:'Review'},
+  {id:4,title:'Q3 dealer newsletter',type:'Email',owner:'Marketing EU',due:'2026-07-10',status:'Approved'},
+  {id:5,title:'Robot launch social pack',type:'Social media',owner:'Marketing Manager',due:'2026-07-20',status:'In production'},
+];
+let nextCtId=10;
+
+let testimonials=[
+  {id:1,customer:'Boerderij de Hoeve',country:'Netherlands',quote:'The BouMatic AMS system has transformed our milking operation. We\'ve seen a 15% increase in milk yield and our cows are healthier.',product:'AMS Robot',status:'Published'},
+  {id:2,customer:'Mosida Farms',country:'USA',quote:'Parts availability and customer service are excellent. Never had to wait more than 48 hours for critical parts.',product:'Parts',status:'Approved'},
+  {id:3,customer:'Dairy Farm Skjern',country:'Denmark',quote:'',product:'AMS Robot',status:'Draft'},
+];
+let nextTstId=10;
+
+// LOGIN
+function doLogin(){
+  const uname=document.getElementById('l-user').value.trim().toLowerCase();
+  const pin=document.getElementById('l-pin').value.trim();
+  const user=USERS.find(u=>u.username===uname&&u.pin===pin);
+  if(!user){document.getElementById('l-err').style.display='block';return}
+  document.getElementById('l-err').style.display='none';
+  currentUser=user;
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app-screen').style.display='flex';
+  buildSb();navTo('dash',null);
+}
+document.getElementById('l-pin').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+function logout(){currentUser=null;document.getElementById('app-screen').style.display='none';document.getElementById('login-screen').style.display='flex';document.getElementById('l-user').value='';document.getElementById('l-pin').value='';}
+
+function buildSb(){
+  const u=currentUser;
+  document.getElementById('sb-av').textContent=av(u.name);
+  document.getElementById('sb-name').textContent=u.name;
+  document.getElementById('sb-role').textContent=u.role==='admin'?'Global Admin':u.role==='manager'?'Marketing Manager':'Marketing';
+  const navItems=[
+    {sc:'Overview',it:[{id:'dash',ic:'ti-layout-dashboard',lb:'Dashboard'}]},
+    {sc:'Marketing',it:[{id:'projects',ic:'ti-folder',lb:'Projects'},{id:'events',ic:'ti-calendar-event',lb:'Events'},{id:'campaigns',ic:'ti-speakerphone',lb:'Campaigns'}]},
+    {sc:'Content',it:[{id:'content',ic:'ti-file-text',lb:'Content'},{id:'testimonials',ic:'ti-quote',lb:'Testimonials'}]},
+    {sc:'Finance',it:[{id:'budget',ic:'ti-wallet',lb:'Budgets'},{id:'reports',ic:'ti-chart-bar',lb:'ROI & Reports'}]},
+  ];
+  let html='';navItems.forEach(g=>{html+=`<div class="nsc">${g.sc}</div>`;g.it.forEach(i=>html+=`<div class="ni" id="nav-${i.id}" onclick="navTo('${i.id}',this)"><i class="ti ${i.ic}"></i>${i.lb}</div>`);});
+  document.getElementById('nav-links').innerHTML=html;
+}
+function toggleSb(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sb-bg').classList.toggle('open')}
+function closeSb(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sb-bg').classList.remove('open')}
+const PG={dash:'Dashboard',projects:'Projects',events:'Events',campaigns:'Campaigns',content:'Content',testimonials:'Testimonials',budget:'Budgets',reports:'ROI & Reports'};
+function navTo(id,el){
+  document.querySelectorAll('.sc').forEach(s=>s.classList.remove('active'));document.getElementById('s-'+id)?.classList.add('active');
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));document.getElementById('nav-'+id)?.classList.add('active');
+  document.getElementById('pg-title').textContent=PG[id]||id;closeSb();
+  const rs={dash:renderDash,projects:renderProjects,events:renderEvents,campaigns:renderCampaigns,content:renderContent,testimonials:renderTestimonials,budget:renderBudget,reports:renderReports};
+  if(rs[id])rs[id]();
+}
+
+function renderDash(){
+  const totalBudget=projects.reduce((s,p)=>s+p.budget,0);const totalSpent=projects.reduce((s,p)=>s+p.spent,0);const totalLeads=events.reduce((s,e)=>s+e.leads,0);
+  document.getElementById('d-stats').innerHTML=`
+    <div class="st"><div class="sl">Active projects</div><div class="sv">${projects.filter(p=>p.status==='Active').length}</div></div>
+    <div class="st"><div class="sl">Upcoming events</div><div class="sv" style="color:var(--ac)">${events.filter(e=>e.start>new Date().toISOString().slice(0,10)).length}</div></div>
+    <div class="st"><div class="sl">Total budget</div><div class="sv">${fmt(totalBudget)}</div><div class="ss">Spent: ${fmt(totalSpent)}</div></div>
+    <div class="st"><div class="sl">Leads generated</div><div class="sv" style="color:var(--gr)">${totalLeads}</div></div>`;
+  document.getElementById('d-tasks').innerHTML=contentItems.filter(c=>c.status!=='Published').slice(0,5).map(c=>`<div style="padding:9px 14px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:8px"><div style="flex:1"><div style="font-size:12px;font-weight:500">${c.title}</div><div style="font-size:11px;color:var(--t2)">${c.type} · Due ${c.due}</div></div>${sbdg(c.status)}</div>`).join('');
+  document.getElementById('d-events').innerHTML=events.sort((a,b)=>a.start.localeCompare(b.start)).slice(0,4).map(e=>`<div style="padding:9px 14px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:8px"><div style="flex:1"><div style="font-size:12px;font-weight:500">${e.name}</div><div style="font-size:11px;color:var(--t2)">${e.location} · ${e.start}</div></div>${reg(e.region)}</div>`).join('');
+  document.getElementById('d-budget').innerHTML=projects.map(p=>{const rem=p.budget-p.spent;const pct=p.budget?Math.round(p.spent/p.budget*100):0;return`<tr><td style="font-weight:500">${p.name}</td><td>${reg(p.region)}</td><td>${fmt(p.budget)}</td><td>${fmt(p.spent)}</td><td><span class="bdg ${rem<0?'dr':rem<p.budget*.2?'da':'dg'}">${fmt(rem)}</span></td><td>${pct}%</td></tr>`;}).join('');
+}
+
+function renderProjects(){
+  const rf=document.getElementById('pj-reg-f')?.value||'';
+  const list=rf?projects.filter(p=>p.region===rf):projects;
+  document.getElementById('proj-list').innerHTML=list.map(p=>{const rem=p.budget-p.spent;const pct=p.budget?Math.round(p.spent/p.budget*100):0;
+    return`<div class="ev-card"><div style="display:flex;align-items:flex-start;gap:12px"><div style="flex:1"><div class="ev-title">${p.name}</div><div class="ev-meta"><span>${reg(p.region)}</span><span style="color:var(--t3)">${p.start} – ${p.end}</span></div><div style="font-size:12px;color:var(--t2)">${p.desc}</div><div class="ev-budget"><div class="ev-bitem"><div class="lbl">Planned</div><div class="val">${fmt(p.budget)}</div></div><div class="ev-bitem"><div class="lbl">Spent</div><div class="val">${fmt(p.spent)}</div></div><div class="ev-bitem"><div class="lbl">Remaining</div><div class="val" style="color:${rem<0?'#dc2626':'#16a34a'}">${fmt(rem)}</div></div><div class="ev-bitem"><div class="lbl">Utilization</div><div class="val">${pct}%</div></div></div></div><div>${sbdg(p.status)}</div></div></div>`;
+  }).join('');
+}
+function addProject(){
+  const name=document.getElementById('pjn').value.trim();if(!name)return;
+  projects.push({id:nextPjId++,name,region:document.getElementById('pjr').value,start:document.getElementById('pjs').value,end:document.getElementById('pje').value,budget:parseFloat(document.getElementById('pjb').value)||0,spent:0,status:document.getElementById('pjst').value,desc:document.getElementById('pjd').value});
+  ['pjn','pjb','pjd'].forEach(id=>document.getElementById(id).value='');closeMo('m-add-proj');renderProjects();
+}
+
+let evViewMode='list';
+function evView(mode,el){evViewMode=mode;document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.getElementById('ev-list-view').style.display=mode==='list'?'block':'none';document.getElementById('ev-cal-view').style.display=mode==='cal'?'block':'none';renderEvents();}
+function renderEvents(){
+  if(evViewMode==='list'){
+    document.getElementById('ev-list-view').innerHTML=events.map(e=>{const spent=e.budgetActual;const rem=e.budgetPlanned-spent;return`<div class="ev-card"><div style="display:flex;align-items:flex-start;gap:12px"><div style="flex:1"><div class="ev-title">${e.name}</div><div class="ev-meta"><span>${sbdg(e.type)}</span><span>${reg(e.region)}</span><span style="color:var(--t3)"><i class="ti ti-map-pin"></i>${e.location}</span><span style="color:var(--t3)"><i class="ti ti-calendar"></i>${e.start}${e.end!==e.start?' – '+e.end:''}</span></div>${e.notes?`<div style="font-size:12px;color:var(--t2)">${e.notes}</div>`:''}<div class="ev-budget"><div class="ev-bitem"><div class="lbl">Budget</div><div class="val">${fmt(e.budgetPlanned)}</div></div><div class="ev-bitem"><div class="lbl">Spent</div><div class="val">${fmt(spent)}</div></div><div class="ev-bitem"><div class="lbl">Leads</div><div class="val">${e.leads}</div></div></div></div></div></div>`;}).join('');
+  } else {
+    const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+    const grid=document.getElementById('cal-grid');
+    grid.innerHTML=days.map(d=>`<div class="cal-hdr">${d}</div>`).join('');
+    const months=['Jul','Aug','Sep','Oct','Nov'];
+    const typeColors={'Trade show':'#7c3aed','Conference':'#2563eb','Customer visit':'#16a34a','Webinar':'#d97706','Internal':'#6b7280'};
+    months.forEach(m=>{
+      grid.innerHTML+=`<div style="grid-column:1/-1;padding:6px 4px;font-size:11px;font-weight:700;color:var(--t2);margin-top:8px">${m} 2026</div>`;
+      const monthEvs=events.filter(e=>e.start.includes('2026-'+(['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'].indexOf(m)+1).toString().padStart(2,'0')));
+      monthEvs.forEach(e=>{const c=typeColors[e.type]||'#6b7280';grid.innerHTML+=`<div style="grid-column:1/-1;background:${c}15;border-left:3px solid ${c};border-radius:6px;padding:6px 10px;margin-bottom:4px;display:flex;align-items:center;gap:8px"><span style="font-size:12px;font-weight:600">${e.name}</span><span style="font-size:11px;color:var(--t2)">${e.start} · ${e.location}</span>${reg(e.region)}</div>`;});
+    });
+  }
+}
+function addEvent(){
+  const name=document.getElementById('evn').value.trim();if(!name)return;
+  events.push({id:nextEvId++,name,type:document.getElementById('evt').value,location:document.getElementById('evl').value,start:document.getElementById('evs').value,end:document.getElementById('eve').value,region:document.getElementById('evr').value,budgetPlanned:parseFloat(document.getElementById('evbp').value)||0,budgetActual:0,leads:0,notes:document.getElementById('evnotes').value});
+  ['evn','evl','evnotes'].forEach(id=>document.getElementById(id).value='');closeMo('m-add-ev');renderEvents();
+}
+
+function renderCampaigns(){document.getElementById('camp-body').innerHTML=campaigns.map(c=>`<tr><td style="font-weight:500">${c.name}</td><td style="color:var(--t3)">—</td><td>${reg(c.region)}</td><td style="font-size:11px;color:var(--t2)">${c.goal}</td><td>${fmt(c.budget)}</td><td style="color:var(--t3)">${c.start}</td><td style="color:var(--t3)">${c.end}</td><td>${sbdg(c.status)}</td></tr>`).join('');}
+function addCampaign(){const name=document.getElementById('cn').value.trim();if(!name)return;campaigns.push({id:nextCampId++,name,region:document.getElementById('cr').value,budget:parseFloat(document.getElementById('cb').value)||0,spent:0,start:document.getElementById('cs').value,end:document.getElementById('ce').value,goal:document.getElementById('cg').value,status:'Planning'});['cn','cb','cg'].forEach(id=>document.getElementById(id).value='');closeMo('m-add-camp');renderCampaigns();}
+
+function renderContent(){document.getElementById('content-body').innerHTML=contentItems.map(c=>`<tr><td style="font-weight:500">${c.title}</td><td>${sbdg(c.type)}</td><td style="color:var(--t3)">—</td><td style="color:var(--t2)">${c.owner}</td><td style="color:var(--t3)">${c.due}</td><td>${sbdg(c.status)}</td></tr>`).join('');}
+function addContent(){const name=document.getElementById('ctn').value.trim();if(!name)return;contentItems.push({id:nextCtId++,title:name,type:document.getElementById('ctt').value,owner:currentUser.name,due:document.getElementById('ctd').value,status:document.getElementById('cts').value});document.getElementById('ctn').value='';closeMo('m-add-content');renderContent();}
+
+function renderTestimonials(){document.getElementById('test-list').innerHTML=testimonials.map(t=>`<div class="ev-card"><div style="display:flex;align-items:flex-start;gap:12px"><div style="flex:1"><div class="ev-title">${t.customer} <span style="font-weight:400;font-size:12px;color:var(--t2)">· ${t.country}</span></div>${t.quote?`<div style="font-size:13px;color:var(--t2);font-style:italic;margin:8px 0">"${t.quote}"</div>`:''}<div style="font-size:12px;color:var(--t3)">Product: ${t.product}</div></div><div>${sbdg(t.status)}</div></div></div>`).join('');}
+function addTestimonial(){const name=document.getElementById('tn').value.trim();if(!name)return;testimonials.push({id:nextTstId++,customer:name,country:document.getElementById('tc').value,quote:document.getElementById('tq').value,product:document.getElementById('tp').value,status:document.getElementById('ts').value});['tn','tc','tq','tp'].forEach(id=>document.getElementById(id).value='');closeMo('m-add-test');renderTestimonials();}
+
+function renderBudget(){
+  const total=projects.reduce((s,p)=>s+p.budget,0)+events.reduce((s,e)=>s+e.budgetPlanned,0);const spent=projects.reduce((s,p)=>s+p.spent,0)+events.reduce((s,e)=>s+e.budgetActual,0);const rem=total-spent;
+  document.getElementById('bgt-stats').innerHTML=`<div class="st"><div class="sl">Total planned</div><div class="sv">${fmt(total)}</div></div><div class="st"><div class="sl">Total spent</div><div class="sv" style="color:var(--am)">${fmt(spent)}</div></div><div class="st"><div class="sl">Remaining</div><div class="sv" style="color:var(--gr)">${fmt(rem)}</div></div><div class="st"><div class="sl">Utilization</div><div class="sv">${total?Math.round(spent/total*100):0}%</div></div>`;
+  const rows=[...projects.map(p=>({name:p.name,cat:'Project',region:p.region,planned:p.budget,actual:p.spent,status:p.status})),...events.map(e=>({name:e.name,cat:'Event',region:e.region,planned:e.budgetPlanned,actual:e.budgetActual,status:'—'}))];
+  document.getElementById('bgt-body').innerHTML=rows.map(r=>{const rem2=r.planned-r.actual;return`<tr><td style="font-weight:500">${r.name}</td><td><span class="bdg dgr">${r.cat}</span></td><td>${reg(r.region)}</td><td>${fmt(r.planned)}</td><td>${fmt(r.actual)}</td><td><span class="bdg ${rem2<0?'dr':rem2<r.planned*.2?'da':'dg'}">${fmt(rem2)}</span></td><td>${sbdg(r.status)}</td></tr>`;}).join('');
+}
+
+function renderReports(){
+  const totalLeads=events.reduce((s,e)=>s+e.leads,0);const totalCost=projects.reduce((s,p)=>s+p.spent,0)+events.reduce((s,e)=>s+e.budgetActual,0);
+  document.getElementById('roi-stats').innerHTML=`<div class="st"><div class="sl">Total leads</div><div class="sv" style="color:var(--gr)">${totalLeads}</div></div><div class="st"><div class="sl">Total cost</div><div class="sv">${fmt(totalCost)}</div></div><div class="st"><div class="sl">Cost per lead</div><div class="sv">${totalLeads?fmt(Math.round(totalCost/totalLeads)):'—'}</div></div><div class="st"><div class="sl">Active campaigns</div><div class="sv" style="color:var(--ac)">${campaigns.filter(c=>c.status==='Active').length}</div></div>`;
+  document.getElementById('kpi-body').innerHTML=[{kpi:'Leads generated',target:300,actual:totalLeads},{kpi:'Events executed',target:6,actual:events.filter(e=>e.budgetActual>0).length},{kpi:'Content published',target:20,actual:contentItems.filter(c=>c.status==='Published').length},{kpi:'Testimonials live',target:10,actual:testimonials.filter(t=>t.status==='Published').length}].map(k=>{const pct=k.target?Math.round(k.actual/k.target*100):0;return`<tr><td>${k.kpi}</td><td>${k.target}</td><td>${k.actual}</td><td><span class="bdg ${pct>=100?'dg':pct>=60?'da':'dr'}">${pct}%</span></td></tr>`;}).join('');
+  document.getElementById('roi-body').innerHTML=events.filter(e=>e.leads>0).map(e=>{const roi=e.budgetActual>0?Math.round(e.leads*3500/e.budgetActual*100)/100:0;return`<tr><td style="font-weight:500">${e.name}</td><td>${fmt(e.budgetActual)}</td><td>${e.leads}</td><td>${fmt(e.leads*3500)}</td><td><span class="bdg ${roi>2?'dg':roi>1?'da':'dr'}">${roi}x</span></td></tr>`;}).join('');
+}
+
+function openMo(id){document.getElementById(id).classList.add('open')}
+function closeMo(id){document.getElementById(id).classList.remove('open')}
+document.querySelectorAll('.ov').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open')}));
+</script>
+</body>
+</html>

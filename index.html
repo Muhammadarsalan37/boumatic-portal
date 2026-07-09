@@ -3,527 +3,245 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BouMatic — Digital Tools Portal</title>
+<title>BouMatic Digital Portal</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
 <style>
-  :root {
-    --navy:   #0D2B4E;
-    --blue:   #2563eb;
-    --blue-l: #eff6ff;
-    --green:  #1A6B3C;
-    --green-l:#f0fdf4;
-    --amber:  #C97A1A;
-    --amber-l:#fffbeb;
-    --border: #e5e7eb;
-    --text:   #111827;
-    --text-2: #6b7280;
-    --text-3: #9ca3af;
-    --page:   #f9fafb;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0 }
-  body {
-    font-family: 'Inter', sans-serif;
-    background: var(--page);
-    color: var(--text);
-    min-height: 100vh;
-  }
-
-  /* ── Header ── */
-  .header {
-    background: var(--navy);
-    padding: 0 24px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    box-shadow: 0 2px 12px rgba(0,0,0,.25);
-  }
-  .header-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-  }
-  .logo-icon {
-    width: 36px;
-    height: 36px;
-    background: var(--blue);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    color: #fff;
-  }
-  .logo-text { font-size: 15px; font-weight: 700; color: #fff }
-  .logo-sub  { font-size: 11px; color: rgba(255,255,255,.5); font-weight: 400 }
-  .header-right {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    color: rgba(255,255,255,.6);
-  }
-  .header-right i { font-size: 15px }
-
-  /* ── Hero ── */
-  .hero {
-    background: linear-gradient(135deg, var(--navy) 0%, #1d4ed8 100%);
-    padding: 64px 24px 72px;
-    text-align: center;
-    color: #fff;
-  }
-  .hero-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(255,255,255,.12);
-    border: 1px solid rgba(255,255,255,.2);
-    border-radius: 20px;
-    padding: 4px 12px;
-    font-size: 12px;
-    color: rgba(255,255,255,.85);
-    margin-bottom: 20px;
-  }
-  .hero h1 {
-    font-size: clamp(26px, 5vw, 42px);
-    font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: 14px;
-  }
-  .hero p {
-    font-size: 16px;
-    color: rgba(255,255,255,.75);
-    max-width: 560px;
-    margin: 0 auto 32px;
-    line-height: 1.6;
-  }
-  .hero-stats {
-    display: flex;
-    gap: 32px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  .hero-stat { text-align: center }
-  .hero-stat .val {
-    font-size: 28px;
-    font-weight: 700;
-    display: block;
-  }
-  .hero-stat .lbl {
-    font-size: 12px;
-    color: rgba(255,255,255,.6);
-  }
-
-  /* ── Main ── */
-  .main {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 40px 24px 60px;
-  }
-
-  /* ── Section header ── */
-  .section-header {
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-  .section-header h2 {
-    font-size: 17px;
-    font-weight: 600;
-  }
-  .section-header p {
-    font-size: 13px;
-    color: var(--text-2);
-  }
-
-  /* ── App Cards ── */
-  .apps-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    margin-bottom: 48px;
-  }
-  .app-card {
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    overflow: hidden;
-    transition: box-shadow .2s, transform .2s;
-    text-decoration: none;
-    color: inherit;
-    display: flex;
-    flex-direction: column;
-  }
-  .app-card:hover {
-    box-shadow: 0 12px 40px rgba(0,0,0,.1);
-    transform: translateY(-2px);
-  }
-  .card-banner {
-    height: 6px;
-  }
-  .card-body {
-    padding: 22px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-  .card-icon-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 14px;
-  }
-  .card-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-  }
-  .card-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 3px 9px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 600;
-  }
-  .badge-live { background: #dcfce7; color: #166534 }
-  .badge-new  { background: #dbeafe; color: #1e40af }
-  .card-title {
-    font-size: 17px;
-    font-weight: 700;
-    margin-bottom: 6px;
-  }
-  .card-desc {
-    font-size: 13px;
-    color: var(--text-2);
-    line-height: 1.6;
-    margin-bottom: 18px;
-    flex: 1;
-  }
-  .card-features {
-    list-style: none;
-    margin-bottom: 20px;
-  }
-  .card-features li {
-    font-size: 12px;
-    color: var(--text-2);
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    padding: 3px 0;
-  }
-  .card-features li i { font-size: 13px; flex-shrink: 0 }
-  .card-footer {
-    border-top: 1px solid var(--border);
-    padding: 14px 22px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--page);
-  }
-  .card-meta {
-    font-size: 11px;
-    color: var(--text-3);
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-  .open-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    color: #fff;
-    text-decoration: none;
-    transition: filter .15s;
-  }
-  .open-btn:hover { filter: brightness(1.1) }
-
-  /* ── Quick links ── */
-  .quick-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 12px;
-    margin-bottom: 48px;
-  }
-  .quick-card {
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    text-decoration: none;
-    color: inherit;
-    transition: all .15s;
-  }
-  .quick-card:hover {
-    border-color: var(--blue);
-    background: var(--blue-l);
-    box-shadow: 0 4px 12px rgba(37,99,235,.1);
-  }
-  .quick-icon {
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    flex-shrink: 0;
-  }
-  .quick-label { font-size: 13px; font-weight: 500 }
-  .quick-sub   { font-size: 11px; color: var(--text-3) }
-
-  /* ── Info strip ── */
-  .info-strip {
-    background: var(--blue-l);
-    border: 1px solid #bfdbfe;
-    border-radius: 12px;
-    padding: 16px 20px;
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    margin-bottom: 48px;
-    font-size: 13px;
-    color: #1e3a8a;
-  }
-  .info-strip i { font-size: 18px; flex-shrink: 0; margin-top: 1px }
-
-  /* ── Footer ── */
-  .footer {
-    background: var(--navy);
-    color: rgba(255,255,255,.5);
-    text-align: center;
-    padding: 24px;
-    font-size: 12px;
-  }
-  .footer strong { color: rgba(255,255,255,.8) }
-
-  /* ── Responsive ── */
-  @media(max-width: 600px) {
-    .hero { padding: 44px 16px 52px }
-    .hero-stats { gap: 20px }
-    .main { padding: 28px 16px 40px }
-    .apps-grid { grid-template-columns: 1fr }
-  }
+:root{--ac:#4f46e5;--al:#eef0fe;--bdr:#e5e7eb;--tx:#111827;--t2:#6b7280;--t3:#9ca3af;--pg:#f9fafb}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--pg);color:var(--tx);min-height:100vh}
+.hdr{background:#0D2B4E;padding:0 24px;position:sticky;top:0;z-index:10}
+.hdr-in{max-width:1100px;margin:0 auto;height:58px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-ic{width:34px;height:34px;background:var(--ac);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff}
+.logo-n{font-size:14px;font-weight:700;color:#fff}
+.logo-s{font-size:10px;color:rgba(255,255,255,.5)}
+.hdr-r{font-size:11px;color:rgba(255,255,255,.5);display:flex;align-items:center;gap:6px}
+.hero{background:linear-gradient(135deg,#0D2B4E,#4f46e5);padding:56px 24px 64px;text-align:center;color:#fff}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:4px 12px;font-size:12px;color:rgba(255,255,255,.85);margin-bottom:18px}
+.hero h1{font-size:clamp(24px,5vw,40px);font-weight:700;line-height:1.2;margin-bottom:12px}
+.hero p{font-size:15px;color:rgba(255,255,255,.75);max-width:520px;margin:0 auto 28px;line-height:1.6}
+.hero-stats{display:flex;gap:32px;justify-content:center;flex-wrap:wrap}
+.hstat .val{font-size:28px;font-weight:700;display:block}
+.hstat .lbl{font-size:12px;color:rgba(255,255,255,.55)}
+.main{max-width:1100px;margin:0 auto;padding:36px 24px 60px}
+.sec-hdr{display:flex;align-items:baseline;gap:10px;margin-bottom:18px}
+.sec-hdr h2{font-size:16px;font-weight:600}
+.sec-hdr p{font-size:12px;color:var(--t2)}
+.apps{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin-bottom:44px}
+.app-card{background:#fff;border:1px solid var(--bdr);border-radius:14px;overflow:hidden;text-decoration:none;color:inherit;display:flex;flex-direction:column;transition:box-shadow .2s,transform .2s}
+.app-card:hover{box-shadow:0 12px 40px rgba(0,0,0,.1);transform:translateY(-2px)}
+.card-banner{height:5px}
+.card-body{padding:20px;flex:1;display:flex;flex-direction:column}
+.card-icon-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.card-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px}
+.card-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.b-live{background:#dcfce7;color:#166534}
+.b-new{background:#dbeafe;color:#1e40af}
+.card-title{font-size:16px;font-weight:700;margin-bottom:5px}
+.card-desc{font-size:12px;color:var(--t2);line-height:1.6;margin-bottom:14px;flex:1}
+.card-features{list-style:none;margin-bottom:16px}
+.card-features li{font-size:11px;color:var(--t2);display:flex;align-items:center;gap:7px;padding:3px 0}
+.card-features li i{font-size:13px;flex-shrink:0}
+.card-footer{border-top:1px solid var(--bdr);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;background:var(--pg)}
+.card-meta{font-size:11px;color:var(--t3);display:flex;align-items:center;gap:4px}
+.open-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;color:#fff;text-decoration:none;transition:filter .15s}
+.open-btn:hover{filter:brightness(1.1)}
+.pin-card{background:#fff;border:1px solid var(--bdr);border-radius:14px;padding:20px;margin-bottom:44px}
+.pin-card-title{font-size:14px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.pin-table{width:100%;border-collapse:collapse;font-size:12px}
+.pin-table th{text-align:left;color:var(--t3);font-weight:500;font-size:11px;padding:6px 10px;border-bottom:1px solid var(--bdr);background:var(--pg)}
+.pin-table td{padding:7px 10px;border-bottom:1px solid var(--bdr);vertical-align:middle}
+.pin-table tr:last-child td{border-bottom:none}
+code{font-family:'Courier New',monospace;background:#f3f4f6;padding:2px 6px;border-radius:4px;font-size:11px;color:#374151}
+.quick{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:44px}
+.qcard{background:#fff;border:1px solid var(--bdr);border-radius:10px;padding:14px;display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;transition:all .15s}
+.qcard:hover{border-color:var(--ac);background:var(--al)}
+.qic{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.qlb{font-size:12px;font-weight:500}
+.qsb{font-size:11px;color:var(--t3)}
+.soon{opacity:.55;pointer-events:none}
+.footer{background:#0D2B4E;color:rgba(255,255,255,.5);text-align:center;padding:22px;font-size:12px}
+.footer strong{color:rgba(255,255,255,.8)}
+@media(max-width:600px){.hero{padding:36px 16px 44px}.main{padding:24px 16px 40px}.apps{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-
-<!-- Header -->
-<header class="header">
-  <div class="header-inner">
-    <a class="logo" href="index.html">
-      <div class="logo-icon"><i class="ti ti-building-factory-2"></i></div>
-      <div>
-        <div class="logo-text">BouMatic</div>
-        <div class="logo-sub">Digital Tools Portal</div>
-      </div>
-    </a>
-    <div class="header-right">
-      <i class="ti ti-map-pin"></i> Amersfoort, NL
-      &nbsp;·&nbsp;
-      <i class="ti ti-calendar"></i> <span id="today-date"></span>
-    </div>
+<header class="hdr">
+  <div class="hdr-in">
+    <a class="logo" href="index.html"><div class="logo-ic"><i class="ti ti-building-factory-2"></i></div><div><div class="logo-n">BouMatic</div><div class="logo-s">Digital Tools Portal</div></div></a>
+    <div class="hdr-r"><i class="ti ti-calendar"></i> <span id="today"></span></div>
   </div>
 </header>
 
-<!-- Hero -->
 <section class="hero">
-  <div class="hero-tag"><i class="ti ti-rocket"></i> Internal tools — v1.0</div>
-  <h1>BouMatic Operations<br>Digital Portal</h1>
-  <p>All internal tools in one place. Click any app to open it directly in your browser — works on laptop and mobile.</p>
+  <div class="hero-tag"><i class="ti ti-lock"></i> Secured with username + PIN</div>
+  <h1>BouMatic Digital Portal</h1>
+  <p>All internal tools in one place. Sign in to each app with your personal username and PIN.</p>
   <div class="hero-stats">
-    <div class="hero-stat"><span class="val">2</span><span class="lbl">Apps live</span></div>
-    <div class="hero-stat"><span class="val">5</span><span class="lbl">Departments</span></div>
-    <div class="hero-stat"><span class="val">77</span><span class="lbl">KPIs tracked</span></div>
-    <div class="hero-stat"><span class="val">100%</span><span class="lbl">Browser-based</span></div>
+    <div class="hstat"><span class="val">5</span><span class="lbl">Apps live</span></div>
+    <div class="hstat"><span class="val">26</span><span class="lbl">User accounts</span></div>
+    <div class="hstat"><span class="val">5</span><span class="lbl">Departments</span></div>
+    <div class="hstat"><span class="val">100%</span><span class="lbl">Browser-based</span></div>
   </div>
 </section>
 
-<!-- Main -->
 <main class="main">
 
-  <!-- Apps -->
-  <div class="section-header">
-    <h2>Applications</h2>
-    <p>Click to open — no installation required</p>
-  </div>
+  <div class="sec-hdr"><h2>Applications</h2><p>Click to open · Sign in with your username and PIN</p></div>
+  <div class="apps">
 
-  <div class="apps-grid">
-
-    <!-- HRMS -->
-    <a class="app-card" href="hrms.html">
-      <div class="card-banner" style="background:linear-gradient(90deg,#2563eb,#7c3aed)"></div>
+    <a class="app-card" href="cs-skill-coverage.html">
+      <div class="card-banner" style="background:linear-gradient(90deg,#4f46e5,#7c3aed)"></div>
       <div class="card-body">
-        <div class="card-icon-row">
-          <div class="card-icon" style="background:#eff6ff;color:#2563eb">
-            <i class="ti ti-users"></i>
-          </div>
-          <span class="card-badge badge-live"><i class="ti ti-circle-filled" style="font-size:8px"></i> Live</span>
-        </div>
-        <div class="card-title">Company HRMS</div>
-        <div class="card-desc">
-          Full HR management system for all departments. Covers skills, scheduling, leave approvals, performance reviews and onboarding — with role-based access control.
-        </div>
+        <div class="card-icon-row"><div class="card-icon" style="background:#eef0fe;color:#4f46e5"><i class="ti ti-chart-radar"></i></div><span class="card-badge b-live"><i class="ti ti-circle-filled" style="font-size:8px"></i>Live</span></div>
+        <div class="card-title">CS Skill &amp; Coverage</div>
+        <div class="card-desc">Real skill matrix for the CS team — 42 skills across 7 pools, team coverage view, gap detection and training requests with manager approval.</div>
         <ul class="card-features">
-          <li><i class="ti ti-check" style="color:#16a34a"></i>Skill matrix — RO1 to RO8 per agent</li>
-          <li><i class="ti ti-check" style="color:#16a34a"></i>Manager leave approval workflow</li>
-          <li><i class="ti ti-check" style="color:#16a34a"></i>Shift planner — EM / RE / DK regions</li>
-          <li><i class="ti ti-check" style="color:#16a34a"></i>Performance reviews + onboarding tracker</li>
-          <li><i class="ti ti-check" style="color:#16a34a"></i>3 roles: Admin · Manager · Employee</li>
+          <li><i class="ti ti-check" style="color:#16a34a"></i>42 skills — Chemicals, Interco, MQOT, Parts, Replace, Robots, System</li>
+          <li><i class="ti ti-check" style="color:#16a34a"></i>Coverage gaps auto-flagged (Critical / Low / OK / Strong)</li>
+          <li><i class="ti ti-check" style="color:#16a34a"></i>Training &amp; leave requests with manager approval</li>
+          <li><i class="ti ti-check" style="color:#16a34a"></i>Admin: add / edit / delete skills and pools</li>
+          <li><i class="ti ti-check" style="color:#16a34a"></i>Editable org chart — reassign managers live</li>
         </ul>
       </div>
-      <div class="card-footer">
-        <span class="card-meta"><i class="ti ti-building"></i>All departments</span>
-        <span class="open-btn" style="background:linear-gradient(135deg,#2563eb,#7c3aed)">
-          Open app <i class="ti ti-arrow-right"></i>
-        </span>
-      </div>
+      <div class="card-footer"><span class="card-meta"><i class="ti ti-users"></i>Customer Service · arsalan.m / 100001</span><span class="open-btn" style="background:linear-gradient(135deg,#4f46e5,#7c3aed)">Open <i class="ti ti-arrow-right"></i></span></div>
     </a>
 
-    <!-- Field Service -->
+    <a class="app-card" href="hrms.html">
+      <div class="card-banner" style="background:linear-gradient(90deg,#2563eb,#4f46e5)"></div>
+      <div class="card-body">
+        <div class="card-icon-row"><div class="card-icon" style="background:#dbeafe;color:#1e40af"><i class="ti ti-users"></i></div><span class="card-badge b-live"><i class="ti ti-circle-filled" style="font-size:8px"></i>Live</span></div>
+        <div class="card-title">Company HRMS</div>
+        <div class="card-desc">Full HR management system for all departments — employees, skills, shifts, leave, performance reviews and onboarding.</div>
+        <ul class="card-features">
+          <li><i class="ti ti-check" style="color:#16a34a"></i>All departments — CS, Engineering, Sales, Ops, Finance, Marketing</li>
+          <li><i class="ti ti-check" style="color:#16a34a"></i>Leave approval routed to direct manager</li>
+          <li><i class="ti ti-check" style="color:#16a34a"></i>Performance reviews — H1 2026</li>
+          <li><i class="ti ti-check" style="color:#16a34a"></i>Onboarding tracker with 7-step checklist</li>
+          <li><i class="ti ti-check" style="color:#16a34a"></i>Admin: departments, user accounts &amp; PINs</li>
+        </ul>
+      </div>
+      <div class="card-footer"><span class="card-meta"><i class="ti ti-building"></i>All departments · arsalan.m / 100001</span><span class="open-btn" style="background:linear-gradient(135deg,#2563eb,#4f46e5)">Open <i class="ti ti-arrow-right"></i></span></div>
+    </a>
+
+    <a class="app-card" href="project-mgmt.html">
+      <div class="card-banner" style="background:linear-gradient(90deg,#0891b2,#0284c7)"></div>
+      <div class="card-body">
+        <div class="card-icon-row"><div class="card-icon" style="background:#ecfeff;color:#0891b2"><i class="ti ti-layout-kanban"></i></div><span class="card-badge b-live"><i class="ti ti-circle-filled" style="font-size:8px"></i>Live</span></div>
+        <div class="card-title">Project Management</div>
+        <div class="card-desc">Company-wide project and task management with Kanban board, plus CS leave and training requests — all with manager approval flows.</div>
+        <ul class="card-features">
+          <li><i class="ti ti-check" style="color:#16a34a"></i>Projects with progress, owner, priority and status</li>
+          <li><i class="ti ti-check" style="color:#16a34a"></i>Kanban board + list view for tasks</li>
+          <li><i class="ti ti-check" style="color:#16a34a"></i>CS leave requests with manager approval</li>
+          <li><i class="ti ti-check" style="color:#16a34a"></i>CS training requests with manager approval</li>
+          <li><i class="ti ti-check" style="color:#16a34a"></i>Pre-loaded: HRMS, Field Service, GMOP, EuroTier projects</li>
+        </ul>
+      </div>
+      <div class="card-footer"><span class="card-meta"><i class="ti ti-folder"></i>All departments · arsalan.m / 100001</span><span class="open-btn" style="background:linear-gradient(135deg,#0891b2,#0284c7)">Open <i class="ti ti-arrow-right"></i></span></div>
+    </a>
+
     <a class="app-card" href="field-service.html">
       <div class="card-banner" style="background:linear-gradient(90deg,#1e3a5f,#2563eb)"></div>
       <div class="card-body">
-        <div class="card-icon-row">
-          <div class="card-icon" style="background:#eff6ff;color:#1e3a5f">
-            <i class="ti ti-clock-bolt"></i>
-          </div>
-          <span class="card-badge badge-live"><i class="ti ti-circle-filled" style="font-size:8px"></i> Live</span>
-        </div>
+        <div class="card-icon-row"><div class="card-icon" style="background:#eff6ff;color:#1e3a5f"><i class="ti ti-clock-bolt"></i></div><span class="card-badge b-live"><i class="ti ti-circle-filled" style="font-size:8px"></i>Live</span></div>
         <div class="card-title">Field Service Time Registration</div>
-        <div class="card-desc">
-          Time registration for SAC and BMR field service employees. Automatic overtime calculation (128% / 147% / 184%), travel time, standby allowances and AFAS payroll export.
-        </div>
+        <div class="card-desc">Time registration for SAC and BMR field engineers with automatic OT calculation, travel deduction, standby allowances and AFAS payroll export.</div>
         <ul class="card-features">
-          <li><i class="ti ti-check" style="color:#16a34a"></i>SAC & BMR group rules built-in</li>
-          <li><i class="ti ti-check" style="color:#16a34a"></i>Auto OT split: 128% / 147% / 184%</li>
-          <li><i class="ti ti-check" style="color:#16a34a"></i>Travel time deduction (30 min SAC rule)</li>
-          <li><i class="ti ti-check" style="color:#16a34a"></i>Manager approval → HR export flow</li>
-          <li><i class="ti ti-check" style="color:#16a34a"></i>AFAS payroll ready + audit trail</li>
+          <li><i class="ti ti-check" style="color:#16a34a"></i>SAC &amp; BMR — separate rules per group</li>
+          <li><i class="ti ti-check" style="color:#16a34a"></i>OT tiers: 128% / 147% / 184% auto-calculated</li>
+          <li><i class="ti ti-check" style="color:#16a34a"></i>Travel time with 30-min SAC deduction</li>
+          <li><i class="ti ti-check" style="color:#16a34a"></i>Manager → HR approval chain → AFAS export</li>
+          <li><i class="ti ti-check" style="color:#16a34a"></i>Full audit trail per submission</li>
         </ul>
       </div>
-      <div class="card-footer">
-        <span class="card-meta"><i class="ti ti-tool"></i>Field Service</span>
-        <span class="open-btn" style="background:linear-gradient(135deg,#1e3a5f,#2563eb)">
-          Open app <i class="ti ti-arrow-right"></i>
-        </span>
+      <div class="card-footer"><span class="card-meta"><i class="ti ti-tool"></i>Field Service · john.b / 700001</span><span class="open-btn" style="background:linear-gradient(135deg,#1e3a5f,#2563eb)">Open <i class="ti ti-arrow-right"></i></span></div>
+    </a>
+
+    <a class="app-card" href="gmop.html">
+      <div class="card-banner" style="background:linear-gradient(90deg,#7c3aed,#a855f7)"></div>
+      <div class="card-body">
+        <div class="card-icon-row"><div class="card-icon" style="background:#f5f3ff;color:#7c3aed"><i class="ti ti-speakerphone"></i></div><span class="card-badge b-new"><i class="ti ti-sparkles" style="font-size:9px"></i>New</span></div>
+        <div class="card-title">GMOP — Marketing Platform</div>
+        <div class="card-desc">Global Marketing Operations Platform covering projects, events, campaigns, content workflow, testimonials, budgets and ROI reporting.</div>
+        <ul class="card-features">
+          <li><i class="ti ti-check" style="color:#16a34a"></i>Events — EuroTier 2026, FFA, Dealer Day, Webinars</li>
+          <li><i class="ti ti-check" style="color:#16a34a"></i>Campaigns with goals, budget and regions</li>
+          <li><i class="ti ti-check" style="color:#16a34a"></i>Content workflow: Brief → Production → Published</li>
+          <li><i class="ti ti-check" style="color:#16a34a"></i>Testimonial library with approval status</li>
+          <li><i class="ti ti-check" style="color:#16a34a"></i>Budget tracker and ROI per event</li>
+        </ul>
       </div>
+      <div class="card-footer"><span class="card-meta"><i class="ti ti-world"></i>Marketing · mkt.mgr / 600001</span><span class="open-btn" style="background:linear-gradient(135deg,#7c3aed,#a855f7)">Open <i class="ti ti-arrow-right"></i></span></div>
     </a>
 
   </div>
 
-  <!-- Info strip -->
-  <div class="info-strip">
-    <i class="ti ti-info-circle"></i>
-    <div>
-      <strong>Demo mode:</strong> All apps run entirely in your browser — no server, no database, no login required to try.
-      In production, connect to SharePoint or Dataverse to persist data.
-      To update an app, replace the HTML file in your GitHub repository and push — the live URL updates within 2 minutes.
+  <div class="sec-hdr"><h2>Login credentials</h2><p>Username + PIN — same across all apps</p></div>
+  <div class="pin-card">
+    <div class="pin-card-title"><i class="ti ti-key" style="color:var(--ac)"></i>All user accounts</div>
+    <div style="overflow-x:auto">
+    <table class="pin-table">
+      <thead><tr><th>Name</th><th>Username</th><th>PIN</th><th>Role</th><th>Department</th><th>Region</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Arsalan M.</strong></td><td><code>arsalan.m</code></td><td><code>100001</code></td><td>Admin</td><td>Customer Service</td><td>—</td></tr>
+        <tr><td>Houda Abdeddaim</td><td><code>houda.a</code></td><td><code>100002</code></td><td>Manager</td><td>Customer Service</td><td>EM</td></tr>
+        <tr><td>Myrthe Heeringa</td><td><code>myrthe.h</code></td><td><code>100003</code></td><td>Employee</td><td>Customer Service</td><td>EM</td></tr>
+        <tr><td>Christophe Leruth</td><td><code>christophe.l</code></td><td><code>100004</code></td><td>Manager</td><td>Customer Service</td><td>RE</td></tr>
+        <tr><td>Alexndara Voets</td><td><code>alexndara.v</code></td><td><code>100005</code></td><td>Employee</td><td>Customer Service</td><td>RE</td></tr>
+        <tr><td>Anne-France Deckers</td><td><code>anne.d</code></td><td><code>100006</code></td><td>Employee</td><td>Customer Service</td><td>RE</td></tr>
+        <tr><td>Geneviève Defrance</td><td><code>genevieve.d</code></td><td><code>100007</code></td><td>Employee</td><td>Customer Service</td><td>RE</td></tr>
+        <tr><td>Isabelle Taton</td><td><code>isabelle.t</code></td><td><code>100008</code></td><td>Employee</td><td>Customer Service</td><td>RE</td></tr>
+        <tr><td>Natalie Claes</td><td><code>natalie.c</code></td><td><code>100009</code></td><td>Employee</td><td>Customer Service</td><td>RE</td></tr>
+        <tr><td>Oksana Bezdolya</td><td><code>oksana.b</code></td><td><code>100010</code></td><td>Employee</td><td>Customer Service</td><td>RE</td></tr>
+        <tr><td>Myriam Jehanno</td><td><code>myriam.j</code></td><td><code>100011</code></td><td>Employee</td><td>Customer Service</td><td>RE</td></tr>
+        <tr><td>Hanne Staniok</td><td><code>hanne.s</code></td><td><code>100012</code></td><td>Manager</td><td>Customer Service</td><td>DK</td></tr>
+        <tr><td>Dorthe Søgaard</td><td><code>dorthe.s</code></td><td><code>100013</code></td><td>Employee</td><td>Customer Service</td><td>DK</td></tr>
+        <tr><td>Karen Festersen Jensen</td><td><code>karen.f</code></td><td><code>100014</code></td><td>Employee</td><td>Customer Service</td><td>DK</td></tr>
+        <tr><td>Jolanda Hoevenberg</td><td><code>jolanda.h</code></td><td><code>100015</code></td><td>Employee</td><td>Customer Service</td><td>DK</td></tr>
+        <tr><td>Marianne Falk</td><td><code>marianne.f</code></td><td><code>100016</code></td><td>Employee</td><td>Customer Service</td><td>DK</td></tr>
+        <tr><td>Tina Kristoffersen</td><td><code>tina.k</code></td><td><code>100017</code></td><td>Employee</td><td>Customer Service</td><td>DK</td></tr>
+        <tr><td>Jan de Vries</td><td><code>jan.v</code></td><td><code>200001</code></td><td>Manager</td><td>Engineering</td><td>NL</td></tr>
+        <tr><td>Sofie Bakker</td><td><code>sofie.b</code></td><td><code>200002</code></td><td>Employee</td><td>Engineering</td><td>NL</td></tr>
+        <tr><td>Rudi Larsen</td><td><code>rudi.l</code></td><td><code>200003</code></td><td>Employee</td><td>Engineering</td><td>DK</td></tr>
+        <tr><td>Emma Patel</td><td><code>emma.p</code></td><td><code>300001</code></td><td>Manager</td><td>Sales</td><td>UK</td></tr>
+        <tr><td>Lucas Müller</td><td><code>lucas.m</code></td><td><code>300002</code></td><td>Employee</td><td>Sales</td><td>DE</td></tr>
+        <tr><td>Petra Novak</td><td><code>petra.n</code></td><td><code>400001</code></td><td>Manager</td><td>Operations</td><td>NL</td></tr>
+        <tr><td>Finance HR</td><td><code>finance.hr</code></td><td><code>500001</code></td><td>HR Viewer</td><td>Finance</td><td>NL</td></tr>
+        <tr><td>Marketing Manager</td><td><code>mkt.mgr</code></td><td><code>600001</code></td><td>Manager</td><td>Marketing</td><td>Global</td></tr>
+        <tr><td>Marketing EU</td><td><code>mkt.eu</code></td><td><code>600002</code></td><td>Employee</td><td>Marketing</td><td>Europe</td></tr>
+        <tr><td>John Blankvoort</td><td><code>john.b</code></td><td><code>700001</code></td><td>Employee (SAC)</td><td>Field Service</td><td>NL</td></tr>
+        <tr><td>Anouk van den Ham</td><td><code>anouk.h</code></td><td><code>700002</code></td><td>Employee (BMR)</td><td>Field Service</td><td>NL</td></tr>
+        <tr><td><strong>HR Admin</strong></td><td><code>admin</code></td><td><code>999999</code></td><td>Admin</td><td>HR</td><td>—</td></tr>
+      </tbody>
+    </table>
     </div>
+    <p style="font-size:11px;color:var(--t3);margin-top:10px"><i class="ti ti-info-circle"></i> PINs can be changed by Admin in HRMS → Admin settings.</p>
   </div>
 
-  <!-- Quick links -->
-  <div class="section-header">
-    <h2>Quick access</h2>
-    <p>Jump directly to a specific module</p>
-  </div>
-
-  <div class="quick-grid">
-    <a class="quick-card" href="hrms.html#skills">
-      <div class="quick-icon" style="background:#ede9fe;color:#5b21b6"><i class="ti ti-chart-radar"></i></div>
-      <div><div class="quick-label">Skill matrix</div><div class="quick-sub">HRMS → Skills</div></div>
-    </a>
-    <a class="quick-card" href="hrms.html#leave">
-      <div class="quick-icon" style="background:#fef9c3;color:#854d0e"><i class="ti ti-beach"></i></div>
-      <div><div class="quick-label">Leave requests</div><div class="quick-sub">HRMS → Leave</div></div>
-    </a>
-    <a class="quick-card" href="hrms.html#performance">
-      <div class="quick-icon" style="background:#dcfce7;color:#166534"><i class="ti ti-star"></i></div>
-      <div><div class="quick-label">Performance</div><div class="quick-sub">HRMS → Reviews</div></div>
-    </a>
-    <a class="quick-card" href="hrms.html#onboarding">
-      <div class="quick-icon" style="background:#dbeafe;color:#1e40af"><i class="ti ti-user-plus"></i></div>
-      <div><div class="quick-label">Onboarding</div><div class="quick-sub">HRMS → New hires</div></div>
-    </a>
-    <a class="quick-card" href="field-service.html#my-reg">
-      <div class="quick-icon" style="background:#ffedd5;color:#9a3412"><i class="ti ti-clock"></i></div>
-      <div><div class="quick-label">My registrations</div><div class="quick-sub">Field Service → Hours</div></div>
-    </a>
-    <a class="quick-card" href="field-service.html#approvals">
-      <div class="quick-icon" style="background:#dcfce7;color:#166534"><i class="ti ti-check"></i></div>
-      <div><div class="quick-label">Approve hours</div><div class="quick-sub">Field Service → Manager</div></div>
-    </a>
-    <a class="quick-card" href="field-service.html#export">
-      <div class="quick-icon" style="background:#f0fdf4;color:#1A6B3C"><i class="ti ti-download"></i></div>
-      <div><div class="quick-label">Payroll export</div><div class="quick-sub">Field Service → HR</div></div>
-    </a>
-    <a class="quick-card" href="field-service.html#leave">
-      <div class="quick-icon" style="background:#fae8ff;color:#6b21a8"><i class="ti ti-calendar-event"></i></div>
-      <div><div class="quick-label">Leave balances</div><div class="quick-sub">Field Service → Leave</div></div>
-    </a>
-  </div>
-
-  <!-- Coming soon placeholder -->
-  <div class="section-header">
-    <h2>Coming soon</h2>
-    <p>On the roadmap</p>
-  </div>
-  <div class="quick-grid">
-    <div class="quick-card" style="opacity:.55;cursor:default">
-      <div class="quick-icon" style="background:#f3f4f6;color:#6b7280"><i class="ti ti-chart-bar"></i></div>
-      <div><div class="quick-label">KPI Dashboard</div><div class="quick-sub">Live metrics — in progress</div></div>
-    </div>
-    <div class="quick-card" style="opacity:.55;cursor:default">
-      <div class="quick-icon" style="background:#f3f4f6;color:#6b7280"><i class="ti ti-truck"></i></div>
-      <div><div class="quick-label">Logistics tracker</div><div class="quick-sub">OTD / OTIF — planned</div></div>
-    </div>
-    <div class="quick-card" style="opacity:.55;cursor:default">
-      <div class="quick-icon" style="background:#f3f4f6;color:#6b7280"><i class="ti ti-tool"></i></div>
-      <div><div class="quick-label">Maintenance planner</div><div class="quick-sub">PM scheduling — planned</div></div>
-    </div>
-    <div class="quick-card" style="opacity:.55;cursor:default">
-      <div class="quick-icon" style="background:#f3f4f6;color:#6b7280"><i class="ti ti-database"></i></div>
-      <div><div class="quick-label">SharePoint connect</div><div class="quick-sub">Live data backend — planned</div></div>
-    </div>
+  <div class="sec-hdr"><h2>Quick access</h2><p>Jump directly to a module</p></div>
+  <div class="quick">
+    <a class="qcard" href="cs-skill-coverage.html"><div class="qic" style="background:#eef0fe;color:#4f46e5"><i class="ti ti-chart-radar"></i></div><div><div class="qlb">Skill matrix</div><div class="qsb">CS Coverage</div></div></a>
+    <a class="qcard" href="cs-skill-coverage.html"><div class="qic" style="background:#fef3c7;color:#d97706"><i class="ti ti-bulb"></i></div><div><div class="qlb">Gap analysis</div><div class="qsb">CS Coverage</div></div></a>
+    <a class="qcard" href="hrms.html"><div class="qic" style="background:#dcfce7;color:#16a34a"><i class="ti ti-beach"></i></div><div><div class="qlb">Leave requests</div><div class="qsb">HRMS</div></div></a>
+    <a class="qcard" href="hrms.html"><div class="qic" style="background:#dbeafe;color:#1e40af"><i class="ti ti-user-plus"></i></div><div><div class="qlb">Onboarding</div><div class="qsb">HRMS</div></div></a>
+    <a class="qcard" href="hrms.html"><div class="qic" style="background:#f3f4f6;color:#374151"><i class="ti ti-star"></i></div><div><div class="qlb">Performance</div><div class="qsb">HRMS</div></div></a>
+    <a class="qcard" href="project-mgmt.html"><div class="qic" style="background:#ecfeff;color:#0891b2"><i class="ti ti-layout-kanban"></i></div><div><div class="qlb">Task board</div><div class="qsb">Project Mgmt</div></div></a>
+    <a class="qcard" href="project-mgmt.html"><div class="qic" style="background:#fee2e2;color:#dc2626"><i class="ti ti-school"></i></div><div><div class="qlb">Training requests</div><div class="qsb">Project Mgmt</div></div></a>
+    <a class="qcard" href="field-service.html"><div class="qic" style="background:#ffedd5;color:#ea580c"><i class="ti ti-clock"></i></div><div><div class="qlb">Register hours</div><div class="qsb">Field Service</div></div></a>
+    <a class="qcard" href="gmop.html"><div class="qic" style="background:#f5f3ff;color:#7c3aed"><i class="ti ti-calendar-event"></i></div><div><div class="qlb">Events</div><div class="qsb">GMOP</div></div></a>
+    <a class="qcard" href="gmop.html"><div class="qic" style="background:#faf5ff;color:#7c3aed"><i class="ti ti-wallet"></i></div><div><div class="qlb">Budgets</div><div class="qsb">GMOP</div></div></a>
+    <div class="qcard soon"><div class="qic" style="background:#f3f4f6;color:#9ca3af"><i class="ti ti-database"></i></div><div><div class="qlb">SharePoint sync</div><div class="qsb">Coming soon</div></div></div>
+    <div class="qcard soon"><div class="qic" style="background:#f3f4f6;color:#9ca3af"><i class="ti ti-chart-bar"></i></div><div><div class="qlb">KPI Dashboard</div><div class="qsb">Planned</div></div></div>
   </div>
 
 </main>
-
-<!-- Footer -->
-<footer class="footer">
-  <strong>BouMatic Digital Tools Portal</strong> &nbsp;·&nbsp;
-  Built by Automation Team &nbsp;·&nbsp;
-  Hosted on GitHub Pages &nbsp;·&nbsp;
-  <span id="footer-year"></span>
-</footer>
-
+<footer class="footer"><strong>BouMatic Digital Portal</strong> &nbsp;·&nbsp; Built by Automation Team &nbsp;·&nbsp; <span id="yr"></span></footer>
 <script>
-  // Date
-  const now = new Date();
-  document.getElementById('today-date').textContent = now.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
-  document.getElementById('footer-year').textContent = now.getFullYear();
+const n=new Date();
+document.getElementById('today').textContent=n.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+document.getElementById('yr').textContent=n.getFullYear();
 </script>
 </body>
 </html>

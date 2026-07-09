@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BouMatic — CS Skill & Coverage</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+:root{
+  --accent:#4f46e5;--accent-l:#eef0fe;--accent-d:#3730a3;
+  --green:#16a34a;--green-l:#dcfce7;--green-d:#14532d;
+  --amber:#d97706;--amber-l:#fef3c7;--amber-d:#78350f;
+  --red:#dc2626;--red-l:#fee2e2;--red-d:#7f1d1d;
+  --blue:#2563eb;--blue-l:#dbeafe;--blue-d:#1e3a8a;
+  --orange:#ea580c;--orange-l:#ffedd5;
+  --border:#e5e7eb;--border-s:#d1d5db;
+  --surface:#fff;--page:#f9fafb;--page2:#f3f4f6;
+  --text:#111827;--text2:#6b7280;--text3:#9ca3af;
+  --r:8px;--sb:220px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--page);color:var(--text);font-size:13px;line-height:1.5;min-height:100vh}
+
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#1e1b4b,#4f46e5)}
+.login-card{background:var(--surface);border-radius:16px;padding:36px 32px;width:100%;max-width:380px;box-shadow:0 24px 64px rgba(0,0,0,.25)}
+.login-logo{font-size:18px;font-weight:700;color:var(--accent);margin-bottom:2px}
+.login-sub{font-size:12px;color:var(--text2);margin-bottom:24px}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
+.role-btn{border:1.5px solid var(--border-s);border-radius:var(--r);padding:10px;cursor:pointer;text-align:center;transition:all .15s;background:var(--surface)}
+.role-btn:hover,.role-btn.sel{border-color:var(--accent);background:var(--accent-l)}
+.role-btn.sel{border-width:2px}
+.role-btn i{font-size:20px;display:block;margin-bottom:3px;color:var(--accent)}
+.role-btn .rn{font-size:11px;font-weight:600}
+.role-btn .rs{font-size:10px;color:var(--text3)}
+.fr{margin-bottom:11px}
+.fr label{display:block;font-size:11px;font-weight:600;color:var(--text2);margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em}
+.fr input,.fr select{width:100%;padding:8px 10px;border:1.5px solid var(--border-s);border-radius:var(--r);font-family:inherit;font-size:13px;color:var(--text);background:var(--surface)}
+.fr input:focus,.fr select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,70,229,.12)}
+.btn-login{width:100%;padding:10px;background:var(--accent);color:#fff;border:none;border-radius:var(--r);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:4px}
+.btn-login:hover{background:var(--accent-d)}
+
+/* APP SHELL */
+.app{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:var(--sb);min-width:var(--sb);background:#1e1b4b;display:flex;flex-direction:column;overflow-y:auto;transition:transform .25s}
+.brand{padding:16px;border-bottom:1px solid rgba(255,255,255,.1)}
+.brand-name{font-size:13px;font-weight:700;color:#fff}
+.brand-sub{font-size:10px;color:rgba(255,255,255,.45);margin-top:1px}
+.upill{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.08)}
+.uav{width:28px;height:28px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
+.uname{font-size:12px;font-weight:500;color:#fff}
+.urole{font-size:10px;color:rgba(255,255,255,.45)}
+.ns{padding:12px 14px 3px;font-size:10px;font-weight:600;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.06em}
+.ni{display:flex;align-items:center;gap:8px;padding:7px 14px;cursor:pointer;color:rgba(255,255,255,.6);font-size:12px;border-left:3px solid transparent;transition:all .12s}
+.ni:hover{background:rgba(255,255,255,.07);color:#fff}
+.ni.active{background:rgba(79,70,229,.4);color:#fff;border-left-color:var(--accent)}
+.ni i{font-size:15px;flex-shrink:0}
+.ni .bc{margin-left:auto;background:var(--red);color:#fff;font-size:10px;padding:1px 6px;border-radius:20px;font-weight:700}
+.logout-btn{margin:auto 12px 12px;padding:7px 10px;border:1px solid rgba(255,255,255,.18);border-radius:var(--r);background:transparent;color:rgba(255,255,255,.6);font-family:inherit;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:6px}
+.logout-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+.main{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;gap:10px;padding:11px 20px;border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:5}
+.topbar-menu{display:none;background:none;border:none;font-size:20px;cursor:pointer;color:var(--text2)}
+.topbar h1{font-size:15px;font-weight:600;flex:1}
+.content{padding:18px 20px;flex:1}
+.screen{display:none}.screen.active{display:block}
+
+/* COMPONENTS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
+.stat-l{font-size:11px;color:var(--text2);margin-bottom:3px;font-weight:500}
+.stat-v{font-size:22px;font-weight:700;line-height:1.1}
+.stat-s{font-size:11px;color:var(--text2);margin-top:2px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:12px;overflow:hidden}
+.ch{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--border);gap:8px;flex-wrap:wrap}
+.ch-title{font-size:13px;font-weight:600}
+.cb{padding:14px}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;color:var(--text2);font-weight:500;font-size:11px;padding:7px 10px;border-bottom:1px solid var(--border);white-space:nowrap;background:var(--page)}
+td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--page)}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:var(--r);border:1px solid var(--border-s);background:var(--surface);color:var(--text);font-size:12px;cursor:pointer;font-family:inherit;transition:all .12s;white-space:nowrap;font-weight:500}
+.btn:hover{background:var(--page)}
+.btn-p{background:var(--accent);color:#fff;border-color:var(--accent)}.btn-p:hover{background:var(--accent-d)}
+.btn-sm{padding:3px 9px;font-size:11px}
+.btn-g{background:var(--green-l);color:var(--green);border-color:#86efac}.btn-g:hover{filter:brightness(.95)}
+.btn-r{color:var(--red);border-color:#fca5a5}.btn-r:hover{background:var(--red-l)}
+.badge{display:inline-block;padding:2px 7px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap}
+.b-g{background:var(--green-l);color:var(--green-d)}
+.b-a{background:var(--amber-l);color:var(--amber-d)}
+.b-r{background:var(--red-l);color:var(--red-d)}
+.b-b{background:var(--blue-l);color:var(--blue-d)}
+.b-p{background:var(--accent-l);color:var(--accent-d)}
+.b-gr{background:var(--page2);color:var(--text2)}
+.b-o{background:var(--orange-l);color:var(--orange)}
+.av{border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
+.av-s{width:26px;height:26px;font-size:10px}
+.av-m{width:32px;height:32px;font-size:12px}
+input,select,textarea{font-family:'Inter',sans-serif;font-size:13px;padding:8px 10px;border:1px solid var(--border-s);border-radius:var(--r);background:var(--surface);color:var(--text);width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,70,229,.12)}
+textarea{resize:vertical;min-height:65px}
+.fg{margin-bottom:11px}
+.fg label{display:block;font-size:11px;font-weight:600;color:var(--text2);margin-bottom:3px;text-transform:uppercase;letter-spacing:.03em}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto}
+.overlay.open{display:flex}
+.modal{background:var(--surface);border-radius:14px;border:1px solid var(--border);padding:22px;width:100%;max-width:520px;margin:auto;box-shadow:0 20px 60px rgba(0,0,0,.15)}
+.modal-lg{max-width:700px}
+.mt{font-size:14px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.cx{background:none;border:none;font-size:18px;cursor:pointer;color:var(--text3);padding:0}
+.cx:hover{color:var(--text)}
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:14px}
+.tab{padding:7px 14px;cursor:pointer;font-size:12px;font-weight:500;color:var(--text2);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab:hover{color:var(--text)}.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.divider{border:none;border-top:1px solid var(--border);margin:12px 0}
+.empty{text-align:center;padding:28px;color:var(--text3);font-size:12px}
+.pbar{height:5px;background:var(--page2);border-radius:3px;overflow:hidden}
+.pfill{height:100%;border-radius:3px}
+.chip-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;border:1.5px solid transparent;background:var(--page2);color:var(--text2);transition:all .12s}
+.chip:hover{border-color:currentColor}.chip.active{border-color:currentColor;color:var(--accent);background:var(--accent-l)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
+.sb-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:49}
+.sb-backdrop.open{display:block}
+
+/* SKILL MATRIX SPECIFIC */
+.lv{border-radius:50%;border:none;font-size:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;transition:transform .1s;flex-shrink:0}
+.lv.ed{cursor:pointer}.lv.ed:hover{transform:scale(1.15)}
+.lv0{background:#f3f4f6;color:#6b7280}
+.lv1{background:var(--amber-l);color:var(--amber-d)}
+.lv2{background:var(--blue-l);color:var(--blue-d)}
+.lv3{background:var(--green-l);color:var(--green-d)}
+.pool-hdr{background:var(--accent-l);color:var(--accent-d);font-weight:700;font-size:11px;padding:6px 10px;border-bottom:1px solid var(--border)}
+.gap-pill{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:700}
+.gap-c{background:#fee2e2;color:#7f1d1d}
+.gap-l{background:#fef3c7;color:#78350f}
+.gap-ok{background:#dcfce7;color:#14532d}
+.gap-s{background:var(--accent-l);color:var(--accent-d)}
+
+/* ORG CHART */
+.org-tree{padding:14px;overflow-x:auto}
+.org-node{display:inline-block;margin:4px}
+.org-card{border:1.5px solid var(--border);border-radius:var(--r);padding:8px 12px;background:var(--surface);min-width:150px;position:relative;cursor:pointer;transition:all .15s}
+.org-card:hover{border-color:var(--accent);box-shadow:0 4px 12px rgba(79,70,229,.12)}
+.org-card.selected{border-color:var(--accent);background:var(--accent-l)}
+.org-card .oc-name{font-size:12px;font-weight:600}
+.org-card .oc-role{font-size:10px;color:var(--text2)}
+.org-card .oc-region{font-size:10px}
+.org-level{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:16px}
+.org-connector{text-align:center;color:var(--text3);font-size:16px;margin:-8px 0 8px}
+.tree-wrap{min-width:600px}
+
+/* APPROVAL ITEM */
+.app-item{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:10px}
+.app-item:last-child{border-bottom:none}
+.app-body{flex:1;min-width:0}
+.app-name{font-weight:600;font-size:12px}
+.app-meta{font-size:11px;color:var(--text2);margin-top:2px}
+.app-note{font-size:11px;color:var(--text2);margin-top:4px;font-style:italic}
+.app-acts{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.alert{padding:10px 14px;border-radius:var(--r);font-size:12px;display:flex;align-items:flex-start;gap:8px;margin-bottom:12px}
+.alert-w{background:var(--amber-l);color:var(--amber-d);border:1px solid #fcd34d}
+.alert-i{background:var(--blue-l);color:var(--blue-d);border:1px solid #93c5fd}
+
+@media(max-width:768px){
+  .sidebar{position:fixed;left:0;top:0;bottom:0;z-index:50;transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .topbar-menu{display:block}
+  .stats{grid-template-columns:1fr 1fr}
+  .two-col,.g2,.g3{grid-template-columns:1fr}
+  .content{padding:14px}
+  .overlay{padding:12px}
+  .modal{max-width:100%}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="login-screen">
+  <div class="login-card">
+    <div class="login-logo"><i class="ti ti-chart-radar"></i> CS Skill & Coverage</div>
+    <div class="login-sub">BouMatic Customer Service — Team Operations</div>
+    <div class="role-grid">
+      <div class="role-btn sel" onclick="pickRole('admin',this)"><i class="ti ti-shield-check"></i><div class="rn">Admin</div><div class="rs">Full access</div></div>
+      <div class="role-btn" onclick="pickRole('manager',this)"><i class="ti ti-users"></i><div class="rn">Manager</div><div class="rs">Team lead</div></div>
+      <div class="role-btn" onclick="pickRole('employee',this)"><i class="ti ti-user"></i><div class="rn">Employee</div><div class="rs">CSR</div></div>
+      <div class="role-btn" onclick="pickRole('hr',this)"><i class="ti ti-building"></i><div class="rn">HR</div><div class="rs">View & export</div></div>
+    </div>
+    <div class="fr"><label>Sign in as</label><select id="login-sel"><option value="">Choose account…</option></select></div>
+    <button class="btn-login" onclick="doLogin()"><i class="ti ti-login"></i> Sign in</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="app-screen" style="display:none">
+  <div class="sidebar" id="sidebar">
+    <div class="brand"><div class="brand-name"><i class="ti ti-chart-radar"></i> CS Skill & Coverage</div><div class="brand-sub">BouMatic Customer Service</div></div>
+    <div class="upill"><div class="uav" id="sb-av">?</div><div><div class="uname" id="sb-name">—</div><div class="urole" id="sb-role">—</div></div></div>
+    <div id="nav-links"></div>
+    <button class="logout-btn" onclick="logout()"><i class="ti ti-logout"></i> Sign out</button>
+  </div>
+  <div class="sb-backdrop" id="sb-backdrop" onclick="closeSb()"></div>
+  <div class="main">
+    <div class="topbar">
+      <button class="topbar-menu" onclick="toggleSb()"><i class="ti ti-menu-2"></i></button>
+      <h1 id="page-title">Dashboard</h1>
+      <div id="topbar-acts"></div>
+    </div>
+    <div class="content">
+
+      <!-- DASHBOARD -->
+      <div id="s-dashboard" class="screen active">
+        <div class="stats" id="dash-stats"></div>
+        <div class="two-col">
+          <div class="card"><div class="ch"><span class="ch-title">Pending approvals</span><span class="badge b-p" id="dash-pend-count">0</span></div><div id="dash-approvals"></div></div>
+          <div class="card"><div class="ch"><span class="ch-title">Critical coverage gaps</span></div><div id="dash-gaps"></div></div>
+        </div>
+        <div class="card"><div class="ch"><span class="ch-title">Pool overview</span></div>
+          <div class="tw"><table><thead><tr><th>Pool</th><th>Skills</th><th>Team avg</th><th>Coverage ≥2</th><th>Status</th><th>SOP</th></tr></thead><tbody id="pool-overview"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- SKILL MATRIX -->
+      <div id="s-matrix" class="screen">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+          <div style="display:flex;gap:10px;align-items:center;font-size:11px;color:var(--text2);flex-wrap:wrap">
+            <span style="display:flex;align-items:center;gap:3px"><span class="lv lv0" style="width:18px;height:18px;font-size:9px">0</span>None</span>
+            <span style="display:flex;align-items:center;gap:3px"><span class="lv lv1" style="width:18px;height:18px;font-size:9px">1</span>Basic</span>
+            <span style="display:flex;align-items:center;gap:3px"><span class="lv lv2" style="width:18px;height:18px;font-size:9px">2</span>Proficient</span>
+            <span style="display:flex;align-items:center;gap:3px"><span class="lv lv3" style="width:18px;height:18px;font-size:9px">3</span>Expert</span>
+            <span id="matrix-hint" style="color:var(--text3)"></span>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <select id="matrix-pool-f" onchange="renderMatrix()" style="width:auto;font-size:12px;padding:5px 8px">
+              <option value="">All pools</option>
+              <option>Chemicals</option><option>Interco</option><option>MQOT</option>
+              <option>Parts</option><option>Replace</option><option>Robots</option><option>System</option>
+            </select>
+            <select id="matrix-region-f" onchange="renderMatrix()" style="width:auto;font-size:12px;padding:5px 8px">
+              <option value="">All regions</option><option>RE</option><option>EM</option><option>DK</option>
+            </select>
+            <button class="btn btn-sm btn-p" id="btn-add-skill" onclick="openModal('m-add-skill')" style="display:none"><i class="ti ti-plus"></i>Add skill</button>
+            <button class="btn btn-sm" id="btn-manage-pools" onclick="openManagePools()" style="display:none"><i class="ti ti-settings"></i>Manage pools</button>
+          </div>
+        </div>
+        <div class="card" style="overflow-x:auto">
+          <table id="matrix-tbl" style="min-width:700px"><thead id="matrix-head"></thead><tbody id="matrix-body"></tbody></table>
+        </div>
+      </div>
+
+      <!-- COVERAGE -->
+      <div id="s-coverage" class="screen">
+        <div class="chip-row" id="cov-pool-chips"></div>
+        <div class="stats" id="cov-stats"></div>
+        <div class="card"><div class="ch"><span class="ch-title">Coverage by skill — who can cover what</span></div>
+          <div class="tw"><table><thead><tr><th>Pool</th><th>Skill</th><th>SOP</th><th>Lv 1+</th><th>Lv 2+</th><th>Lv 3</th><th>Coverage</th><th>Status</th><th>Experts</th></tr></thead><tbody id="cov-body"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- IMPROVEMENTS -->
+      <div id="s-improve" class="screen">
+        <div class="alert alert-i"><i class="ti ti-info-circle"></i><span>Improvement opportunities are auto-generated from coverage gaps and low skill scores. Click "Request training" on any row to log a training request.</span></div>
+        <div class="card"><div class="ch"><span class="ch-title">🔴 Critical — fewer than 2 agents proficient</span></div><div id="imp-critical"></div></div>
+        <div class="card"><div class="ch"><span class="ch-title">🟡 Low coverage — 25–50% of team proficient</span></div><div id="imp-low"></div></div>
+        <div class="card"><div class="ch"><span class="ch-title">📋 Missing SOPs — no procedure documented</span></div><div id="imp-sop"></div></div>
+        <div class="card"><div class="ch"><span class="ch-title">🌟 Expert gaps — no level-3 agent for this skill</span></div><div id="imp-expert"></div></div>
+      </div>
+
+      <!-- TRAINING REQUESTS -->
+      <div id="s-training" class="screen">
+        <div class="two-col" style="align-items:start">
+          <div class="card"><div class="ch"><span class="ch-title">New training request</span></div><div class="cb">
+            <div class="fg"><label>Agent</label><select id="tr-agent"></select></div>
+            <div class="fg"><label>Pool</label><select id="tr-pool" onchange="filterTrSkills()">
+              <option value="">All pools</option>
+              <option>Chemicals</option><option>Interco</option><option>MQOT</option>
+              <option>Parts</option><option>Replace</option><option>Robots</option><option>System</option>
+            </select></div>
+            <div class="fg"><label>Skill</label><select id="tr-skill"></select></div>
+            <div class="fg"><label>Target level</label><select id="tr-level"><option value="1">1 — Basic</option><option value="2" selected>2 — Proficient</option><option value="3">3 — Expert</option></select></div>
+            <div class="fg"><label>Priority</label><select id="tr-priority"><option value="High">High — coverage gap</option><option value="Medium">Medium — development</option><option value="Low">Low — nice to have</option></select></div>
+            <div class="fg"><label>Notes</label><textarea id="tr-notes" placeholder="Context, method, urgency…"></textarea></div>
+            <button class="btn btn-p" style="width:100%" onclick="submitTraining()"><i class="ti ti-send"></i>Submit for manager approval</button>
+          </div></div>
+          <div>
+            <div class="card"><div class="ch"><span class="ch-title">Pending approval</span><span class="badge b-a" id="tr-pend-count">0</span></div><div id="tr-pending-list"></div></div>
+            <div class="card"><div class="ch"><span class="ch-title">All requests</span></div><div id="tr-all-list"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LEAVE REQUESTS -->
+      <div id="s-leave" class="screen">
+        <div class="tabs">
+          <div class="tab active" onclick="leaveTab('pending',this)">Pending approval</div>
+          <div class="tab" onclick="leaveTab('approved',this)">Approved</div>
+          <div class="tab" onclick="leaveTab('balances',this)">Balances</div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
+          <button class="btn btn-p btn-sm" onclick="openModal('m-leave')"><i class="ti ti-plus"></i>Request leave</button>
+        </div>
+        <div id="lt-pending">
+          <div class="card"><div id="leave-pending-list"></div></div>
+        </div>
+        <div id="lt-approved" style="display:none">
+          <div class="card"><div class="tw"><table><thead><tr><th>Agent</th><th>Region</th><th>Type</th><th>From</th><th>To</th><th>Days</th><th>Approved by</th></tr></thead><tbody id="leave-approved-list"></tbody></table></div></div>
+        </div>
+        <div id="lt-balances" style="display:none">
+          <div class="card"><div class="tw"><table><thead><tr><th>Agent</th><th>Region</th><th>Entitlement</th><th>Used</th><th>Remaining</th><th>Balance</th></tr></thead><tbody id="leave-balance-list"></tbody></table></div></div>
+        </div>
+      </div>
+
+      <!-- ORG CHART -->
+      <div id="s-org" class="screen">
+        <div class="alert alert-i"><i class="ti ti-info-circle"></i><span>Click any person to edit their manager, role or region. Changes update the approval routing automatically.</span></div>
+        <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+          <button class="btn btn-p btn-sm" onclick="openModal('m-add-person')"><i class="ti ti-user-plus"></i>Add person</button>
+          <button class="btn btn-sm" onclick="renderOrg()"><i class="ti ti-refresh"></i>Refresh</button>
+        </div>
+        <div class="card"><div class="ch"><span class="ch-title">CS Team hierarchy</span></div><div class="org-tree" id="org-tree"></div></div>
+        <div class="card" id="edit-person-card" style="display:none">
+          <div class="ch"><span class="ch-title" id="edit-person-title">Edit person</span><button class="btn btn-sm btn-r" onclick="removePerson()"><i class="ti ti-trash"></i>Remove</button></div>
+          <div class="cb">
+            <div class="g3">
+              <div class="fg"><label>Name</label><input id="ep-name"></div>
+              <div class="fg"><label>Role</label><input id="ep-role"></div>
+              <div class="fg"><label>Region</label><select id="ep-region"><option value="">—</option><option>RE</option><option>EM</option><option>DK</option></select></div>
+            </div>
+            <div class="g2">
+              <div class="fg"><label>Manager</label><select id="ep-manager"></select></div>
+              <div class="fg"><label>System role</label><select id="ep-sysrole"><option value="employee">Employee</option><option value="manager">Manager</option><option value="admin">Admin</option><option value="hr">HR</option></select></div>
+            </div>
+            <button class="btn btn-p" onclick="savePersonEdit()"><i class="ti ti-check"></i>Save changes</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div id="m-add-skill" class="overlay"><div class="modal">
+  <div class="mt">Add skill<button class="cx" onclick="closeModal('m-add-skill')">×</button></div>
+  <div class="fg"><label>Pool</label><select id="as-pool"><option>Chemicals</option><option>Interco</option><option>MQOT</option><option>Parts</option><option>Replace</option><option>Robots</option><option>System</option></select></div>
+  <div class="fg"><label>Skill name</label><input id="as-name" placeholder="e.g. Chemical price validation"></div>
+  <div class="fg"><label>SOP available</label><select id="as-sop"><option value="">None</option><option value="✅ Yes">✅ Yes</option><option value="🔄 Draft">🔄 Draft</option><option value="❌ No">❌ No</option></select></div>
+  <button class="btn btn-p" style="width:100%;margin-top:4px" onclick="addSkill()"><i class="ti ti-check"></i>Add skill</button>
+</div></div>
+
+<div id="m-edit-skill" class="overlay"><div class="modal">
+  <div class="mt" id="es-title">Edit skill<button class="cx" onclick="closeModal('m-edit-skill')">×</button></div>
+  <div class="fg"><label>Pool</label><select id="es-pool"><option>Chemicals</option><option>Interco</option><option>MQOT</option><option>Parts</option><option>Replace</option><option>Robots</option><option>System</option></select></div>
+  <div class="fg"><label>Skill name</label><input id="es-name" placeholder="Skill name"></div>
+  <div class="fg"><label>SOP available</label><select id="es-sop"><option value="">None</option><option value="✅ Yes">✅ Yes</option><option value="🔄 Draft">🔄 Draft</option><option value="❌ No">❌ No</option></select></div>
+  <div style="display:flex;gap:8px;margin-top:4px">
+    <button class="btn btn-p" style="flex:1" onclick="saveSkillEdit()"><i class="ti ti-check"></i>Save changes</button>
+    <button class="btn btn-r" onclick="deleteSkill()"><i class="ti ti-trash"></i>Delete skill</button>
+  </div>
+</div></div>
+
+<div id="m-manage-pools" class="overlay"><div class="modal modal-lg">
+  <div class="mt">Manage pools & skills<button class="cx" onclick="closeModal('m-manage-pools')">×</button></div>
+  <div class="alert alert-i" style="margin-bottom:12px"><i class="ti ti-info-circle"></i>Add, rename or delete entire pools. Deleting a pool removes all its skills.</div>
+  <div class="g2" style="margin-bottom:14px">
+    <div>
+      <div class="fg"><label>New pool name</label><input id="np-pool-name" placeholder="e.g. Finance"></div>
+      <button class="btn btn-p btn-sm" onclick="addPool()"><i class="ti ti-plus"></i>Add pool</button>
+    </div>
+    <div id="pool-manage-list" style="max-height:300px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--r)"></div>
+  </div>
+</div></div>
+
+<div id="m-leave" class="overlay"><div class="modal">
+  <div class="mt">Request leave<button class="cx" onclick="closeModal('m-leave')">×</button></div>
+  <div class="fg"><label>Agent</label><select id="lv-agent"></select></div>
+  <div class="fg"><label>Leave type</label><select id="lv-type"><option>Annual</option><option>Sick</option><option>Emergency</option><option>Special</option><option>ADV</option></select></div>
+  <div class="g2">
+    <div class="fg"><label>From</label><input type="date" id="lv-from"></div>
+    <div class="fg"><label>To</label><input type="date" id="lv-to"></div>
+  </div>
+  <div class="fg"><label>Notes</label><textarea id="lv-notes" placeholder="Reason or context…"></textarea></div>
+  <div class="alert alert-w" style="margin-bottom:10px"><i class="ti ti-alert-triangle"></i>Your manager will be notified and must approve this request.</div>
+  <button class="btn btn-p" style="width:100%" onclick="submitLeave()"><i class="ti ti-send"></i>Submit for approval</button>
+</div></div>
+
+<div id="m-add-person" class="overlay"><div class="modal">
+  <div class="mt">Add person<button class="cx" onclick="closeModal('m-add-person')">×</button></div>
+  <div class="g2">
+    <div class="fg"><label>Full name</label><input id="np-name" placeholder="Firstname Lastname"></div>
+    <div class="fg"><label>Role</label><input id="np-role" placeholder="CSR"></div>
+  </div>
+  <div class="g3">
+    <div class="fg"><label>Region</label><select id="np-region"><option value="">—</option><option>RE</option><option>EM</option><option>DK</option></select></div>
+    <div class="fg"><label>Manager</label><select id="np-mgr"></select></div>
+    <div class="fg"><label>System role</label><select id="np-sysrole"><option value="employee">Employee</option><option value="manager">Manager</option><option value="admin">Admin</option><option value="hr">HR</option></select></div>
+  </div>
+  <button class="btn btn-p" style="width:100%;margin-top:4px" onclick="addPerson()"><i class="ti ti-check"></i>Add person</button>
+</div></div>
+
+<div id="m-tr-approve" class="overlay"><div class="modal">
+  <div class="mt" id="tra-title">Review training request<button class="cx" onclick="closeModal('m-tr-approve')">×</button></div>
+  <div id="tra-content" style="margin-bottom:14px;font-size:12px;color:var(--text2)"></div>
+  <div class="fg"><label>Manager comment</label><textarea id="tra-comment" placeholder="Optional note…"></textarea></div>
+  <div style="display:flex;gap:8px;margin-top:8px">
+    <button class="btn btn-g" onclick="approveTraining()"><i class="ti ti-check"></i>Approve</button>
+    <button class="btn btn-r" onclick="declineTraining()"><i class="ti ti-x"></i>Decline</button>
+  </div>
+</div></div>
+
+<div id="m-lv-approve" class="overlay"><div class="modal">
+  <div class="mt" id="lva-title">Review leave request<button class="cx" onclick="closeModal('m-lv-approve')">×</button></div>
+  <div id="lva-content" style="margin-bottom:14px;font-size:12px;color:var(--text2)"></div>
+  <div class="fg"><label>Comment</label><textarea id="lva-comment" placeholder="Optional note…"></textarea></div>
+  <div style="display:flex;gap:8px;margin-top:8px">
+    <button class="btn btn-g" onclick="approveLeave()"><i class="ti ti-check"></i>Approve</button>
+    <button class="btn btn-r" onclick="declineLeave()"><i class="ti ti-x"></i>Decline</button>
+  </div>
+</div></div>
+
+<script>
+// ═══════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════
+let people = [
+  {id:1,name:'Arsalan M.',role:'Automation Manager',region:'',managerId:null,sysRole:'admin'},
+  {id:2,name:'Houda Abdeddaim',role:'Team Lead',region:'EM',managerId:1,sysRole:'manager'},
+  {id:3,name:'Myrthe Heeringa',role:'CSR',region:'EM',managerId:2,sysRole:'employee'},
+  {id:4,name:'Christophe Leruth',role:'Team Lead',region:'RE',managerId:1,sysRole:'manager'},
+  {id:5,name:'Alexndara Voets',role:'CSR',region:'RE',managerId:4,sysRole:'employee'},
+  {id:6,name:'Anne-France Deckers',role:'CSR',region:'RE',managerId:4,sysRole:'employee'},
+  {id:7,name:'Geneviève Defrance',role:'CSR',region:'RE',managerId:4,sysRole:'employee'},
+  {id:8,name:'Isabelle Taton',role:'CSR',region:'RE',managerId:4,sysRole:'employee'},
+  {id:9,name:'Natalie Claes',role:'CSR',region:'RE',managerId:4,sysRole:'employee'},
+  {id:10,name:'Oksana Bezdolya',role:'CSR',region:'RE',managerId:4,sysRole:'employee'},
+  {id:11,name:'Myriam Jehanno',role:'CSR',region:'RE',managerId:4,sysRole:'employee'},
+  {id:12,name:'Hanne Staniok',role:'Team Lead',region:'DK',managerId:1,sysRole:'manager'},
+  {id:13,name:'Dorthe Søgaard',role:'CSR',region:'DK',managerId:12,sysRole:'employee'},
+  {id:14,name:'Karen Festersen Jensen',role:'CSR',region:'DK',managerId:12,sysRole:'employee'},
+  {id:15,name:'Jolanda Hoevenberg',role:'CSR',region:'DK',managerId:12,sysRole:'employee'},
+  {id:16,name:'Marianne Falk',role:'CSR',region:'DK',managerId:12,sysRole:'employee'},
+  {id:17,name:'Tina Kristoffersen',role:'CSR',region:'DK',managerId:12,sysRole:'employee'},
+];
+let nextPersonId = 20;
+
+// Skills — pool, name, sop, [scores by person id 4,5,6,7,8,9,10,11,2,3,12,13,14,15,16,17]
+// Order matches Excel column order: Christophe(4),Alexndara(5),Anne-France(6),Geneviève(7),Isabelle(8),Natalie(9),Oksana(10),Myriam(11),Houda(2),Myrthe(3),Hanne(12),Dorthe(13),Karen(14),Jolanda(15),Marianne(16),Tina(17)
+const COL_ORDER = [4,5,6,7,8,9,10,11,2,3,12,13,14,15,16,17];
+
+let skills = [
+  {id:1,pool:'Chemicals',name:'Chemical order entry & validation',sop:'',scores:{4:1,5:3,6:3,7:3,8:3,9:3,10:3,11:2,2:0,3:0,12:0,13:2,14:2,15:2,16:2,17:2}},
+  {id:2,pool:'Chemicals',name:'Chemical exception handling',sop:'',scores:{4:1,5:3,6:3,7:3,8:3,9:3,10:3,11:1,2:0,3:0,12:0,13:2,14:2,15:2,16:2,17:2}},
+  {id:3,pool:'Interco',name:'Intercompany order entry',sop:'',scores:{4:3,5:0,6:0,7:0,8:0,9:0,10:0,11:1,2:1,3:1,12:0,13:0,14:0,15:0,16:0,17:0}},
+  {id:4,pool:'Interco',name:'Interco invoice creation & reconciliation',sop:'',scores:{4:3,5:0,6:0,7:0,8:0,9:0,10:0,11:1,2:1,3:1,12:0,13:0,14:0,15:0,16:0,17:0}},
+  {id:5,pool:'Interco',name:'Cross-entity stock transfer handling',sop:'',scores:{4:3,5:0,6:0,7:0,8:0,9:0,10:0,11:1,2:0,3:0,12:0,13:0,14:0,15:0,16:0,17:0}},
+  {id:6,pool:'Interco',name:'Interco dispute & correction',sop:'',scores:{4:3,5:0,6:0,7:0,8:0,9:0,10:0,11:0,2:0,3:0,12:0,13:0,14:0,15:0,16:0,17:0}},
+  {id:7,pool:'MQOT',name:'ProQOT / MQuote order quoting',sop:'',scores:{4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:2,2:0,3:0,12:0,13:0,14:0,15:0,16:0,17:0}},
+  {id:8,pool:'MQOT',name:'Configuration build in ProQOT',sop:'',scores:{4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,2:0,3:0,12:0,13:0,14:0,15:0,16:0,17:0}},
+  {id:9,pool:'MQOT',name:'Margin validation in ProQOT',sop:'',scores:{4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:1,2:0,3:0,12:0,13:0,14:0,15:0,16:0,17:0}},
+  {id:10,pool:'MQOT',name:'Discount limit management (DSM/RSM)',sop:'',scores:{4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:1,2:0,3:0,12:0,13:0,14:0,15:0,16:0,17:0}},
+  {id:11,pool:'MQOT',name:'MQOT escalation & approval workflow',sop:'',scores:{4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:1,2:0,3:0,12:0,13:0,14:0,15:0,16:0,17:0}},
+  {id:12,pool:'Parts',name:'Parts order entry — conventional systems',sop:'✅ Yes',scores:{4:1,5:3,6:3,7:3,8:3,9:3,10:3,11:3,2:1,3:1,12:2,13:3,14:3,15:3,16:3,17:3}},
+  {id:13,pool:'Parts',name:'Backorder & delivery delay handling',sop:'',scores:{4:1,5:3,6:3,7:3,8:3,9:3,10:3,11:3,2:1,3:1,12:2,13:3,14:3,15:3,16:3,17:3}},
+  {id:14,pool:'Parts',name:'Damaged / missing parts processing',sop:'',scores:{4:1,5:3,6:3,7:3,8:3,9:3,10:3,11:3,2:1,3:1,12:2,13:3,14:3,15:2,16:3,17:3}},
+  {id:15,pool:'Parts',name:'Dropship & supplier coordination',sop:'',scores:{4:3,5:3,6:3,7:3,8:3,9:3,10:3,11:3,2:0,3:0,12:0,13:3,14:2,15:2,16:3,17:3}},
+  {id:16,pool:'Parts',name:'Parts price lookup & repricing',sop:'',scores:{4:0,5:3,6:3,7:3,8:3,9:3,10:3,11:3,2:1,3:1,12:2,13:3,14:3,15:3,16:3,17:3}},
+  {id:17,pool:'Parts',name:'Parts order release & warehouse coordination',sop:'✅ Yes',scores:{4:3,5:3,6:3,7:3,8:3,9:3,10:3,11:3,2:1,3:1,12:2,13:3,14:3,15:3,16:3,17:3}},
+  {id:18,pool:'Parts',name:'Parts return / RMA processing',sop:'',scores:{4:3,5:3,6:3,7:3,8:3,9:3,10:3,11:3,2:1,3:1,12:2,13:1,14:1,15:3,16:1,17:1}},
+  {id:19,pool:'Replace',name:'Replacement parts identification',sop:'',scores:{4:2,5:3,6:3,7:3,8:3,9:3,10:3,11:3,2:1,3:0,12:1,13:1,14:2,15:2,16:2,17:2}},
+  {id:20,pool:'Replace',name:'End-of-life / obsolete parts handling',sop:'',scores:{4:3,5:3,6:3,7:3,8:3,9:3,10:3,11:3,2:0,3:0,12:2,13:1,14:2,15:2,16:2,17:2}},
+  {id:21,pool:'Replace',name:'Cross-reference & alternative part lookup',sop:'',scores:{4:3,5:3,6:3,7:3,8:3,9:3,10:3,11:3,2:0,3:0,12:2,13:2,14:2,15:2,16:2,17:2}},
+  {id:22,pool:'Replace',name:'Warranty replacement processing',sop:'',scores:{4:3,5:3,6:3,7:3,8:3,9:3,10:3,11:3,2:0,3:0,12:0,13:0,14:0,15:2,16:0,17:0}},
+  {id:23,pool:'Replace',name:'Replacement order entry & follow-up',sop:'',scores:{4:1,5:3,6:3,7:3,8:3,9:3,10:3,11:3,2:1,3:0,12:0,13:0,14:0,15:2,16:0,17:0}},
+  {id:24,pool:'Robots',name:'Robot order entry (ProQOT / Experlogix)',sop:'',scores:{4:0,5:0,6:2,7:2,8:0,9:0,10:0,11:1,2:3,3:3,12:0,13:0,14:0,15:0,16:0,17:1}},
+  {id:25,pool:'Robots',name:'Robot configuration validation (3-check)',sop:'',scores:{4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,2:3,3:3,12:0,13:1,14:1,15:0,16:0,17:1}},
+  {id:26,pool:'Robots',name:'Robot order gating — Commitment YES checks',sop:'',scores:{4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:1,2:3,3:3,12:0,13:0,14:0,15:0,16:0,17:0}},
+  {id:27,pool:'Robots',name:'Robot order release & dispatch',sop:'',scores:{4:0,5:0,6:3,7:3,8:0,9:0,10:0,11:0,2:3,3:3,12:0,13:2,14:2,15:0,16:0,17:1}},
+  {id:28,pool:'Robots',name:'Robot installation coordination',sop:'',scores:{4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:2,2:0,3:0,12:0,13:0,14:0,15:0,16:0,17:0}},
+  {id:29,pool:'Robots',name:'20% downpayment follow-up',sop:'',scores:{4:0,5:0,6:3,7:3,8:0,9:0,10:0,11:3,2:3,3:3,12:0,13:3,14:2,15:0,16:0,17:1}},
+  {id:30,pool:'Robots',name:'MilkGenius subscription — new sensor setup',sop:'',scores:{4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,2:0,3:1,12:0,13:0,14:0,15:0,16:0,17:0}},
+  {id:31,pool:'Robots',name:'MilkGenius subscription — sensor modification',sop:'',scores:{4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,2:0,3:0,12:0,13:0,14:0,15:0,16:0,17:0}},
+  {id:32,pool:'Robots',name:'ATP stock check (Available-to-Promise)',sop:'',scores:{4:0,5:0,6:2,7:2,8:0,9:0,10:0,11:2,2:1,3:1,12:0,13:0,14:3,15:0,16:0,17:2}},
+  {id:33,pool:'Robots',name:'Escalation matrix — margin approval',sop:'',scores:{4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:1,2:0,3:0,12:0,13:0,14:0,15:0,16:0,17:0}},
+  {id:34,pool:'System',name:'Microsoft Dynamics F&O — order management',sop:'✅ Yes',scores:{4:0,5:3,6:3,7:3,8:3,9:3,10:3,11:3,2:0,3:0,12:2,13:3,14:3,15:3,16:2,17:3}},
+  {id:35,pool:'System',name:'Microsoft Dynamics F&O — subscription billing',sop:'',scores:{4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,2:0,3:0,12:0,13:0,14:0,15:3,16:2,17:0}},
+  {id:36,pool:'System',name:'Dynamics 365 CRM (CE) — pipeline',sop:'',scores:{4:1,5:1,6:1,7:1,8:1,9:1,10:1,11:0,2:0,3:0,12:0,13:0,14:0,15:0,16:2,17:0}},
+  {id:37,pool:'System',name:'SAC Cloudserver — Apollo licensing',sop:'',scores:{4:0,5:1,6:1,7:1,8:1,9:1,10:1,11:3,2:0,3:0,12:0,13:0,14:2,15:3,16:2,17:0}},
+  {id:38,pool:'System',name:'Apollo billing — first order',sop:'',scores:{4:0,5:1,6:1,7:1,8:1,9:1,10:1,11:3,2:0,3:0,12:0,13:0,14:2,15:3,16:2,17:3}},
+  {id:39,pool:'System',name:'Apollo billing — annual renewal',sop:'',scores:{4:0,5:1,6:1,7:1,8:1,9:1,10:1,11:3,2:0,3:0,12:0,13:0,14:2,15:3,16:2,17:3}},
+  {id:40,pool:'System',name:'NedapNow activation & company code',sop:'',scores:{4:0,5:3,6:3,7:3,8:3,9:3,10:3,11:0,2:0,3:2,12:0,13:1,14:1,15:3,16:2,17:1}},
+  {id:41,pool:'System',name:'NedapNow monthly billing',sop:'',scores:{4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,2:0,3:0,12:0,13:0,14:0,15:0,16:2,17:0}},
+  {id:42,pool:'System',name:'TIM / Saturnus bi-annual invoicing',sop:'',scores:{4:0,5:0,6:1,7:0,8:0,9:1,10:0,11:3,2:0,3:0,12:1,13:1,14:3,15:3,16:3,17:3}},
+];
+let nextSkillId = 50;
+
+let trainingReqs = [
+  {id:1,agentId:3,pool:'Robots',skillId:24,level:2,priority:'High',notes:'EM region needs Robots coverage',status:'Pending',requestedBy:2,managerId:2,managerComment:'',date:'2026-06-15'},
+  {id:2,agentId:13,pool:'Interco',skillId:3,level:2,priority:'Medium',notes:'DK team gap',status:'Approved',requestedBy:12,managerId:12,managerComment:'Scheduled for Aug',date:'2026-06-10'},
+];
+let nextTrId = 10;
+let reviewingTrId = null;
+
+let leaveRequests = [
+  {id:1,agentId:3,type:'Annual',from:'2026-07-14',to:'2026-07-18',days:5,status:'Pending',notes:'Summer',requestedBy:3,approvedBy:null,managerComment:''},
+  {id:2,agentId:16,type:'Annual',from:'2026-08-04',to:'2026-08-15',days:10,status:'Pending',notes:'',requestedBy:16,approvedBy:null,managerComment:''},
+  {id:3,agentId:6,type:'Annual',from:'2026-06-02',to:'2026-06-06',days:5,status:'Approved',notes:'',requestedBy:6,approvedBy:4,managerComment:''},
+];
+let nextLvId = 10;
+let reviewingLvId = null;
+
+let currentUser = null;
+let selectedRole = 'admin';
+let currentLeaveTab = 'pending';
+let editingPersonId = null;
+
+// ═══════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════
+const POOL_COLORS = {Chemicals:'#7c3aed',Interco:'#0369a1',MQOT:'#b45309',Parts:'#16a34a',Replace:'#0891b2',Robots:'#dc2626',System:'#6b21a8'};
+const POOL_BG = {Chemicals:'#f5f3ff',Interco:'#e0f2fe',MQOT:'#fef3c7',Parts:'#dcfce7',Replace:'#cffafe',Robots:'#fee2e2',System:'#faf5ff'};
+const REGION_COLORS = {RE:'#2563eb',EM:'#16a34a',DK:'#d97706'};
+
+function p(id){return people.find(x=>x.id===id)}
+function av(name){return(name||'').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}
+function avHtml(name,size='s'){return`<span class="av av-${size}" style="background:var(--accent-l);color:var(--accent-d)">${av(name)}</span>`}
+function regionBadge(r){if(!r)return'';const c=REGION_COLORS[r]||'#888';return`<span class="badge" style="background:${c}22;color:${c}">${r}</span>`}
+function poolBadge(pool){const c=POOL_COLORS[pool]||'#888';const bg=POOL_BG[pool]||'#f9f9f9';return`<span class="badge" style="background:${bg};color:${c}">${pool}</span>`}
+function gapFlag(pct){
+  if(pct<0.25)return'<span class="gap-pill gap-c">🔴 Critical</span>';
+  if(pct<0.5)return'<span class="gap-pill gap-l">🟡 Low</span>';
+  if(pct<0.75)return'<span class="gap-pill gap-ok">🟢 OK</span>';
+  return'<span class="gap-pill gap-s">✅ Strong</span>';
+}
+function statusBadge(s){const m={Pending:'b-a',Approved:'b-g',Declined:'b-r',Draft:'b-gr'};return`<span class="badge ${m[s]||'b-gr'}">${s}</span>`}
+function getManagerOf(pid){const person=p(pid);if(!person||!person.managerId)return null;return p(person.managerId)}
+function canApproveTraining(tr){if(isAdmin())return true;if(!isManager())return false;const agent=p(tr.agentId);return agent&&agent.managerId===currentUser.id;}
+function canApproveLeave(lv){if(isAdmin())return true;if(!isManager())return false;const agent=p(lv.agentId);return agent&&agent.managerId===currentUser.id;}
+function isAdmin(){return currentUser&&(currentUser.sysRole==='admin')}
+function isManager(){return currentUser&&(currentUser.sysRole==='manager'||currentUser.sysRole==='admin')}
+function canEditSkill(agentId){
+  if(isAdmin())return true;
+  if(!isManager())return false;
+  const agent=p(agentId);return agent&&agent.managerId===currentUser.id;
+}
+function visiblePeople(){
+  if(isAdmin()||currentUser.sysRole==='hr')return people;
+  if(isManager())return people.filter(x=>x.managerId===currentUser.id||x.id===currentUser.id);
+  return people.filter(x=>x.id===currentUser.id);
+}
+function skillAvg(s){const vals=Object.values(s.scores).filter(v=>v>0);return vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:0;}
+function skillCov(s){const total=COL_ORDER.length;const q=COL_ORDER.filter(id=>(s.scores[id]||0)>=2).length;return q/total;}
+function skillExperts(s){return COL_ORDER.filter(id=>(s.scores[id]||0)>=3).length;}
+
+// ═══════════════════════════════════════
+// LOGIN
+// ═══════════════════════════════════════
+function pickRole(role,el){
+  selectedRole=role;
+  document.querySelectorAll('.role-btn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');
+  const sel=document.getElementById('login-sel');
+  sel.innerHTML='<option value="">Choose account…</option>';
+  const roleMap={admin:['admin'],manager:['manager'],employee:['employee'],hr:['hr']};
+  const allowed=roleMap[role]||[];
+  people.filter(x=>allowed.includes(x.sysRole)).forEach(x=>sel.innerHTML+=`<option value="${x.id}">${x.name} — ${x.role}${x.region?' ('+x.region+')':''}</option>`);
+}
+function doLogin(){
+  const id=parseInt(document.getElementById('login-sel').value);if(!id){alert('Choose an account.');return}
+  currentUser=people.find(x=>x.id===id);
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app-screen').style.display='flex';
+  buildSidebar();nav('dashboard',null);
+}
+function logout(){
+  currentUser=null;
+  document.getElementById('app-screen').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+  pickRole('admin',document.querySelector('.role-btn'));
+}
+
+// ═══════════════════════════════════════
+// SIDEBAR
+// ═══════════════════════════════════════
+function buildSidebar(){
+  const u=currentUser;
+  document.getElementById('sb-av').textContent=av(u.name);
+  document.getElementById('sb-name').textContent=u.name;
+  document.getElementById('sb-role').textContent=u.sysRole==='admin'?'Administrator':u.sysRole==='manager'?`Manager (${u.region||'CS'})`:u.sysRole==='hr'?'HR Viewer':`CSR ${u.region?'('+u.region+')':''}`;
+
+  const trPend=trainingReqs.filter(r=>r.status==='Pending'&&canApproveTraining(r)).length;
+  const lvPend=leaveRequests.filter(r=>r.status==='Pending'&&canApproveLeave(r)).length;
+  const totalPend=trPend+lvPend;
+
+  const navDef=[
+    {section:'Overview',items:[{id:'dashboard',icon:'ti-layout-dashboard',label:'Dashboard'}]},
+    {section:'Skills',items:[
+      {id:'matrix',icon:'ti-table',label:'Skill matrix'},
+      {id:'coverage',icon:'ti-shield-check',label:'Coverage view'},
+      {id:'improve',icon:'ti-bulb',label:'Improvements'},
+    ]},
+    {section:'Requests',items:[
+      {id:'training',icon:'ti-school',label:'Training',badge:trPend||null},
+      {id:'leave',icon:'ti-beach',label:'Leave',badge:lvPend||null},
+    ]},
+  ];
+  if(isAdmin()||isManager()||currentUser.sysRole==='hr'){
+    navDef.push({section:'Team',items:[{id:'org',icon:'ti-hierarchy',label:'Org chart & roles'}]});
+  }
+
+  let html='';
+  navDef.forEach(g=>{
+    html+=`<div class="ns">${g.section}</div>`;
+    g.items.forEach(item=>{
+      const badge=item.badge?`<span class="bc">${item.badge}</span>`:'';
+      html+=`<div class="ni" id="nav-${item.id}" onclick="nav('${item.id}',this)"><i class="ti ${item.icon}"></i>${item.label}${badge}</div>`;
+    });
+  });
+  document.getElementById('nav-links').innerHTML=html;
+}
+function toggleSb(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sb-backdrop').classList.toggle('open')}
+function closeSb(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sb-backdrop').classList.remove('open')}
+const PAGE_TITLES={dashboard:'Dashboard',matrix:'Skill matrix',coverage:'Coverage view',improve:'Improvement opportunities',training:'Training requests',leave:'Leave requests',org:'Org chart & roles'};
+function nav(id,el){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s-'+id)?.classList.add('active');
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  document.getElementById('nav-'+id)?.classList.add('active');
+  document.getElementById('page-title').textContent=PAGE_TITLES[id]||id;
+  closeSb();
+  const renders={dashboard:renderDashboard,matrix:renderMatrix,coverage:renderCoverage,improve:renderImprove,training:renderTraining,leave:renderLeave,org:renderOrg};
+  if(renders[id])renders[id]();
+}
+
+// ═══════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════
+function renderDashboard(){
+  const totalSkills=skills.length;
+  const critical=skills.filter(s=>skillCov(s)<0.25).length;
+  const trPend=trainingReqs.filter(r=>r.status==='Pending'&&canApproveTraining(r)).length;
+  const lvPend=leaveRequests.filter(r=>r.status==='Pending'&&canApproveLeave(r)).length;
+  document.getElementById('dash-stats').innerHTML=`
+    <div class="stat"><div class="stat-l">Team size</div><div class="stat-v">${people.filter(x=>x.sysRole==='employee'||x.sysRole==='manager').length}</div><div class="stat-s">3 regions — RE, EM, DK</div></div>
+    <div class="stat"><div class="stat-l">Total skills</div><div class="stat-v">${totalSkills}</div><div class="stat-s">Across 7 pools</div></div>
+    <div class="stat"><div class="stat-l">Critical gaps</div><div class="stat-v" style="color:var(--red)">${critical}</div><div class="stat-s">< 25% coverage</div></div>
+    <div class="stat"><div class="stat-l">Pending approvals</div><div class="stat-v" style="color:var(--amber)">${trPend+lvPend}</div><div class="stat-s">${trPend} training · ${lvPend} leave</div></div>`;
+
+  // Pending approvals
+  const allPend=[
+    ...trainingReqs.filter(r=>r.status==='Pending'&&canApproveTraining(r)).map(r=>({type:'training',data:r})),
+    ...leaveRequests.filter(r=>r.status==='Pending'&&canApproveLeave(r)).map(r=>({type:'leave',data:r}))
+  ];
+  document.getElementById('dash-pend-count').textContent=allPend.length;
+  document.getElementById('dash-approvals').innerHTML=allPend.length?allPend.map(item=>{
+    if(item.type==='training'){
+      const r=item.data;const agent=p(r.agentId);const sk=skills.find(s=>s.id===r.skillId);
+      return`<div class="app-item">${avHtml(agent?.name||'?')}<div class="app-body"><div class="app-name">${agent?.name} — Training</div><div class="app-meta">${sk?.name||'?'} → Level ${r.level} · ${r.priority}</div></div><button class="btn btn-sm btn-g" onclick="openTrainingReview(${r.id})"><i class="ti ti-check"></i>Review</button></div>`;
+    } else {
+      const r=item.data;const agent=p(r.agentId);
+      return`<div class="app-item">${avHtml(agent?.name||'?')}<div class="app-body"><div class="app-name">${agent?.name} — Leave</div><div class="app-meta">${r.type} · ${r.from} to ${r.to} · ${r.days}d</div></div><button class="btn btn-sm btn-g" onclick="openLeaveReview(${r.id})"><i class="ti ti-check"></i>Review</button></div>`;
+    }
+  }).join(''):'<div class="empty">No pending approvals.</div>';
+
+  // Critical gaps on dashboard
+  const critSkills=skills.filter(s=>skillCov(s)<0.25).slice(0,8);
+  document.getElementById('dash-gaps').innerHTML=critSkills.length?critSkills.map(s=>{
+    const q=COL_ORDER.filter(id=>(s.scores[id]||0)>=2).length;
+    return`<div style="display:flex;align-items:center;gap:8px;padding:9px 14px;border-bottom:1px solid var(--border)">
+      ${poolBadge(s.pool)}<span style="flex:1;font-size:12px">${s.name}</span>
+      <span style="font-size:11px;color:var(--text2)">${q}/16 proficient</span>
+      <button class="btn btn-sm" onclick="openQuickTrain(${s.id})"><i class="ti ti-school"></i></button>
+    </div>`;
+  }).join(''):'<div class="empty">No critical gaps — great coverage!</div>';
+
+  // Pool overview
+  const pools=['Chemicals','Interco','MQOT','Parts','Replace','Robots','System'];
+  const sopCounts={};
+  skills.forEach(s=>{if(!sopCounts[s.pool])sopCounts[s.pool]={yes:0,total:0};sopCounts[s.pool].total++;if(s.sop==='✅ Yes')sopCounts[s.pool].yes++;});
+  document.getElementById('pool-overview').innerHTML=pools.map(pool=>{
+    const ps=skills.filter(s=>s.pool===pool);
+    const avgCov=ps.length?ps.reduce((a,s)=>a+skillCov(s),0)/ps.length:0;
+    const avgScore=ps.length?ps.reduce((a,s)=>a+skillAvg(s),0)/ps.length:0;
+    const sc=sopCounts[pool]||{yes:0,total:0};
+    return`<tr><td>${poolBadge(pool)}</td><td>${ps.length}</td><td>${avgScore.toFixed(1)}</td><td>${Math.round(avgCov*100)}%</td><td>${gapFlag(avgCov)}</td><td>${sc.yes}/${sc.total} SOPs</td></tr>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════
+// SKILL MATRIX
+// ═══════════════════════════════════════
+function renderMatrix(){
+  const poolF=document.getElementById('matrix-pool-f').value;
+  const regionF=document.getElementById('matrix-region-f').value;
+  const btn=document.getElementById('btn-add-skill');
+  if(btn)btn.style.display=isAdmin()?'inline-flex':'none';
+  const btnP=document.getElementById('btn-manage-pools');
+  if(btnP)btnP.style.display=isAdmin()?'inline-flex':'none';
+  const hint=document.getElementById('matrix-hint');
+  if(hint)hint.textContent=isAdmin()?'Click a dot to cycle · ✏️ edit · 🗑 delete per row':isManager()?'Click a dot on your direct reports to edit':'Read-only — your manager updates your levels';
+
+  let filtPeople=COL_ORDER.map(id=>p(id)).filter(Boolean);
+  if(regionF)filtPeople=filtPeople.filter(x=>x.region===regionF);
+  let filtSkills=poolF?skills.filter(s=>s.pool===poolF):skills;
+
+  // Group by pool
+  const pools=[...new Set(filtSkills.map(s=>s.pool))];
+  const head=document.getElementById('matrix-head');
+  const body=document.getElementById('matrix-body');
+
+  head.innerHTML=`<tr><th style="min-width:200px">Skill</th><th>SOP</th>${filtPeople.map(x=>`<th style="text-align:center;min-width:32px;font-size:10px">${x.name.split(' ')[0]}<br><span style="color:var(--text3)">${x.region||''}</span></th>`).join('')}<th style="text-align:center">Avg</th><th style="text-align:center">Cov%</th><th>Status</th>${isAdmin()?'<th></th>':''}</tr>`;
+
+  let bodyHtml='';
+  pools.forEach(pool=>{
+    const ps=filtSkills.filter(s=>s.pool===pool);
+    bodyHtml+=`<tr><td colspan="${filtPeople.length+(isAdmin()?6:5)}" class="pool-hdr" style="background:${POOL_BG[pool]||'#f9f9f9'};color:${POOL_COLORS[pool]||'#333'}">${pool}</td></tr>`;
+    ps.forEach(skill=>{
+      const cov=skillCov(skill);
+      const avg=skillAvg(skill);
+      const cells=filtPeople.map(person=>{
+        const lv=skill.scores[person.id]||0;
+        const canEdit=canEditSkill(person.id);
+        return`<td style="text-align:center"><span class="lv lv${lv}${canEdit?' ed':''}" ${canEdit?`onclick="cycleSkill(${skill.id},${person.id},this)"`:''}>${lv}</span></td>`;
+      }).join('');
+      const adminBtns=isAdmin()?`<td style="white-space:nowrap"><button class="btn btn-sm" onclick="openEditSkill(${skill.id})" title="Edit skill" style="padding:3px 7px;margin-right:3px"><i class="ti ti-pencil"></i></button><button class="btn btn-sm btn-r" onclick="confirmDeleteSkill(${skill.id})" title="Delete skill" style="padding:3px 7px"><i class="ti ti-trash"></i></button></td>`:'';
+      bodyHtml+=`<tr><td style="font-size:12px">${skill.name}</td><td style="font-size:11px">${skill.sop||'—'}</td>${cells}<td style="text-align:center;font-weight:600;font-size:12px">${avg.toFixed(1)}</td><td style="text-align:center;font-size:11px">${Math.round(cov*100)}%</td><td>${gapFlag(cov)}</td>${adminBtns}</tr>`;
+    });
+  });
+  body.innerHTML=bodyHtml;
+}
+function cycleSkill(skillId,personId,el){
+  const skill=skills.find(s=>s.id===skillId);if(!skill)return;
+  skill.scores[personId]=((skill.scores[personId]||0)+1)%4;
+  const lv=skill.scores[personId];
+  el.className=`lv lv${lv} ed`;el.textContent=lv;
+}
+function addSkill(){
+  const pool=document.getElementById('as-pool').value;
+  const name=document.getElementById('as-name').value.trim();
+  const sop=document.getElementById('as-sop').value;
+  if(!name)return;
+  const scores={};COL_ORDER.forEach(id=>scores[id]=0);
+  // also seed any new people added since COL_ORDER
+  people.forEach(x=>{if(!(x.id in scores))scores[x.id]=0;});
+  skills.push({id:nextSkillId++,pool,name,sop,scores});
+  ['as-name'].forEach(id=>document.getElementById(id).value='');
+  closeModal('m-add-skill');renderMatrix();
+}
+
+let editingSkillId=null;
+function openEditSkill(skillId){
+  const skill=skills.find(s=>s.id===skillId);if(!skill)return;
+  editingSkillId=skillId;
+  document.getElementById('es-title').innerHTML=`Edit skill <button class="cx" onclick="closeModal('m-edit-skill')">×</button>`;
+  document.getElementById('es-pool').value=skill.pool;
+  document.getElementById('es-name').value=skill.name;
+  document.getElementById('es-sop').value=skill.sop||'';
+  openModal('m-edit-skill');
+}
+function saveSkillEdit(){
+  const skill=skills.find(s=>s.id===editingSkillId);if(!skill)return;
+  const name=document.getElementById('es-name').value.trim();
+  if(!name){alert('Skill name cannot be empty.');return}
+  skill.pool=document.getElementById('es-pool').value;
+  skill.name=name;
+  skill.sop=document.getElementById('es-sop').value;
+  editingSkillId=null;
+  closeModal('m-edit-skill');renderMatrix();renderCoverage&&renderCoverage();
+}
+function confirmDeleteSkill(skillId){
+  const skill=skills.find(s=>s.id===skillId);if(!skill)return;
+  if(!confirm(`Delete skill "${skill.name}" from pool ${skill.pool}?\n\nThis will remove all scores for this skill. This cannot be undone.`))return;
+  skills=skills.filter(s=>s.id!==skillId);
+  renderMatrix();
+}
+function deleteSkill(){
+  confirmDeleteSkill(editingSkillId);
+  closeModal('m-edit-skill');
+}
+
+// Pool management
+const POOL_LIST=['Chemicals','Interco','MQOT','Parts','Replace','Robots','System'];
+let customPools=[...POOL_LIST];
+function getAllPools(){return[...new Set([...POOL_LIST,...customPools,...skills.map(s=>s.pool)])].sort();}
+function refreshPoolDropdowns(){
+  const pools=getAllPools();
+  const opts=pools.map(p=>`<option>${p}</option>`).join('');
+  ['as-pool','es-pool'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=opts;});
+  const mf=document.getElementById('matrix-pool-f');
+  if(mf){mf.innerHTML='<option value="">All pools</option>'+pools.map(p=>`<option>${p}</option>`).join('');}
+}
+function openManagePools(){
+  renderPoolManageList();
+  openModal('m-manage-pools');
+}
+function renderPoolManageList(){
+  const pools=getAllPools();
+  const el=document.getElementById('pool-manage-list');
+  el.innerHTML=pools.map(pool=>{
+    const count=skills.filter(s=>s.pool===pool).length;
+    return`<div style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--border)">
+      <span class="badge" style="background:${POOL_BG[pool]||'#f5f5f5'};color:${POOL_COLORS[pool]||'#333'}">${pool}</span>
+      <span style="flex:1;font-size:11px;color:var(--text2)">${count} skill${count!==1?'s':''}</span>
+      ${count===0?`<button class="btn btn-sm btn-r" onclick="deletePool('${pool}')"><i class="ti ti-trash"></i>Delete</button>`:'<span style="font-size:11px;color:var(--text3)">Has skills</span>'}
+    </div>`;
+  }).join('');
+}
+function addPool(){
+  const name=document.getElementById('np-pool-name').value.trim();
+  if(!name){alert('Enter a pool name.');return}
+  if(getAllPools().includes(name)){alert('Pool already exists.');return}
+  customPools.push(name);
+  POOL_COLORS[name]=POOL_COLORS[name]||'#6b7280';
+  POOL_BG[name]=POOL_BG[name]||'#f9fafb';
+  document.getElementById('np-pool-name').value='';
+  refreshPoolDropdowns();renderPoolManageList();
+}
+function deletePool(pool){
+  const count=skills.filter(s=>s.pool===pool).length;
+  if(count>0){alert(`Cannot delete "${pool}" — it still has ${count} skill(s). Delete the skills first.`);return}
+  if(!confirm(`Delete pool "${pool}"?`))return;
+  customPools=customPools.filter(p=>p!==pool);
+  refreshPoolDropdowns();renderPoolManageList();renderMatrix();
+}
+function openQuickTrain(skillId){
+  const skill=skills.find(s=>s.id===skillId);if(!skill)return;
+  document.getElementById('tr-pool').value=skill.pool;
+  filterTrSkills();
+  document.getElementById('tr-skill').value=skillId;
+  nav('training',null);
+  document.querySelectorAll('.ni').forEach(n=>{if(n.textContent.trim()==='Training')n.classList.add('active');else n.classList.remove('active')});
+}
+
+// ═══════════════════════════════════════
+// COVERAGE
+// ═══════════════════════════════════════
+function renderCoverage(){
+  // Pool chips
+  const pools=['Chemicals','Interco','MQOT','Parts','Replace','Robots','System'];
+  const filterKey='cov_pool';
+  const el=document.getElementById('cov-pool-chips');
+  const active=window._covFilter||'';
+  el.innerHTML='<span class="chip active" onclick="setCovFilter(\'\')">All pools</span>'+pools.map(pool=>`<span class="chip" style="color:${POOL_COLORS[pool]}" onclick="setCovFilter('${pool}')">${pool}</span>`).join('');
+  el.querySelectorAll('.chip').forEach(c=>{if(c.textContent===(active||'All pools'))c.classList.add('active');else c.classList.remove('active')});
+
+  const filtSkills=active?skills.filter(s=>s.pool===active):skills;
+  const totalAgents=COL_ORDER.length;
+  const critical=filtSkills.filter(s=>skillCov(s)<0.25).length;
+  const low=filtSkills.filter(s=>skillCov(s)>=0.25&&skillCov(s)<0.5).length;
+  const ok=filtSkills.filter(s=>skillCov(s)>=0.5).length;
+
+  document.getElementById('cov-stats').innerHTML=`
+    <div class="stat"><div class="stat-l">Skills assessed</div><div class="stat-v">${filtSkills.length}</div></div>
+    <div class="stat"><div class="stat-l">🔴 Critical gaps</div><div class="stat-v" style="color:var(--red)">${critical}</div></div>
+    <div class="stat"><div class="stat-l">🟡 Low coverage</div><div class="stat-v" style="color:var(--amber)">${low}</div></div>
+    <div class="stat"><div class="stat-l">🟢 OK or Strong</div><div class="stat-v" style="color:var(--green)">${ok}</div></div>`;
+
+  document.getElementById('cov-body').innerHTML=filtSkills.map(s=>{
+    const l1=COL_ORDER.filter(id=>(s.scores[id]||0)>=1).length;
+    const l2=COL_ORDER.filter(id=>(s.scores[id]||0)>=2).length;
+    const l3=COL_ORDER.filter(id=>(s.scores[id]||0)>=3).length;
+    const cov=l2/totalAgents;
+    const experts=COL_ORDER.filter(id=>(s.scores[id]||0)>=3).map(id=>p(id)?.name.split(' ')[0]).filter(Boolean);
+    return`<tr><td>${poolBadge(s.pool)}</td><td style="font-size:12px">${s.name}</td><td style="font-size:11px">${s.sop||'—'}</td><td style="text-align:center">${l1}</td><td style="text-align:center;font-weight:600">${l2}</td><td style="text-align:center">${l3}</td><td style="min-width:80px"><div class="pbar"><div class="pfill" style="width:${Math.round(cov*100)}%;background:${cov<0.25?'var(--red)':cov<0.5?'var(--amber)':cov<0.75?'var(--green)':'var(--accent)'}"></div></div><div style="font-size:10px;color:var(--text2);margin-top:2px">${Math.round(cov*100)}%</div></td><td>${gapFlag(cov)}</td><td style="font-size:11px;color:var(--text2)">${experts.join(', ')||'None'}</td></tr>`;
+  }).join('');
+}
+function setCovFilter(val){window._covFilter=val;renderCoverage();}
+
+// ═══════════════════════════════════════
+// IMPROVEMENTS
+// ═══════════════════════════════════════
+function renderImprove(){
+  const totalAgents=COL_ORDER.length;
+  const critSkills=skills.filter(s=>skillCov(s)<0.25);
+  const lowSkills=skills.filter(s=>skillCov(s)>=0.25&&skillCov(s)<0.5);
+  const noSop=skills.filter(s=>!s.sop||s.sop==='❌ No');
+  const noExpert=skills.filter(s=>skillExperts(s)===0&&skillCov(s)>=0.25);
+
+  function impRow(s,priority){
+    const cov=skillCov(s);const q=COL_ORDER.filter(id=>(s.scores[id]||0)>=2).length;
+    // Who to train — agents with lv 0 or 1
+    const candidates=COL_ORDER.filter(id=>(s.scores[id]||0)<2).map(id=>p(id)?.name.split(' ')[0]).filter(Boolean).slice(0,3);
+    return`<div style="display:flex;align-items:center;gap:8px;padding:9px 14px;border-bottom:1px solid var(--border);flex-wrap:wrap">
+      ${poolBadge(s.pool)}<span style="flex:1;font-size:12px;min-width:140px">${s.name}</span>
+      <span style="font-size:11px;color:var(--text2)">${q}/${totalAgents} proficient</span>
+      ${candidates.length?`<span style="font-size:11px;color:var(--text3)">Candidates: ${candidates.join(', ')}</span>`:''}
+      <span class="badge b-${priority==='High'?'r':priority==='Medium'?'a':'gr'}">${priority}</span>
+      <button class="btn btn-sm btn-p" onclick="openQuickTrain(${s.id})"><i class="ti ti-school"></i>Request training</button>
+    </div>`;
+  }
+
+  document.getElementById('imp-critical').innerHTML=critSkills.length?critSkills.map(s=>impRow(s,'High')).join(''):'<div class="empty">No critical gaps! ✅</div>';
+  document.getElementById('imp-low').innerHTML=lowSkills.length?lowSkills.map(s=>impRow(s,'Medium')).join(''):'<div class="empty">No low coverage skills.</div>';
+  document.getElementById('imp-sop').innerHTML=noSop.length?noSop.map(s=>`<div style="display:flex;align-items:center;gap:8px;padding:9px 14px;border-bottom:1px solid var(--border)">${poolBadge(s.pool)}<span style="flex:1;font-size:12px">${s.name}</span><span class="badge b-r">No SOP</span></div>`).join(''):'<div class="empty">All skills have SOPs! ✅</div>';
+  document.getElementById('imp-expert').innerHTML=noExpert.length?noExpert.map(s=>impRow(s,'Low')).join(''):'<div class="empty">All covered skills have at least one expert.</div>';
+}
+
+// ═══════════════════════════════════════
+// TRAINING REQUESTS
+// ═══════════════════════════════════════
+function filterTrSkills(){
+  const pool=document.getElementById('tr-pool').value;
+  const sel=document.getElementById('tr-skill');
+  const filtered=pool?skills.filter(s=>s.pool===pool):skills;
+  sel.innerHTML=filtered.map(s=>`<option value="${s.id}">${s.pool} — ${s.name}</option>`).join('');
+}
+function renderTraining(){
+  filterTrSkills();
+  const vp=visiblePeople();
+  document.getElementById('tr-agent').innerHTML=vp.map(x=>`<option value="${x.id}">${x.name}${x.region?' ('+x.region+')':''}</option>`).join('');
+
+  const myPending=trainingReqs.filter(r=>r.status==='Pending'&&canApproveTraining(r));
+  document.getElementById('tr-pend-count').textContent=myPending.length;
+
+  function trRow(r,showActs){
+    const agent=p(r.agentId);const sk=skills.find(s=>s.id===r.skillId);
+    return`<div style="display:flex;align-items:flex-start;gap:9px;padding:10px 14px;border-bottom:1px solid var(--border)">
+      ${avHtml(agent?.name||'?')}
+      <div style="flex:1">
+        <div style="font-weight:600;font-size:12px">${agent?.name||'?'}</div>
+        <div style="font-size:11px;color:var(--text2)">${poolBadge(sk?.pool||'')} ${sk?.name||'?'} → Level ${r.level}</div>
+        <div style="font-size:11px;color:var(--text2);margin-top:2px">${r.date} · ${r.notes||''}</div>
+        ${r.managerComment?`<div style="font-size:11px;font-style:italic;color:var(--text2);margin-top:2px">"${r.managerComment}"</div>`:''}
+      </div>
+      <span class="badge b-${r.priority==='High'?'r':r.priority==='Medium'?'a':'gr'}">${r.priority}</span>
+      ${statusBadge(r.status)}
+      ${showActs&&r.status==='Pending'?`<button class="btn btn-sm btn-g" onclick="openTrainingReview(${r.id})"><i class="ti ti-check"></i>Review</button>`:''}
+    </div>`;
+  }
+
+  document.getElementById('tr-pending-list').innerHTML=myPending.length?myPending.map(r=>trRow(r,true)).join(''):'<div class="empty">No pending training requests.</div>';
+  const allVisible=trainingReqs.filter(r=>{const agent=p(r.agentId);return isAdmin()||(isManager()&&agent?.managerId===currentUser.id)||r.agentId===currentUser.id;});
+  document.getElementById('tr-all-list').innerHTML=allVisible.length?allVisible.map(r=>trRow(r,false)).join(''):'<div class="empty">No training requests yet.</div>';
+}
+function submitTraining(){
+  const agentId=parseInt(document.getElementById('tr-agent').value);
+  const skillId=parseInt(document.getElementById('tr-skill').value);
+  const level=document.getElementById('tr-level').value;
+  const priority=document.getElementById('tr-priority').value;
+  const notes=document.getElementById('tr-notes').value;
+  const skill=skills.find(s=>s.id===skillId);
+  const agent=p(agentId);
+  const managerId=agent?.managerId||null;
+  trainingReqs.push({id:nextTrId++,agentId,pool:skill?.pool||'',skillId,level,priority,notes,status:'Pending',requestedBy:currentUser.id,managerId,managerComment:'',date:new Date().toISOString().slice(0,10)});
+  document.getElementById('tr-notes').value='';
+  buildSidebar();renderTraining();
+}
+function openTrainingReview(id){
+  reviewingTrId=id;
+  const r=trainingReqs.find(x=>x.id===id);const agent=p(r.agentId);const sk=skills.find(s=>s.id===r.skillId);
+  document.getElementById('tra-title').innerHTML=`Review training request <button class="cx" onclick="closeModal('m-tr-approve')">×</button>`;
+  document.getElementById('tra-content').innerHTML=`<strong>${agent?.name}</strong> — ${sk?.pool}: ${sk?.name}<br>Target level: ${r.level} · Priority: ${r.priority}<br>Notes: ${r.notes||'—'}<br>Requested: ${r.date}`;
+  document.getElementById('tra-comment').value='';
+  openModal('m-tr-approve');
+}
+function approveTraining(){const r=trainingReqs.find(x=>x.id===reviewingTrId);if(!r)return;r.status='Approved';r.managerComment=document.getElementById('tra-comment').value;closeModal('m-tr-approve');buildSidebar();renderTraining();}
+function declineTraining(){const r=trainingReqs.find(x=>x.id===reviewingTrId);if(!r)return;r.status='Declined';r.managerComment=document.getElementById('tra-comment').value;closeModal('m-tr-approve');buildSidebar();renderTraining();}
+
+// ═══════════════════════════════════════
+// LEAVE
+// ═══════════════════════════════════════
+function renderLeave(){
+  const vp=visiblePeople();
+  document.getElementById('lv-agent').innerHTML=vp.map(x=>`<option value="${x.id}">${x.name}</option>`).join('');
+
+  const myPending=leaveRequests.filter(r=>r.status==='Pending'&&canApproveLeave(r));
+  const myApproved=leaveRequests.filter(r=>r.status==='Approved'&&(isAdmin()||(isManager()&&p(r.agentId)?.managerId===currentUser.id)||r.agentId===currentUser.id));
+
+  // Pending
+  document.getElementById('leave-pending-list').innerHTML=myPending.length?myPending.map(r=>{
+    const agent=p(r.agentId);
+    return`<div class="app-item">${avHtml(agent?.name||'?')}
+      <div class="app-body"><div class="app-name">${agent?.name} ${regionBadge(agent?.region)}</div>
+      <div class="app-meta">${r.type} · ${r.from} to ${r.to} · ${r.days}d</div>
+      ${r.notes?`<div class="app-note">"${r.notes}"</div>`:''}
+      ${canApproveLeave(r)&&r.agentId!==currentUser.id?`<div class="app-acts"><button class="btn btn-sm btn-g" onclick="openLeaveReview(${r.id})"><i class="ti ti-check"></i>Approve</button><button class="btn btn-sm btn-r" onclick="declineLeaveQuick(${r.id})"><i class="ti ti-x"></i>Decline</button></div>`:r.agentId===currentUser.id?`<div class="app-acts"><span class="badge b-a">Awaiting your manager's approval</span></div>`:''}
+      </div></div>`;
+  }).join(''):'<div class="empty">No pending leave requests.</div>';
+
+  // Approved
+  document.getElementById('leave-approved-list').innerHTML=myApproved.map(r=>{
+    const agent=p(r.agentId);const approver=r.approvedBy?p(r.approvedBy):null;
+    return`<tr><td><div style="display:flex;align-items:center;gap:6px">${avHtml(agent?.name||'?')}${agent?.name}</div></td><td>${regionBadge(agent?.region)}</td><td>${r.type}</td><td>${r.from}</td><td>${r.to}</td><td>${r.days}d</td><td style="color:var(--text2)">${approver?.name||'Admin'}</td></tr>`;
+  }).join('');
+
+  // Balances
+  const balPeople=visiblePeople().filter(x=>x.sysRole!=='admin'&&x.sysRole!=='hr');
+  document.getElementById('leave-balance-list').innerHTML=balPeople.map(x=>{
+    const used=leaveRequests.filter(r=>r.agentId===x.id&&r.status==='Approved').reduce((s,r)=>s+r.days,0);
+    const rem=25-used;const pct=Math.round(rem/25*100);
+    return`<tr><td><div style="display:flex;align-items:center;gap:6px">${avHtml(x.name)}${x.name}</div></td><td>${regionBadge(x.region)}</td><td>25d</td><td>${used}d</td><td><span class="badge ${rem>15?'b-g':rem>8?'b-a':'b-r'}">${rem}d</span></td><td style="min-width:80px"><div class="pbar"><div class="pfill" style="width:${pct}%;background:${rem>15?'var(--green)':rem>8?'var(--amber)':'var(--red)'}"></div></div></td></tr>`;
+  }).join('');
+}
+function submitLeave(){
+  const agentId=parseInt(document.getElementById('lv-agent').value);
+  const type=document.getElementById('lv-type').value;
+  const from=document.getElementById('lv-from').value;
+  const to=document.getElementById('lv-to').value;
+  const notes=document.getElementById('lv-notes').value;
+  if(!from||!to){alert('Select dates.');return}
+  const d1=new Date(from);const d2=new Date(to);
+  const days=Math.max(1,Math.round((d2-d1)/86400000)+1);
+  const agent=p(agentId);
+  leaveRequests.push({id:nextLvId++,agentId,type,from,to,days,status:'Pending',notes,requestedBy:currentUser.id,approvedBy:null,managerComment:''});
+  ['lv-from','lv-to','lv-notes'].forEach(id=>document.getElementById(id).value='');
+  closeModal('m-leave');buildSidebar();renderLeave();
+}
+function openLeaveReview(id){
+  reviewingLvId=id;
+  const r=leaveRequests.find(x=>x.id===id);const agent=p(r.agentId);
+  document.getElementById('lva-title').innerHTML=`Review leave: ${agent?.name} <button class="cx" onclick="closeModal('m-lv-approve')">×</button>`;
+  document.getElementById('lva-content').innerHTML=`<strong>${r.type}</strong> · ${r.from} to ${r.to} · ${r.days} days<br>${r.notes?`Notes: "${r.notes}"`:''}`;
+  document.getElementById('lva-comment').value='';
+  openModal('m-lv-approve');
+}
+function approveLeave(){const r=leaveRequests.find(x=>x.id===reviewingLvId);if(!r)return;r.status='Approved';r.approvedBy=currentUser.id;r.managerComment=document.getElementById('lva-comment').value;closeModal('m-lv-approve');buildSidebar();renderLeave();}
+function declineLeave(){const r=leaveRequests.find(x=>x.id===reviewingLvId);if(!r)return;r.status='Declined';r.managerComment=document.getElementById('lva-comment').value;closeModal('m-lv-approve');buildSidebar();renderLeave();}
+function declineLeaveQuick(id){const r=leaveRequests.find(x=>x.id===id);if(r&&canApproveLeave(r)){r.status='Declined';r.approvedBy=currentUser.id;}buildSidebar();renderLeave();}
+function leaveTab(tab,el){
+  currentLeaveTab=tab;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
+  ['pending','approved','balances'].forEach(t=>{document.getElementById('lt-'+t).style.display=t===tab?'block':'none'});
+}
+
+// ═══════════════════════════════════════
+// ORG CHART
+// ═══════════════════════════════════════
+function renderOrg(){
+  editingPersonId=null;
+  document.getElementById('edit-person-card').style.display='none';
+  // Build tree: root → managers → employees
+  const roots=people.filter(x=>!x.managerId);
+  function buildLevel(parentId){
+    return people.filter(x=>x.managerId===parentId);
+  }
+  function personCard(x){
+    const sel=editingPersonId===x.id;
+    return`<div class="org-node"><div class="org-card${sel?' selected':''}" onclick="selectPerson(${x.id})">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">${avHtml(x.name)}<div><div class="oc-name">${x.name}</div><div class="oc-role">${x.role}</div></div></div>
+      <div style="display:flex;gap:4px;flex-wrap:wrap">${regionBadge(x.region)}<span class="badge b-${x.sysRole==='admin'?'r':x.sysRole==='manager'?'p':'b-gr'}" style="font-size:10px">${x.sysRole}</span></div>
+    </div></div>`;
+  }
+
+  let html='<div class="tree-wrap">';
+  roots.forEach(root=>{
+    html+=`<div style="text-align:center;margin-bottom:8px">${personCard(root)}</div>`;
+    const l2=buildLevel(root.id);
+    if(l2.length){
+      html+='<div class="org-connector"><i class="ti ti-git-fork" style="transform:rotate(180deg)"></i></div>';
+      html+='<div class="org-level">';
+      l2.forEach(mgr=>{
+        html+=`<div style="display:flex;flex-direction:column;align-items:center;gap:4px">${personCard(mgr)}`;
+        const l3=buildLevel(mgr.id);
+        if(l3.length){
+          html+='<div style="font-size:12px;color:var(--text3)">↓</div><div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center">';
+          l3.forEach(emp=>html+=personCard(emp));
+          html+='</div>';
+        }
+        html+='</div>';
+      });
+      html+='</div>';
+    }
+  });
+  html+='</div>';
+  document.getElementById('org-tree').innerHTML=html;
+}
+function selectPerson(id){
+  editingPersonId=id;
+  const x=people.find(p=>p.id===id);
+  document.getElementById('edit-person-card').style.display='block';
+  document.getElementById('edit-person-title').textContent=`Edit: ${x.name}`;
+  document.getElementById('ep-name').value=x.name;
+  document.getElementById('ep-role').value=x.role;
+  document.getElementById('ep-region').value=x.region||'';
+  document.getElementById('ep-sysrole').value=x.sysRole;
+  const mgrSel=document.getElementById('ep-manager');
+  mgrSel.innerHTML='<option value="">No manager (root)</option>'+people.filter(p=>p.id!==id).map(p=>`<option value="${p.id}" ${p.id===x.managerId?'selected':''}>${p.name}</option>`).join('');
+  renderOrg();
+}
+function savePersonEdit(){
+  const x=people.find(p=>p.id===editingPersonId);if(!x)return;
+  x.name=document.getElementById('ep-name').value;
+  x.role=document.getElementById('ep-role').value;
+  x.region=document.getElementById('ep-region').value;
+  x.sysRole=document.getElementById('ep-sysrole').value;
+  const mgrVal=document.getElementById('ep-manager').value;
+  x.managerId=mgrVal?parseInt(mgrVal):null;
+  editingPersonId=null;
+  document.getElementById('edit-person-card').style.display='none';
+  renderOrg();buildSidebar();
+}
+function removePerson(){
+  if(!editingPersonId)return;
+  if(!confirm(`Remove ${people.find(p=>p.id===editingPersonId)?.name}?`))return;
+  const idx=people.findIndex(p=>p.id===editingPersonId);
+  if(idx>-1)people.splice(idx,1);
+  editingPersonId=null;
+  document.getElementById('edit-person-card').style.display='none';
+  renderOrg();
+}
+function addPerson(){
+  const name=document.getElementById('np-name').value.trim();if(!name)return;
+  const role=document.getElementById('np-role').value.trim();
+  const region=document.getElementById('np-region').value;
+  const mgrId=parseInt(document.getElementById('np-mgr').value)||null;
+  const sysRole=document.getElementById('np-sysrole').value;
+  people.push({id:nextPersonId++,name,role:role||'CSR',region,managerId:mgrId,sysRole});
+  ['np-name','np-role'].forEach(id=>document.getElementById(id).value='');
+  closeModal('m-add-person');
+  // Refresh manager dropdowns in modal
+  document.getElementById('np-mgr').innerHTML='<option value="">No manager</option>'+people.map(x=>`<option value="${x.id}">${x.name}</option>`).join('');
+  renderOrg();
+}
+
+// ═══════════════════════════════════════
+// MODALS
+// ═══════════════════════════════════════
+function openModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open')}));
+
+// Init
+pickRole('admin',document.querySelector('.role-btn'));
+filterTrSkills();
+// Pre-fill np-mgr
+document.getElementById('np-mgr').innerHTML='<option value="">No manager</option>'+people.map(x=>`<option value="${x.id}">${x.name}</option>`).join('');
+</script>
+</body>
+</html>
