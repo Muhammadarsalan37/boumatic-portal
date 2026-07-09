@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BouMatic HRMS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+:root{
+  --accent:#4f46e5;--accent-light:#eef0fe;--accent-dark:#3730a3;
+  --green-bg:#eaf3de;--green-tx:#27500a;
+  --amber-bg:#faeeda;--amber-tx:#633806;
+  --red-bg:#fcebeb;--red-tx:#791f1f;
+  --blue-bg:#e6f1fb;--blue-tx:#0c447c;
+  --gray-bg:#f1efe8;--gray-tx:#444441;
+  --border:#e4e4de;--border-strong:#ccccc6;
+  --surface:#fff;--page:#f5f5f1;
+  --text:#1a1a18;--text-2:#555553;--text-3:#999997;
+  --radius:8px;--sidebar:220px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--page);color:var(--text);font-size:13px;line-height:1.5;min-height:100vh}
+
+/* ── Login ── */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.login-card{background:var(--surface);border:0.5px solid var(--border);border-radius:16px;padding:36px 32px;width:100%;max-width:380px}
+.login-logo{font-size:18px;font-weight:600;margin-bottom:4px}
+.login-sub{font-size:12px;color:var(--text-3);margin-bottom:28px}
+.login-roles{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:20px}
+.role-btn{padding:10px 6px;border:0.5px solid var(--border);border-radius:var(--radius);text-align:center;cursor:pointer;transition:all .15s;background:var(--surface)}
+.role-btn:hover{border-color:var(--accent);background:var(--accent-light)}
+.role-btn.selected{border-color:var(--accent);background:var(--accent-light);color:var(--accent)}
+.role-btn .role-icon{font-size:20px;margin-bottom:4px}
+.role-btn .role-name{font-size:11px;font-weight:500}
+.role-btn .role-hint{font-size:10px;color:var(--text-3);margin-top:1px}
+.form-row{margin-bottom:12px}
+.form-row label{display:block;font-size:11px;font-weight:500;color:var(--text-2);margin-bottom:4px}
+.form-row input,.form-row select{width:100%;padding:8px 10px;border:0.5px solid var(--border-strong);border-radius:var(--radius);font-family:inherit;font-size:13px;color:var(--text);background:var(--surface)}
+.form-row input:focus,.form-row select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,70,229,.1)}
+.btn-login{width:100%;padding:10px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;margin-top:4px}
+.btn-login:hover{background:var(--accent-dark)}
+.login-demo{font-size:11px;color:var(--text-3);text-align:center;margin-top:14px}
+
+/* ── App shell ── */
+.app{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:var(--sidebar);min-width:var(--sidebar);background:var(--surface);border-right:0.5px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;transition:transform .25s}
+.brand{padding:16px;border-bottom:0.5px solid var(--border)}
+.brand-name{font-size:14px;font-weight:600}
+.brand-sub{font-size:10px;color:var(--text-3);margin-top:1px}
+.user-pill{display:flex;align-items:center;gap:8px;padding:10px 12px;margin:8px;border-radius:var(--radius);background:var(--page)}
+.user-pill .av{width:28px;height:28px;border-radius:50%;background:var(--accent-light);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0}
+.user-pill .uname{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-pill .urole{font-size:10px;color:var(--text-3)}
+.logout-btn{margin:0 12px 8px;padding:6px 10px;border:0.5px solid var(--border);border-radius:var(--radius);background:none;color:var(--text-2);font-family:inherit;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:6px;width:calc(100% - 24px)}
+.logout-btn:hover{background:var(--red-bg);color:var(--red-tx);border-color:var(--red-tx)}
+.nav-section{padding:10px 12px 3px;font-size:10px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em}
+.nav-item{display:flex;align-items:center;gap:8px;padding:7px 12px;cursor:pointer;color:var(--text-2);font-size:12px;border-left:2px solid transparent;transition:background .12s}
+.nav-item:hover{background:var(--page);color:var(--text)}
+.nav-item.active{background:var(--accent-light);color:var(--accent);border-left-color:var(--accent);font-weight:500}
+.nav-item i{font-size:15px;flex-shrink:0}
+.nav-item .badge-count{margin-left:auto;background:var(--accent);color:#fff;font-size:10px;padding:1px 6px;border-radius:20px;font-weight:600}
+.main{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;gap:10px;padding:12px 20px;border-bottom:0.5px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:5}
+.topbar-menu{display:none;background:none;border:none;font-size:20px;cursor:pointer;color:var(--text-2);padding:2px}
+.topbar h1{font-size:15px;font-weight:600;flex:1}
+.content{padding:18px 20px;flex:1}
+.screen{display:none}.screen.active{display:block}
+
+/* ── Stats ── */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.stat{background:var(--surface);border:0.5px solid var(--border);border-radius:10px;padding:12px 14px}
+.stat-label{font-size:11px;color:var(--text-3);margin-bottom:3px}
+.stat-val{font-size:22px;font-weight:600;line-height:1.1}
+.stat-sub{font-size:11px;color:var(--text-2);margin-top:3px}
+
+/* ── Cards ── */
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:10px;margin-bottom:12px;overflow:hidden}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:0.5px solid var(--border);gap:8px;flex-wrap:wrap}
+.card-head-title{font-size:13px;font-weight:600}
+.card-body{padding:14px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
+.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+
+/* ── Tables ── */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;color:var(--text-3);font-weight:500;font-size:11px;padding:7px 10px;border-bottom:0.5px solid var(--border);white-space:nowrap}
+td{padding:8px 10px;border-bottom:0.5px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--page)}
+
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:var(--radius);border:0.5px solid var(--border-strong);background:var(--surface);color:var(--text);font-size:12px;cursor:pointer;font-family:inherit;transition:background .12s;white-space:nowrap}
+.btn:hover{background:var(--page)}
+.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}.btn-primary:hover{background:var(--accent-dark);border-color:var(--accent-dark)}
+.btn-sm{padding:4px 9px;font-size:11px}
+.btn-danger{color:var(--red-tx);border-color:#f7c1c1}.btn-danger:hover{background:var(--red-bg)}
+.btn-success{background:var(--green-bg);color:var(--green-tx);border-color:#c0dd97}.btn-success:hover{background:#d8efc4}
+.btn-amber{background:var(--amber-bg);color:var(--amber-tx);border-color:#f5d59a}.btn-amber:hover{background:#f5e0b0}
+
+/* ── Badges ── */
+.badge{display:inline-block;padding:2px 7px;border-radius:20px;font-size:11px;font-weight:500;white-space:nowrap}
+.b-green{background:var(--green-bg);color:var(--green-tx)}
+.b-amber{background:var(--amber-bg);color:var(--amber-tx)}
+.b-red{background:var(--red-bg);color:var(--red-tx)}
+.b-blue{background:var(--blue-bg);color:var(--blue-tx)}
+.b-gray{background:var(--gray-bg);color:var(--gray-tx)}
+.b-purple{background:var(--accent-light);color:var(--accent-dark)}
+
+/* ── Avatar ── */
+.av{border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:600;flex-shrink:0}
+.av-sm{width:26px;height:26px;font-size:10px}
+.av-md{width:32px;height:32px;font-size:12px}
+
+/* ── Skill dots ── */
+.lv{border-radius:50%;border:none;font-size:11px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;transition:transform .1s}
+.lv.clickable{cursor:pointer}.lv.clickable:hover{transform:scale(1.15)}
+.lv0{background:#f1efe8;color:#666}.lv1{background:var(--amber-bg);color:var(--amber-tx)}.lv2{background:var(--blue-bg);color:var(--blue-tx)}.lv3{background:var(--green-bg);color:var(--green-tx)}
+
+/* ── Progress ── */
+.pbar{height:5px;background:#f1efe8;border-radius:3px;overflow:hidden}
+.pfill{height:100%;border-radius:3px;transition:width .3s}
+
+/* ── Tabs ── */
+.tabs{display:flex;gap:0;margin-bottom:14px;border-bottom:0.5px solid var(--border)}
+.tab{padding:7px 14px;cursor:pointer;font-size:12px;color:var(--text-2);border-bottom:2px solid transparent;margin-bottom:-0.5px;transition:color .12s}
+.tab:hover{color:var(--text)}.tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500}
+
+/* ── Chips ── */
+.chip-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;border:0.5px solid transparent;transition:all .12s;background:var(--page)}
+.chip:hover{border-color:currentColor}.chip.active{border:1.5px solid currentColor}
+
+/* ── Forms ── */
+input,select,textarea{font-family:'Inter',sans-serif;font-size:13px;padding:8px 10px;border:0.5px solid var(--border-strong);border-radius:var(--radius);background:var(--surface);color:var(--text);width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,70,229,.1)}
+textarea{resize:vertical;min-height:68px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* ── Modals ── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:100;align-items:flex-start;justify-content:center;padding:48px 16px;overflow-y:auto}
+.overlay.open{display:flex}
+.modal{background:var(--surface);border-radius:14px;border:0.5px solid var(--border);padding:22px;width:100%;max-width:440px;margin:auto}
+.modal-title{font-size:14px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.close-x{background:none;border:none;font-size:18px;cursor:pointer;color:var(--text-3);line-height:1;padding:0;font-family:inherit}
+.close-x:hover{color:var(--text)}
+
+/* ── Onboarding steps ── */
+.ob-step{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:0.5px solid var(--border)}
+.ob-step:last-child{border-bottom:none}
+.step-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.s-done{background:var(--green-bg);color:var(--green-tx)}.s-now{background:var(--accent-light);color:var(--accent)}.s-todo{background:var(--gray-bg);color:#888}
+
+/* ── Perf stars ── */
+.stars{display:flex;gap:2px}
+.star{color:#ef9f27;font-size:14px}.star-e{color:#e4e4de}
+
+/* ── Access denied ── */
+.access-denied{text-align:center;padding:48px 20px;color:var(--text-3)}
+.access-denied i{font-size:40px;margin-bottom:12px;display:block;color:var(--red-tx)}
+.access-denied h3{font-size:14px;color:var(--text);margin-bottom:6px}
+
+/* ── Approval card ── */
+.approval-item{padding:12px 14px;border-bottom:0.5px solid var(--border);display:flex;align-items:flex-start;gap:10px}
+.approval-item:last-child{border-bottom:none}
+.approval-body{flex:1;min-width:0}
+.approval-name{font-weight:500;font-size:13px}
+.approval-meta{font-size:11px;color:var(--text-3);margin-top:2px}
+.approval-note{font-size:12px;color:var(--text-2);margin-top:4px;font-style:italic}
+.approval-actions{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+
+/* ── Responsive ── */
+@media(max-width:768px){
+  .app{flex-direction:column}
+  .sidebar{position:fixed;left:0;top:0;bottom:0;z-index:50;transform:translateX(-100%);width:240px}
+  .sidebar.open{transform:translateX(0)}
+  .topbar-menu{display:block}
+  .main{height:100vh}
+  .stats{grid-template-columns:1fr 1fr}
+  .two-col,.form-grid{grid-template-columns:1fr}
+  .three-col{grid-template-columns:1fr 1fr}
+  .content{padding:14px}
+  .overlay{padding:16px}
+  .modal{max-width:100%}
+}
+@media(max-width:480px){
+  .stats{grid-template-columns:1fr 1fr}
+  .three-col{grid-template-columns:1fr}
+  .login-roles{grid-template-columns:1fr}
+}
+.sidebar-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:49}
+.sidebar-backdrop.open{display:block}
+.empty{text-align:center;padding:24px;color:var(--text-3);font-size:12px}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════ LOGIN ═══════════════════════════════════════════ -->
+<div class="login-wrap" id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">BouMatic HRMS</div>
+    <div class="login-sub">Sign in to your workspace</div>
+    <div class="login-roles" id="role-picker">
+      <div class="role-btn selected" onclick="pickRole('admin',this)">
+        <div class="role-icon"><i class="ti ti-shield-check"></i></div>
+        <div class="role-name">Admin</div>
+        <div class="role-hint">Full access</div>
+      </div>
+      <div class="role-btn" onclick="pickRole('manager',this)">
+        <div class="role-icon"><i class="ti ti-users"></i></div>
+        <div class="role-name">Manager</div>
+        <div class="role-hint">Team access</div>
+      </div>
+      <div class="role-btn" onclick="pickRole('employee',this)">
+        <div class="role-icon"><i class="ti ti-user"></i></div>
+        <div class="role-name">Employee</div>
+        <div class="role-hint">Own data</div>
+      </div>
+    </div>
+    <div class="form-row"><label>Sign in as</label>
+      <select id="login-user-select">
+        <option value="">Choose account...</option>
+      </select>
+    </div>
+    <button class="btn-login" onclick="doLogin()"><i class="ti ti-login"></i> Sign in</button>
+    <div class="login-demo">Demo mode — select a role and account to explore</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ APP ═══════════════════════════════════════════ -->
+<div class="app" id="app-screen" style="display:none">
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="brand"><div class="brand-name">BouMatic HRMS</div><div class="brand-sub" id="sb-dept-label">Company-wide</div></div>
+    <div class="user-pill">
+      <div class="av av-sm" id="sb-av"></div>
+      <div><div class="uname" id="sb-name"></div><div class="urole" id="sb-role"></div></div>
+    </div>
+    <div id="nav-links"></div>
+    <button class="logout-btn" onclick="logout()"><i class="ti ti-logout"></i> Sign out</button>
+  </div>
+  <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="closeSidebar()"></div>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="topbar">
+      <button class="topbar-menu" onclick="toggleSidebar()" aria-label="Menu"><i class="ti ti-menu-2"></i></button>
+      <h1 id="page-title">Dashboard</h1>
+      <div id="topbar-actions"></div>
+    </div>
+    <div class="content">
+
+      <!-- DASHBOARD -->
+      <div id="s-dashboard" class="screen active">
+        <div class="stats" id="dash-stats"></div>
+        <div class="two-col">
+          <div class="card"><div class="card-head"><span class="card-head-title">Headcount by department</span></div><div class="table-wrap"><table><thead><tr><th>Department</th><th>People</th><th>Skill gaps</th></tr></thead><tbody id="dash-dept"></tbody></table></div></div>
+          <div class="card"><div class="card-head"><span class="card-head-title">Pending approvals</span></div><div id="dash-approvals"></div></div>
+        </div>
+        <div class="card"><div class="card-head"><span class="card-head-title">Recent activity</span></div><div class="table-wrap"><table><thead><tr><th>Event</th><th>Person</th><th>Department</th><th>Date</th><th>Status</th></tr></thead><tbody id="dash-activity"></tbody></table></div></div>
+      </div>
+
+      <!-- EMPLOYEES -->
+      <div id="s-employees" class="screen">
+        <div class="chip-row" id="emp-dept-chips"></div>
+        <div class="card">
+          <div class="card-head"><span class="card-head-title">All employees</span><button class="btn btn-primary btn-sm" id="btn-add-emp" onclick="openModal('m-emp')" style="display:none"><i class="ti ti-plus"></i>Add employee</button></div>
+          <div class="table-wrap"><table><thead><tr><th>Name</th><th>Department</th><th>Role</th><th>Manager</th><th>Location</th><th>Status</th><th id="emp-action-col"></th></tr></thead><tbody id="emp-table"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- SKILL MATRIX -->
+      <div id="s-skills" class="screen">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+          <div style="display:flex;gap:10px;align-items:center;font-size:11px;color:var(--text-3);flex-wrap:wrap">
+            <span style="display:flex;align-items:center;gap:3px"><span class="lv lv0" style="width:18px;height:18px;font-size:9px">0</span>None</span>
+            <span style="display:flex;align-items:center;gap:3px"><span class="lv lv1" style="width:18px;height:18px;font-size:9px">1</span>Learning</span>
+            <span style="display:flex;align-items:center;gap:3px"><span class="lv lv2" style="width:18px;height:18px;font-size:9px">2</span>Qualified</span>
+            <span style="display:flex;align-items:center;gap:3px"><span class="lv lv3" style="width:18px;height:18px;font-size:9px">3</span>Expert</span>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <select id="skill-dept-f" onchange="renderSkills()" style="width:auto;padding:5px 8px;font-size:12px"><option value="">All departments</option></select>
+            <button class="btn btn-sm" id="btn-add-skill" onclick="openModal('m-skill')" style="display:none"><i class="ti ti-plus"></i>Add skill</button>
+          </div>
+        </div>
+        <div class="card" style="overflow-x:auto">
+          <table id="skill-table" style="min-width:500px"><thead id="skill-head"></thead><tbody id="skill-body"></tbody></table>
+        </div>
+        <div style="font-size:11px;color:var(--text-3);margin-top:4px" id="skill-hint"></div>
+      </div>
+
+      <!-- TRAINING -->
+      <div id="s-training" class="screen">
+        <div class="two-col" style="align-items:start">
+          <div class="card" id="training-form-card">
+            <div class="card-head"><span class="card-head-title">New training request</span></div>
+            <div class="card-body">
+              <div class="form-row"><label>Employee</label><select id="tr-emp"></select></div>
+              <div class="form-row"><label>Skill</label><select id="tr-skl"></select></div>
+              <div class="form-row"><label>Target level</label><select id="tr-lv"><option value="1">1 — Learning</option><option value="2">2 — Qualified</option><option value="3">3 — Expert</option></select></div>
+              <div class="form-row"><label>Priority</label><select id="tr-pri"><option value="High">High — coverage gap</option><option value="Medium">Medium — development</option><option value="Low">Low — nice to have</option></select></div>
+              <div class="form-row"><label>Notes</label><textarea id="tr-notes" placeholder="Context or approach"></textarea></div>
+              <button class="btn btn-primary" style="width:100%" onclick="submitTraining()"><i class="ti ti-send"></i>Submit request</button>
+            </div>
+          </div>
+          <div>
+            <div class="card">
+              <div class="card-head"><span class="card-head-title">Open requests</span><span class="badge b-purple" id="tr-count">0</span></div>
+              <div id="tr-list"><div class="empty">No requests yet.</div></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><span class="card-head-title">Coverage gaps — training needed</span></div>
+              <div id="gap-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SHIFTS -->
+      <div id="s-shifts" class="screen">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+          <select id="shift-dept-f" onchange="renderShifts()" style="width:auto;padding:5px 8px;font-size:12px"><option value="">All departments</option></select>
+          <span style="font-size:11px;color:var(--text-3)">Week of Jun 30 – Jul 4, 2026</span>
+        </div>
+        <div class="card" style="overflow-x:auto"><div id="shift-grid" style="display:grid;gap:3px;font-size:11px;min-width:420px"></div></div>
+        <div class="card"><div class="card-body" style="display:flex;gap:16px;font-size:11px;flex-wrap:wrap">
+          <span><span style="display:inline-block;width:28px;height:14px;border-radius:3px;background:var(--blue-bg);vertical-align:middle;margin-right:4px"></span><span style="color:var(--blue-tx)">Morning (07–15)</span></span>
+          <span><span style="display:inline-block;width:28px;height:14px;border-radius:3px;background:var(--green-bg);vertical-align:middle;margin-right:4px"></span><span style="color:var(--green-tx)">Day (09–17)</span></span>
+          <span><span style="display:inline-block;width:28px;height:14px;border-radius:3px;background:var(--amber-bg);vertical-align:middle;margin-right:4px"></span><span style="color:var(--amber-tx)">Late (10–18)</span></span>
+          <span><span style="display:inline-block;width:28px;height:14px;border-radius:3px;background:var(--gray-bg);vertical-align:middle;margin-right:4px"></span><span style="color:var(--gray-tx)">Off / leave</span></span>
+        </div></div>
+      </div>
+
+      <!-- LEAVE -->
+      <div id="s-leave" class="screen">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+          <div class="tabs" style="margin-bottom:0;border-bottom:none">
+            <div class="tab active" onclick="leaveTab('pending',this)">Pending</div>
+            <div class="tab" onclick="leaveTab('approved',this)">Approved</div>
+            <div class="tab" onclick="leaveTab('balances',this)">Balances</div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="openModal('m-leave')"><i class="ti ti-plus"></i>Request leave</button>
+        </div>
+        <div id="lt-pending">
+          <div class="chip-row" id="leave-dept-chips-p"></div>
+          <div class="card" id="pending-card"><div id="pending-list"></div></div>
+        </div>
+        <div id="lt-approved" style="display:none"><div class="chip-row" id="leave-dept-chips-a"></div><div class="card"><div class="table-wrap"><table><thead><tr><th>Employee</th><th>Dept</th><th>Type</th><th>From</th><th>To</th><th>Days</th><th>Approved by</th></tr></thead><tbody id="approved-list"></tbody></table></div></div></div>
+        <div id="lt-balances" style="display:none"><div class="chip-row" id="leave-dept-chips-b"></div><div class="card"><div class="table-wrap"><table><thead><tr><th>Employee</th><th>Dept</th><th>Entitlement</th><th>Used</th><th>Remaining</th><th>Balance</th></tr></thead><tbody id="balance-list"></tbody></table></div></div></div>
+      </div>
+
+      <!-- PERFORMANCE -->
+      <div id="s-performance" class="screen">
+        <div class="stats" id="perf-stats"></div>
+        <div class="chip-row" id="perf-dept-chips"></div>
+        <div class="card"><div class="card-head"><span class="card-head-title">H1 2026 reviews</span></div><div class="table-wrap"><table><thead><tr><th>Employee</th><th>Dept</th><th>Role</th><th>Rating</th><th>KPIs</th><th>Status</th><th>Notes</th></tr></thead><tbody id="perf-table"></tbody></table></div></div>
+      </div>
+
+      <!-- ONBOARDING -->
+      <div id="s-onboarding" class="screen">
+        <div class="three-col" id="onboard-stats"></div>
+        <div class="card">
+          <div class="card-head"><span class="card-head-title">Active onboarding</span><button class="btn btn-primary btn-sm" id="btn-add-onboard" onclick="openModal('m-onboard')" style="display:none"><i class="ti ti-plus"></i>Add new hire</button></div>
+          <div class="table-wrap"><table><thead><tr><th>Name</th><th>Dept</th><th>Role</th><th>Start</th><th>Progress</th><th>Manager</th><th>Status</th></tr></thead><tbody id="onboard-table"></tbody></table></div>
+        </div>
+        <div id="onboard-detail"></div>
+      </div>
+
+      <!-- ADMIN MANAGE -->
+      <div id="s-manage" class="screen">
+        <div class="two-col" style="align-items:start">
+          <div class="card">
+            <div class="card-head"><span class="card-head-title">Departments</span><button class="btn btn-sm" onclick="openModal('m-dept')"><i class="ti ti-plus"></i>Add</button></div>
+            <div id="dept-list"></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><span class="card-head-title">Roles and permissions</span></div>
+            <div class="card-body">
+              <table><thead><tr><th>Permission</th><th>Admin</th><th>Manager</th><th>Employee</th></tr></thead><tbody>
+                <tr><td>View all employees</td><td><i class="ti ti-check" style="color:var(--green-tx)"></i></td><td>Own dept</td><td>Own profile</td></tr>
+                <tr><td>Edit skill levels</td><td><i class="ti ti-check" style="color:var(--green-tx)"></i></td><td>Own team</td><td><i class="ti ti-x" style="color:var(--red-tx)"></i></td></tr>
+                <tr><td>Add/remove skills</td><td><i class="ti ti-check" style="color:var(--green-tx)"></i></td><td><i class="ti ti-x" style="color:var(--red-tx)"></i></td><td><i class="ti ti-x" style="color:var(--red-tx)"></i></td></tr>
+                <tr><td>Approve leave</td><td><i class="ti ti-check" style="color:var(--green-tx)"></i></td><td>Own team</td><td><i class="ti ti-x" style="color:var(--red-tx)"></i></td></tr>
+                <tr><td>Request leave</td><td><i class="ti ti-check" style="color:var(--green-tx)"></i></td><td><i class="ti ti-check" style="color:var(--green-tx)"></i></td><td><i class="ti ti-check" style="color:var(--green-tx)"></i></td></tr>
+                <tr><td>Add employees</td><td><i class="ti ti-check" style="color:var(--green-tx)"></i></td><td><i class="ti ti-x" style="color:var(--red-tx)"></i></td><td><i class="ti ti-x" style="color:var(--red-tx)"></i></td></tr>
+                <tr><td>View performance</td><td><i class="ti ti-check" style="color:var(--green-tx)"></i></td><td>Own team</td><td>Own only</td></tr>
+                <tr><td>Manage departments</td><td><i class="ti ti-check" style="color:var(--green-tx)"></i></td><td><i class="ti ti-x" style="color:var(--red-tx)"></i></td><td><i class="ti ti-x" style="color:var(--red-tx)"></i></td></tr>
+              </tbody></table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- ═══════════════════ MODALS ═══════════════════ -->
+<div id="m-emp" class="overlay"><div class="modal">
+  <div class="modal-title">Add employee<button class="close-x" onclick="closeModal('m-emp')">×</button></div>
+  <div class="form-grid"><div class="form-row"><label>Full name</label><input id="n-name" placeholder="Firstname Lastname"></div><div class="form-row"><label>Role / title</label><input id="n-role" placeholder="CSR (EM)"></div></div>
+  <div class="form-grid"><div class="form-row"><label>Department</label><select id="n-dept"></select></div><div class="form-row"><label>Location</label><input id="n-loc" placeholder="Amersfoort, NL"></div></div>
+  <div class="form-row"><label>Manager</label><select id="n-mgr"><option value="">No manager</option></select></div>
+  <div class="form-row"><label>System role</label><select id="n-sysrole"><option value="employee">Employee</option><option value="manager">Manager</option><option value="admin">Admin</option></select></div>
+  <button class="btn btn-primary" style="width:100%;margin-top:4px" onclick="addEmployee()"><i class="ti ti-check"></i>Add employee</button>
+</div></div>
+
+<div id="m-skill" class="overlay"><div class="modal">
+  <div class="modal-title">Add skill<button class="close-x" onclick="closeModal('m-skill')">×</button></div>
+  <div class="form-row"><label>Skill name</label><input id="sk-name" placeholder="RO9 — Advanced diagnostics"></div>
+  <div class="form-row"><label>Description</label><input id="sk-desc" placeholder="Short description"></div>
+  <button class="btn btn-primary" style="width:100%;margin-top:4px" onclick="addSkill()"><i class="ti ti-check"></i>Add skill</button>
+</div></div>
+
+<div id="m-dept" class="overlay"><div class="modal">
+  <div class="modal-title">Add department<button class="close-x" onclick="closeModal('m-dept')">×</button></div>
+  <div class="form-row"><label>Department name</label><input id="dp-name" placeholder="Engineering"></div>
+  <button class="btn btn-primary" style="width:100%;margin-top:4px" onclick="addDept()"><i class="ti ti-check"></i>Add department</button>
+</div></div>
+
+<div id="m-onboard" class="overlay"><div class="modal">
+  <div class="modal-title">Add new hire<button class="close-x" onclick="closeModal('m-onboard')">×</button></div>
+  <div class="form-grid"><div class="form-row"><label>Full name</label><input id="ob-name" placeholder="Firstname Lastname"></div><div class="form-row"><label>Role</label><input id="ob-role" placeholder="CSR (RE)"></div></div>
+  <div class="form-grid"><div class="form-row"><label>Department</label><select id="ob-dept"></select></div><div class="form-row"><label>Start date</label><input id="ob-date" type="date"></div></div>
+  <div class="form-row"><label>Manager</label><select id="ob-mgr"><option value="">Select manager</option></select></div>
+  <button class="btn btn-primary" style="width:100%;margin-top:4px" onclick="addOnboard()"><i class="ti ti-check"></i>Add new hire</button>
+</div></div>
+
+<div id="m-leave" class="overlay"><div class="modal">
+  <div class="modal-title">Request leave<button class="close-x" onclick="closeModal('m-leave')">×</button></div>
+  <div class="form-row"><label>Employee</label><select id="lv-emp"></select></div>
+  <div class="form-row"><label>Leave type</label><select id="lv-type"><option>Annual</option><option>Sick</option><option>Emergency</option><option>Unpaid</option></select></div>
+  <div class="form-grid">
+    <div class="form-row"><label>From</label><input id="lv-from" type="date"></div>
+    <div class="form-row"><label>To</label><input id="lv-to" type="date"></div>
+  </div>
+  <div class="form-row"><label>Notes (optional)</label><textarea id="lv-notes" placeholder="Reason or context"></textarea></div>
+  <button class="btn btn-primary" style="width:100%;margin-top:4px" onclick="submitLeave()"><i class="ti ti-send"></i>Submit request</button>
+</div></div>
+
+<div id="m-train-req" class="overlay"><div class="modal">
+  <div class="modal-title">Request training<button class="close-x" onclick="closeModal('m-train-req')">×</button></div>
+  <div class="form-row"><label>Employee</label><select id="qtr-emp"></select></div>
+  <div class="form-row"><label>Skill</label><select id="qtr-skl"></select></div>
+  <div class="form-row"><label>Target level</label><select id="qtr-lv"><option value="1">1 — Learning</option><option value="2">2 — Qualified</option><option value="3">3 — Expert</option></select></div>
+  <div class="form-row"><label>Priority</label><select id="qtr-pri"><option value="High">High — coverage gap</option><option value="Medium">Medium</option><option value="Low">Low</option></select></div>
+  <button class="btn btn-primary" style="width:100%;margin-top:4px" onclick="submitQuickTraining()"><i class="ti ti-send"></i>Submit</button>
+</div></div>
+
+<script>
+// ═══════════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════════
+const DEPT_COLORS=['#4338ca','#0f6e56','#854f0b','#993556','#185fa5','#3b6d11'];
+const DEPT_BG=['#eef0fe','#e1f5ee','#faeeda','#fbeaf0','#e6f1fb','#eaf3de'];
+
+let depts=['Customer Service','Engineering','Sales','Operations','Finance'];
+
+let employees=[
+  {id:1,name:'Houda Abdelkarim',role:'Team Lead CS (EM)',dept:'Customer Service',loc:'Amersfoort, NL',status:'Active',managerId:null,sysRole:'manager'},
+  {id:2,name:'Myrthe Heeringa',role:'CSR (EM)',dept:'Customer Service',loc:'Amersfoort, NL',status:'Active',managerId:1,sysRole:'employee'},
+  {id:3,name:'Myriam Jehanno',role:'CSR (RE)',dept:'Customer Service',loc:'Amersfoort, NL',status:'Active',managerId:1,sysRole:'employee'},
+  {id:4,name:'Marianne Falk',role:'CSR (DK)',dept:'Customer Service',loc:'Skjern, DK',status:'Active',managerId:1,sysRole:'employee'},
+  {id:5,name:'Tina Kristoffersen',role:'CSR (DK)',dept:'Customer Service',loc:'Skjern, DK',status:'Active',managerId:1,sysRole:'employee'},
+  {id:6,name:'Anne-France Deckers',role:'CSR (RE)',dept:'Customer Service',loc:'Amersfoort, NL',status:'Active',managerId:1,sysRole:'employee'},
+  {id:7,name:'Natalie Claes',role:'CSR (RE)',dept:'Customer Service',loc:'Amersfoort, NL',status:'Active',managerId:1,sysRole:'employee'},
+  {id:8,name:'Arsalan M.',role:'Automation Manager',dept:'Customer Service',loc:'Amersfoort, NL',status:'Active',managerId:1,sysRole:'manager'},
+  {id:9,name:'Christophe L.',role:'CSR (RE)',dept:'Customer Service',loc:'Amersfoort, NL',status:'Onboarding',managerId:1,sysRole:'employee'},
+  {id:10,name:'Jan de Vries',role:'Senior Engineer',dept:'Engineering',loc:'Amersfoort, NL',status:'Active',managerId:null,sysRole:'manager'},
+  {id:11,name:'Sofie Bakker',role:'QA Engineer',dept:'Engineering',loc:'Amersfoort, NL',status:'Active',managerId:10,sysRole:'employee'},
+  {id:12,name:'Rudi Larsen',role:'Field Engineer',dept:'Engineering',loc:'Skjern, DK',status:'Active',managerId:10,sysRole:'employee'},
+  {id:13,name:'Emma Patel',role:'Sales Manager',dept:'Sales',loc:'London, UK',status:'Active',managerId:null,sysRole:'manager'},
+  {id:14,name:'Lucas Müller',role:'Account Executive',dept:'Sales',loc:'Berlin, DE',status:'Active',managerId:13,sysRole:'employee'},
+  {id:15,name:'Petra Novak',role:'Operations Lead',dept:'Operations',loc:'Amersfoort, NL',status:'Active',managerId:null,sysRole:'manager'},
+  {id:99,name:'Admin User',role:'HR Administrator',dept:'Operations',loc:'Amersfoort, NL',status:'Active',managerId:null,sysRole:'admin'},
+];
+
+let skills=[
+  {id:1,name:'RO1',desc:'Robot basics'},{id:2,name:'RO2',desc:'Configuration'},
+  {id:3,name:'RO3',desc:'Troubleshoot'},{id:4,name:'RO4',desc:'Advanced config'},
+  {id:5,name:'RO5',desc:'Integration'},{id:6,name:'RO6',desc:'Automation'},
+  {id:7,name:'RO7',desc:'Expert ops'},{id:8,name:'RO8',desc:'Lead certified'},
+];
+
+let matrix={};
+const seedData={1:[3,3,2,2,1,2,2,3],2:[2,2,2,1,1,0,1,0],3:[2,2,2,2,1,1,2,0],4:[2,2,2,2,0,0,1,0],5:[2,2,2,1,0,0,1,0],6:[2,2,2,2,1,1,2,0],7:[2,2,2,1,0,0,1,0],8:[3,2,2,2,2,3,2,3],9:[1,0,0,0,0,0,0,0],10:[0,0,0,0,3,3,2,1],11:[0,0,0,0,2,2,2,1],12:[1,1,0,0,2,1,1,0],13:[0,0,0,0,0,0,0,0],14:[0,0,0,0,0,0,0,0],15:[0,0,0,0,1,1,0,0]};
+
+function initMatrix(){
+  employees.forEach(e=>{
+    skills.forEach((s,si)=>{
+      const k=`${e.id}:${s.id}`;
+      if(matrix[k]===undefined){const seed=seedData[e.id];matrix[k]=seed?seed[si]??0:0;}
+    });
+  });
+}
+
+let leaveRequests=[
+  {id:1,empId:2,type:'Annual',from:'Jul 14',to:'Jul 18',days:5,status:'Pending',note:'Summer holiday',approvedBy:null},
+  {id:2,empId:5,type:'Annual',from:'Aug 4',to:'Aug 15',days:10,status:'Pending',note:'',approvedBy:null},
+  {id:3,empId:13,type:'Annual',from:'Jul 7',to:'Jul 11',days:5,status:'Pending',note:'',approvedBy:null},
+  {id:4,empId:4,type:'Annual',from:'May 19',to:'May 30',days:10,status:'Approved',note:'',approvedBy:1},
+  {id:5,empId:3,type:'Annual',from:'Jun 2',to:'Jun 6',days:5,status:'Approved',note:'',approvedBy:1},
+  {id:6,empId:14,type:'Sick',from:'Jun 20',to:'Jun 21',days:2,status:'Approved',note:'',approvedBy:13},
+];
+let nextLeaveId=10;
+
+let trainingReqs=[];
+let nextTrainId=1;
+
+let onboardData=[
+  {id:1,name:'Christophe L.',dept:'Customer Service',role:'CSR (RE)',start:'Jun 30, 2026',managerId:1,progress:2,steps:7,status:'Week 1'},
+];
+
+let perfData=[
+  {empId:1,rating:4,kpis:'4/5',status:'Done',note:'Promotion flagged'},
+  {empId:2,rating:3,kpis:'3/5',status:'Done',note:'Attendance noted'},
+  {empId:3,rating:4,kpis:'4/5',status:'Done',note:''},
+  {empId:4,rating:5,kpis:'5/5',status:'Done',note:'Promotion flagged'},
+  {empId:5,rating:0,kpis:'—',status:'Pending',note:''},
+  {empId:10,rating:4,kpis:'4/5',status:'Done',note:''},
+  {empId:11,rating:3,kpis:'3/5',status:'Pending',note:''},
+  {empId:13,rating:5,kpis:'5/5',status:'Done',note:'Top performer'},
+  {empId:14,rating:0,kpis:'—',status:'Pending',note:''},
+];
+
+// ═══════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════
+let currentUser=null;
+let activeFilters={};
+let currentLeaveTab='pending';
+
+// ═══════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════
+function emp(id){return employees.find(e=>e.id===id)}
+function av(name){return(name||'').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}
+function deptIdx(d){return depts.indexOf(d)}
+function deptColor(d){const i=deptIdx(d)%DEPT_COLORS.length;return i>=0?DEPT_COLORS[i]:'#4338ca'}
+function deptBg(d){const i=deptIdx(d)%DEPT_BG.length;return i>=0?DEPT_BG[i]:'#eef0fe'}
+function deptBadge(d){return`<span class="badge" style="background:${deptBg(d)};color:${deptColor(d)}">${d||'—'}</span>`}
+function avHtml(name,dept,size='sm'){return`<span class="av av-${size}" style="background:${deptBg(dept)};color:${deptColor(dept)}">${av(name)}</span>`}
+function stars(r){if(!r)return'<span style="color:var(--text-3);font-size:11px">—</span>';return'<div class="stars">'+[1,2,3,4,5].map(i=>`<span class="${i<=r?'star':'star star-e'}">★</span>`).join('')+'</div>'}
+function mkey(eid,sid){return`${eid}:${sid}`}
+
+// permissions
+function isAdmin(){return currentUser&&currentUser.sysRole==='admin'}
+function isManager(){return currentUser&&(currentUser.sysRole==='manager'||currentUser.sysRole==='admin')}
+function canApproveLeave(req){
+  if(isAdmin())return true;
+  if(!isManager())return false;
+  const requester=emp(req.empId);
+  return requester&&requester.managerId===currentUser.id;
+}
+function canEditSkill(empId){
+  if(isAdmin())return true;
+  if(!isManager())return false;
+  const e=emp(empId);
+  return e&&e.managerId===currentUser.id;
+}
+function visibleEmployees(){
+  if(isAdmin())return employees.filter(e=>e.id!==99);
+  if(isManager()&&currentUser.sysRole==='manager'){
+    return employees.filter(e=>e.managerId===currentUser.id||e.id===currentUser.id);
+  }
+  return employees.filter(e=>e.id===currentUser.id);
+}
+
+// ═══════════════════════════════════════════════
+//  LOGIN
+// ═══════════════════════════════════════════════
+let selectedRole='admin';
+function pickRole(role,el){
+  selectedRole=role;
+  document.querySelectorAll('.role-btn').forEach(b=>b.classList.remove('selected'));
+  el.classList.add('selected');
+  const sel=document.getElementById('login-user-select');
+  sel.innerHTML='<option value="">Choose account...</option>';
+  const accounts=role==='admin'?employees.filter(e=>e.sysRole==='admin'):role==='manager'?employees.filter(e=>e.sysRole==='manager'):employees.filter(e=>e.sysRole==='employee'&&e.id!==99);
+  accounts.forEach(e=>{sel.innerHTML+=`<option value="${e.id}">${e.name} — ${e.dept}</option>`});
+}
+function doLogin(){
+  const sel=document.getElementById('login-user-select');
+  const id=parseInt(sel.value);
+  if(!id){alert('Please choose an account.');return}
+  currentUser=employees.find(e=>e.id===id);
+  if(!currentUser)return;
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app-screen').style.display='flex';
+  initMatrix();
+  buildSidebar();
+  nav('dashboard',null);
+}
+function logout(){
+  currentUser=null;activeFilters={};
+  document.getElementById('app-screen').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+  pickRole('admin',document.querySelector('.role-btn'));
+}
+
+// ═══════════════════════════════════════════════
+//  SIDEBAR
+// ═══════════════════════════════════════════════
+function buildSidebar(){
+  const e=currentUser;
+  document.getElementById('sb-av').textContent=av(e.name);
+  document.getElementById('sb-av').style.background=deptBg(e.dept);
+  document.getElementById('sb-av').style.color=deptColor(e.dept);
+  document.getElementById('sb-name').textContent=e.name;
+  document.getElementById('sb-role').textContent=e.sysRole==='admin'?'Administrator':e.sysRole==='manager'?'Manager':'Employee';
+  document.getElementById('sb-dept-label').textContent=isAdmin()?'Company-wide':e.dept;
+
+  const pendingCount=leaveRequests.filter(r=>r.status==='Pending'&&canApproveLeave(r)).length;
+  const navItems=[
+    {id:'dashboard',icon:'ti-layout-dashboard',label:'Dashboard',section:'Overview'},
+    {id:'employees',icon:'ti-users',label:'Employees',section:'Workforce'},
+    {id:'skills',icon:'ti-chart-radar',label:'Skill matrix'},
+    {id:'training',icon:'ti-school',label:'Training'},
+    {id:'shifts',icon:'ti-calendar-week',label:'Shifts',section:'Operations'},
+    {id:'leave',icon:'ti-beach',label:'Leave',badge:pendingCount},
+    {id:'performance',icon:'ti-star',label:'Performance',section:'Talent'},
+    {id:'onboarding',icon:'ti-user-plus',label:'Onboarding'},
+  ];
+  if(isAdmin())navItems.push({id:'manage',icon:'ti-settings',label:'Manage',section:'Admin'});
+
+  let html='';let lastSection='';
+  navItems.forEach(item=>{
+    if(item.section&&item.section!==lastSection){html+=`<div class="nav-section">${item.section}</div>`;lastSection=item.section}
+    const badge=item.badge?`<span class="badge-count">${item.badge}</span>`:'';
+    html+=`<div class="nav-item" id="nav-${item.id}" onclick="nav('${item.id}',this)"><i class="ti ${item.icon}"></i>${item.label}${badge}</div>`;
+  });
+  document.getElementById('nav-links').innerHTML=html;
+}
+
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebar-backdrop').classList.toggle('open')}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebar-backdrop').classList.remove('open')}
+
+// ═══════════════════════════════════════════════
+//  NAV
+// ═══════════════════════════════════════════════
+const pageTitles={dashboard:'Dashboard',employees:'Employees',skills:'Skill matrix',training:'Training',shifts:'Shifts',leave:'Leave',performance:'Performance',onboarding:'Onboarding',manage:'Admin settings'};
+function nav(id,el){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s-'+id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const ni=document.getElementById('nav-'+id);if(ni)ni.classList.add('active');
+  document.getElementById('page-title').textContent=pageTitles[id]||id;
+  document.getElementById('topbar-actions').innerHTML='';
+  closeSidebar();
+  const renders={dashboard:renderDashboard,employees:renderEmployees,skills:renderSkills,training:renderTraining,shifts:renderShifts,leave:renderLeave,performance:renderPerformance,onboarding:renderOnboarding,manage:renderManage};
+  if(renders[id])renders[id]();
+}
+
+// ═══════════════════════════════════════════════
+//  DEPT CHIPS
+// ═══════════════════════════════════════════════
+function buildChips(containerId,filterKey,callback){
+  const el=document.getElementById(containerId);if(!el)return;
+  const active=activeFilters[filterKey]||'';
+  const myDepts=isAdmin()?depts:[...new Set(visibleEmployees().map(e=>e.dept))];
+  el.innerHTML='<span class="chip active" style="color:#4338ca" onclick="setFilter(\''+filterKey+'\',\'\',\''+containerId+'\')">All</span>'+
+    myDepts.map(d=>`<span class="chip" style="color:${deptColor(d)}" onclick="setFilter('${filterKey}','${d}','${containerId}')">${d}</span>`).join('');
+  if(active){el.querySelectorAll('.chip').forEach(c=>{if(c.textContent===active)c.classList.add('active');else c.classList.remove('active')})}
+}
+function setFilter(key,val,cid){
+  activeFilters[key]=val;
+  const el=document.getElementById(cid);if(el)el.querySelectorAll('.chip').forEach(c=>{c.classList.toggle('active',c.textContent===(val||'All'))});
+  const renders={emp:'renderEmployees',perf:'renderPerformance',leave_p:'renderLeave',leave_a:'renderLeave',leave_b:'renderLeave'};
+  const fn=renders[key];if(fn)window[fn]&&window[fn]();
+}
+
+// ═══════════════════════════════════════════════
+//  DASHBOARD
+// ═══════════════════════════════════════════════
+function renderDashboard(){
+  const vis=visibleEmployees();
+  const pending=leaveRequests.filter(r=>r.status==='Pending'&&canApproveLeave(r));
+  const gaps=calcGaps().length;
+  document.getElementById('dash-stats').innerHTML=`
+    <div class="stat"><div class="stat-label">Employees</div><div class="stat-val">${vis.length}</div><div class="stat-sub">${isAdmin()?depts.length+' departments':'Your team'}</div></div>
+    <div class="stat"><div class="stat-label">Leave pending</div><div class="stat-val" style="color:var(--amber-tx)">${pending.length}</div><div class="stat-sub">Awaiting your approval</div></div>
+    <div class="stat"><div class="stat-label">Skill gaps</div><div class="stat-val" style="color:var(--red-tx)">${gaps}</div><div class="stat-sub">Below 2 qualified</div></div>
+    <div class="stat"><div class="stat-label">Onboarding</div><div class="stat-val" style="color:var(--accent)">${onboardData.length}</div><div class="stat-sub">Active new hires</div></div>`;
+
+  if(isAdmin()){
+    document.getElementById('dash-dept').innerHTML=depts.map(d=>{
+      const cnt=employees.filter(e=>e.dept===d).length;
+      const g=calcGapsForDept(d);
+      return`<tr><td>${deptBadge(d)}</td><td>${cnt}</td><td>${g>0?`<span class="badge b-red">${g}</span>`:'<span class="badge b-green">OK</span>'}</td></tr>`;
+    }).join('');
+  } else {
+    document.getElementById('dash-dept').innerHTML=`<tr><td>${deptBadge(currentUser.dept)}</td><td>${vis.length}</td><td>—</td></tr>`;
+  }
+
+  const appHtml=pending.length?pending.slice(0,3).map(r=>{
+    const e=emp(r.empId);if(!e)return'';
+    return`<div class="approval-item">${avHtml(e.name,e.dept)}<div class="approval-body"><div class="approval-name">${e.name}</div><div class="approval-meta">${r.type} · ${r.from}–${r.to} · ${r.days}d</div></div><div style="display:flex;gap:6px"><button class="btn btn-sm btn-success" onclick="approveLeave(${r.id})"><i class="ti ti-check"></i></button><button class="btn btn-sm btn-danger" onclick="declineLeave(${r.id})"><i class="ti ti-x"></i></button></div></div>`;
+  }).join(''):'<div class="empty">No pending approvals.</div>';
+  document.getElementById('dash-approvals').innerHTML=appHtml;
+
+  document.getElementById('dash-activity').innerHTML=`
+    <tr><td>Skill update</td><td>Houda Abdelkarim</td><td>${deptBadge('Customer Service')}</td><td>Today</td><td><span class="badge b-green">Done</span></td></tr>
+    <tr><td>Leave request</td><td>Myrthe Heeringa</td><td>${deptBadge('Customer Service')}</td><td>Today</td><td><span class="badge b-amber">Pending</span></td></tr>
+    <tr><td>Review done</td><td>Emma Patel</td><td>${deptBadge('Sales')}</td><td>Jun 28</td><td><span class="badge b-green">Done</span></td></tr>
+    <tr><td>Onboarding started</td><td>Christophe L.</td><td>${deptBadge('Customer Service')}</td><td>Jun 30</td><td><span class="badge b-blue">Active</span></td></tr>`;
+}
+
+// ═══════════════════════════════════════════════
+//  EMPLOYEES
+// ═══════════════════════════════════════════════
+function renderEmployees(){
+  buildChips('emp-dept-chips','emp',renderEmployees);
+  const btn=document.getElementById('btn-add-emp');
+  if(btn)btn.style.display=isAdmin()?'inline-flex':'none';
+  document.getElementById('emp-action-col').textContent=isAdmin()?'':'';
+  const filter=activeFilters['emp']||'';
+  let list=visibleEmployees();
+  if(filter)list=list.filter(e=>e.dept===filter);
+  document.getElementById('emp-table').innerHTML=list.map(e=>{
+    const mgr=e.managerId?emp(e.managerId):null;
+    const roleLabel=e.sysRole==='admin'?'<span class="badge b-purple">Admin</span>':e.sysRole==='manager'?'<span class="badge b-blue">Manager</span>':'';
+    return`<tr><td><div style="display:flex;align-items:center;gap:7px">${avHtml(e.name,e.dept)}<span style="font-weight:500">${e.name}</span>${roleLabel}</div></td><td>${deptBadge(e.dept)}</td><td style="color:var(--text-2)">${e.role}</td><td style="color:var(--text-3)">${mgr?mgr.name:'—'}</td><td style="color:var(--text-3)">${e.loc}</td><td><span class="badge ${e.status==='Active'?'b-green':e.status==='Onboarding'?'b-blue':'b-gray'}">${e.status}</span></td>${isAdmin()?`<td><button class="btn btn-sm btn-danger" onclick="removeEmp(${e.id})"><i class="ti ti-trash"></i></button></td>`:''}</tr>`;
+  }).join('');
+  const dsel=document.getElementById('n-dept');if(dsel)dsel.innerHTML=depts.map(d=>`<option>${d}</option>`).join('');
+  const msel=document.getElementById('n-mgr');if(msel)msel.innerHTML='<option value="">No manager</option>'+employees.filter(e=>e.sysRole==='manager'||e.sysRole==='admin').map(e=>`<option value="${e.id}">${e.name}</option>`).join('');
+}
+
+function addEmployee(){
+  const name=document.getElementById('n-name').value.trim();
+  const role=document.getElementById('n-role').value.trim();
+  const dept=document.getElementById('n-dept').value;
+  const loc=document.getElementById('n-loc').value.trim();
+  const mgrId=parseInt(document.getElementById('n-mgr').value)||null;
+  const sysRole=document.getElementById('n-sysrole').value;
+  if(!name){alert('Enter a name.');return}
+  const newId=Math.max(...employees.map(e=>e.id))+1;
+  employees.push({id:newId,name,role:role||'Employee',dept,loc,status:'Active',managerId:mgrId,sysRole});
+  ['n-name','n-role','n-loc'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
+  closeModal('m-emp');renderEmployees();
+}
+function removeEmp(id){if(!isAdmin())return;if(!confirm(`Remove ${emp(id)?.name}?`))return;const i=employees.findIndex(e=>e.id===id);if(i>-1)employees.splice(i,1);renderEmployees();}
+
+// ═══════════════════════════════════════════════
+//  SKILL MATRIX
+// ═══════════════════════════════════════════════
+function calcGaps(){
+  const gaps=[];
+  skills.forEach(s=>{
+    const q=employees.filter(e=>e.id!==99&&(matrix[mkey(e.id,s.id)]??0)>=2).length;
+    if(q<2)gaps.push({skill:s,q});
+  });
+  return gaps;
+}
+function calcGapsForDept(dept){
+  const de=employees.filter(e=>e.dept===dept);
+  return skills.filter(s=>de.filter(e=>(matrix[mkey(e.id,s.id)]??0)>=2).length<1).length;
+}
+
+function renderSkills(){
+  const deptF=document.getElementById('skill-dept-f')?.value||'';
+  const dsel=document.getElementById('skill-dept-f');
+  if(dsel){dsel.innerHTML='<option value="">All departments</option>'+depts.map(d=>`<option value="${d}">${d}</option>`).join('');dsel.value=deptF;}
+  const btn=document.getElementById('btn-add-skill');
+  if(btn)btn.style.display=isAdmin()?'inline-flex':'none';
+  const hint=document.getElementById('skill-hint');
+  if(hint)hint.textContent=isAdmin()?'As admin you can edit all skill levels. Click a dot to cycle 0→1→2→3.':isManager()?'As manager you can edit skill levels for your direct reports.':'Skill levels are set by your manager.';
+
+  let list=visibleEmployees();
+  if(deptF)list=list.filter(e=>e.dept===deptF);
+
+  document.getElementById('skill-head').innerHTML='<tr><th style="min-width:130px">Employee</th><th>Dept</th>'+skills.map(s=>`<th style="text-align:center;min-width:44px"><div style="font-size:11px;font-weight:500">${s.name}</div><div style="font-size:10px;color:var(--text-3)">${s.desc}</div></th>`).join('')+'</tr>';
+  document.getElementById('skill-body').innerHTML=list.map(e=>{
+    return`<tr><td><div style="display:flex;align-items:center;gap:6px">${avHtml(e.name,e.dept)}${e.name}</div></td><td>${deptBadge(e.dept)}</td>`+
+    skills.map(s=>{
+      const lv=matrix[mkey(e.id,s.id)]??0;
+      const canEdit=canEditSkill(e.id);
+      return`<td style="text-align:center"><span class="lv lv${lv}${canEdit?' clickable':''}" ${canEdit?`onclick="cycleLevel(${e.id},${s.id},this)"`:''}title="${canEdit?'Click to cycle level':'Level set by manager'}">${lv}</span></td>`;
+    }).join('')+'</tr>';
+  }).join('');
+}
+function cycleLevel(eid,sid,el){
+  if(!canEditSkill(eid))return;
+  matrix[mkey(eid,sid)]=((matrix[mkey(eid,sid)]??0)+1)%4;
+  const lv=matrix[mkey(eid,sid)];
+  el.className=`lv lv${lv} clickable`;el.textContent=lv;
+}
+function addSkill(){
+  if(!isAdmin())return;
+  const name=document.getElementById('sk-name').value.trim();
+  const desc=document.getElementById('sk-desc').value.trim();
+  if(!name)return;
+  const newId=Math.max(...skills.map(s=>s.id))+1;
+  skills.push({id:newId,name,desc:desc||''});
+  ['sk-name','sk-desc'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
+  closeModal('m-skill');renderSkills();
+}
+
+// ═══════════════════════════════════════════════
+//  TRAINING
+// ═══════════════════════════════════════════════
+function renderTraining(){
+  const vis=visibleEmployees();
+  const esel=document.getElementById('tr-emp');const ssel=document.getElementById('tr-skl');
+  if(esel)esel.innerHTML=vis.map(e=>`<option value="${e.id}">${e.name}</option>`).join('');
+  if(ssel)ssel.innerHTML=skills.map(s=>`<option value="${s.id}">${s.name} — ${s.desc}</option>`).join('');
+  const open=trainingReqs.filter(r=>r.status==='Open');
+  document.getElementById('tr-count').textContent=open.length;
+  const list=document.getElementById('tr-list');
+  list.innerHTML=trainingReqs.length?trainingReqs.map((r,i)=>{
+    const e=emp(r.empId);if(!e)return'';
+    return`<div style="display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-bottom:0.5px solid var(--border)">${avHtml(e.name,e.dept)}<div style="flex:1"><div style="font-weight:500">${e.name} <span style="font-weight:400;color:var(--text-2)">→ ${r.skl} level ${r.lv}</span></div><div style="font-size:11px;color:var(--text-3);margin-top:2px">${r.date}${r.note?` · "${r.note}"`:''}</div></div><span class="badge ${r.priority==='High'?'b-red':r.priority==='Medium'?'b-amber':'b-gray'}">${r.priority}</span><button class="btn btn-sm" onclick="markTrainDone(${i})" style="margin-left:4px;${r.status==='Done'?'opacity:.5':''}">${r.status==='Done'?'Done':'Mark done'}</button></div>`;
+  }).join(''):'<div class="empty">No requests yet.</div>';
+  const gaps=calcGaps();
+  document.getElementById('gap-list').innerHTML=gaps.length?gaps.map(g=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 14px;border-bottom:0.5px solid var(--border)">
+      <span class="badge b-red">${g.skill.name}</span>
+      <span style="flex:1;font-size:12px;color:var(--text-2)">${g.skill.desc} — ${g.q} at level 2+</span>
+      <button class="btn btn-sm" onclick="openQuickTrain(${g.skill.id})"><i class="ti ti-school"></i>Request</button>
+    </div>`).join(''):'<div class="empty">No critical gaps.</div>';
+}
+function submitTraining(){
+  const empId=parseInt(document.getElementById('tr-emp').value);
+  const sklId=parseInt(document.getElementById('tr-skl').value);
+  const lv=document.getElementById('tr-lv').value;
+  const priority=document.getElementById('tr-pri').value;
+  const note=document.getElementById('tr-notes').value.trim();
+  const s=skills.find(x=>x.id===sklId);
+  trainingReqs.push({id:nextTrainId++,empId,skl:s?s.name:'',lv,priority,note,date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short'}),status:'Open'});
+  document.getElementById('tr-notes').value='';
+  renderTraining();
+}
+function markTrainDone(i){trainingReqs[i].status='Done';renderTraining()}
+function openQuickTrain(sid){
+  const sel=document.getElementById('qtr-skl');
+  const esel=document.getElementById('qtr-emp');
+  const vis=visibleEmployees();
+  if(esel)esel.innerHTML=vis.map(e=>`<option value="${e.id}">${e.name}</option>`).join('');
+  if(sel){sel.innerHTML=skills.map(s=>`<option value="${s.id}">${s.name} — ${s.desc}</option>`).join('');sel.value=sid;}
+  openModal('m-train-req');
+}
+function submitQuickTraining(){
+  const empId=parseInt(document.getElementById('qtr-emp').value);
+  const sklId=parseInt(document.getElementById('qtr-skl').value);
+  const lv=document.getElementById('qtr-lv').value;
+  const priority=document.getElementById('qtr-pri').value;
+  const s=skills.find(x=>x.id===sklId);
+  trainingReqs.push({id:nextTrainId++,empId,skl:s?s.name:'',lv,priority,note:'',date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short'}),status:'Open'});
+  closeModal('m-train-req');renderTraining();
+}
+
+// ═══════════════════════════════════════════════
+//  SHIFTS
+// ═══════════════════════════════════════════════
+function renderShifts(){
+  const deptF=document.getElementById('shift-dept-f')?.value||'';
+  const dsel=document.getElementById('shift-dept-f');
+  if(dsel){dsel.innerHTML='<option value="">All departments</option>'+depts.map(d=>`<option value="${d}">${d}</option>`).join('');dsel.value=deptF;}
+  let list=visibleEmployees();
+  if(deptF)list=list.filter(e=>e.dept===deptF);
+  list=list.slice(0,12);
+  const days=['Mon 30/6','Tue 1/7','Wed 2/7','Thu 3/7','Fri 4/7'];
+  const patterns=[['M','M','M','M','M'],['D','off','D','D','D'],['D','D','D','D','D'],['off','L','L','L','L'],['L','L','off','L','L'],['D','D','D','off','D'],['D','D','D','D','off'],['D','D','D','D','D'],['D','D','off','D','D'],['M','M','M','M','M'],['D','D','D','D','D'],['L','L','L','L','off']];
+  const cls={M:'background:var(--blue-bg);color:var(--blue-tx)',D:'background:var(--green-bg);color:var(--green-tx)',L:'background:var(--amber-bg);color:var(--amber-tx)',off:'background:var(--gray-bg);color:var(--gray-tx)'};
+  const lbl={M:'Morning',D:'Day',L:'Late',off:'Off'};
+  const grid=document.getElementById('shift-grid');
+  grid.style.gridTemplateColumns=`130px repeat(${days.length},1fr)`;
+  grid.innerHTML=`<div style="font-size:10px;color:var(--text-3);padding:4px"></div>`+days.map(d=>`<div style="font-size:10px;color:var(--text-3);padding:4px;text-align:center">${d}</div>`).join('')+
+  list.map((e,i)=>{
+    const shifts=patterns[i%patterns.length];
+    return`<div style="display:flex;align-items:center;gap:5px;padding:4px 4px">${avHtml(e.name,e.dept)}<span style="font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${e.name.split(' ')[0]}</span></div>`+
+    shifts.map(s=>`<div style="height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;margin:2px 1px;${cls[s]}">${lbl[s]}</div>`).join('');
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════
+//  LEAVE
+// ═══════════════════════════════════════════════
+function renderLeave(){
+  buildChips('leave-dept-chips-p','leave_p',renderLeave);
+  buildChips('leave-dept-chips-a','leave_a',renderLeave);
+  buildChips('leave-dept-chips-b','leave_b',renderLeave);
+
+  const fP=activeFilters['leave_p']||'';
+  const fA=activeFilters['leave_a']||'';
+  const fB=activeFilters['leave_b']||'';
+
+  // populate leave modal employee selector
+  const vis=visibleEmployees();
+  const lvEmp=document.getElementById('lv-emp');
+  if(lvEmp)lvEmp.innerHTML=vis.map(e=>`<option value="${e.id}">${e.name}</option>`).join('');
+
+  // PENDING
+  let pending=leaveRequests.filter(r=>r.status==='Pending');
+  if(!isAdmin()&&!isManager())pending=pending.filter(r=>r.empId===currentUser.id);
+  else if(isManager()&&!isAdmin())pending=pending.filter(r=>canApproveLeave(r)||r.empId===currentUser.id);
+  if(fP)pending=pending.filter(r=>{const e=emp(r.empId);return e&&e.dept===fP});
+
+  document.getElementById('pending-list').innerHTML=pending.length?pending.map(r=>{
+    const e=emp(r.empId);if(!e)return'';
+    const canApp=canApproveLeave(r);
+    const isOwn=r.empId===currentUser.id;
+    return`<div class="approval-item">${avHtml(e.name,e.dept)}<div class="approval-body">
+      <div class="approval-name">${e.name} ${deptBadge(e.dept)}</div>
+      <div class="approval-meta">${r.type} · ${r.from} – ${r.to} · ${r.days}d</div>
+      ${r.note?`<div class="approval-note">"${r.note}"</div>`:''}
+      ${canApp&&!isOwn?`<div class="approval-actions"><button class="btn btn-sm btn-success" onclick="approveLeave(${r.id})"><i class="ti ti-check"></i>Approve</button><button class="btn btn-sm btn-danger" onclick="declineLeave(${r.id})"><i class="ti ti-x"></i>Decline</button></div>`:''}
+      ${isOwn?`<div class="approval-actions"><span class="badge b-amber">Awaiting approval from your manager</span></div>`:''}
+    </div></div>`;
+  }).join(''):'<div class="empty">No pending requests.</div>';
+
+  // APPROVED
+  let approved=leaveRequests.filter(r=>r.status==='Approved');
+  if(!isAdmin())approved=approved.filter(r=>{const e=emp(r.empId);return e&&(e.managerId===currentUser.id||r.empId===currentUser.id)});
+  if(fA)approved=approved.filter(r=>{const e=emp(r.empId);return e&&e.dept===fA});
+  document.getElementById('approved-list').innerHTML=approved.map(r=>{
+    const e=emp(r.empId);if(!e)return'';
+    const approver=r.approvedBy?emp(r.approvedBy):null;
+    return`<tr><td><div style="display:flex;align-items:center;gap:6px">${avHtml(e.name,e.dept)}${e.name}</div></td><td>${deptBadge(e.dept)}</td><td>${r.type}</td><td>${r.from}</td><td>${r.to}</td><td>${r.days}d</td><td style="color:var(--text-3)">${approver?approver.name:'—'}</td></tr>`;
+  }).join('');
+
+  // BALANCES
+  let balEmps=visibleEmployees();
+  if(fB)balEmps=balEmps.filter(e=>e.dept===fB);
+  document.getElementById('balance-list').innerHTML=balEmps.map(e=>{
+    const used=leaveRequests.filter(r=>r.empId===e.id&&r.status==='Approved').reduce((s,r)=>s+r.days,0);
+    const rem=25-used;const pct=Math.round(rem/25*100);
+    return`<tr><td><div style="display:flex;align-items:center;gap:6px">${avHtml(e.name,e.dept)}${e.name}</div></td><td>${deptBadge(e.dept)}</td><td>25d</td><td>${used}d</td><td><span class="badge ${rem>15?'b-green':rem>8?'b-amber':'b-red'}">${rem}d</span></td><td style="min-width:80px"><div class="pbar"><div class="pfill" style="width:${pct}%;background:${rem>15?'#3b6d11':rem>8?'#854f0b':'#a32d2d'}"></div></div></td></tr>`;
+  }).join('');
+}
+function approveLeave(id){
+  const r=leaveRequests.find(x=>x.id===id);
+  if(!r||!canApproveLeave(r))return;
+  r.status='Approved';r.approvedBy=currentUser.id;
+  renderLeave();buildSidebar();renderDashboard();
+}
+function declineLeave(id){
+  const r=leaveRequests.find(x=>x.id===id);
+  if(!r||!canApproveLeave(r))return;
+  leaveRequests=leaveRequests.filter(x=>x.id!==id);
+  renderLeave();buildSidebar();
+}
+function submitLeave(){
+  const empId=parseInt(document.getElementById('lv-emp').value);
+  const type=document.getElementById('lv-type').value;
+  const from=document.getElementById('lv-from').value;
+  const to=document.getElementById('lv-to').value;
+  const notes=document.getElementById('lv-notes').value;
+  if(!from||!to){alert('Select dates.');return}
+  const d1=new Date(from);const d2=new Date(to);
+  const days=Math.max(1,Math.round((d2-d1)/86400000)+1);
+  leaveRequests.push({id:nextLeaveId++,empId,type,from:from.split('-').reverse().join('/'),to:to.split('-').reverse().join('/'),days,status:'Pending',note:notes,approvedBy:null});
+  ['lv-from','lv-to','lv-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
+  closeModal('m-leave');renderLeave();buildSidebar();
+}
+function leaveTab(tab,el){
+  currentLeaveTab=tab;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
+  ['pending','approved','balances'].forEach(t=>{const el=document.getElementById('lt-'+t);if(el)el.style.display=t===tab?'block':'none'});
+}
+
+// ═══════════════════════════════════════════════
+//  PERFORMANCE
+// ═══════════════════════════════════════════════
+function renderPerformance(){
+  buildChips('perf-dept-chips','perf',renderPerformance);
+  const filter=activeFilters['perf']||'';
+  let vis=visibleEmployees();
+  if(filter)vis=vis.filter(e=>e.dept===filter);
+  const myPerf=vis.map(e=>({...perfData.find(p=>p.empId===e.id)||{empId:e.id,rating:0,kpis:'—',status:'Not started',note:''},emp:e}));
+  const done=myPerf.filter(p=>p.status==='Done').length;
+  const rated=myPerf.filter(p=>p.rating>0);
+  const avg=rated.length?Math.round(rated.reduce((s,p)=>s+p.rating,0)/rated.length*10)/10:0;
+  const promo=myPerf.filter(p=>p.note&&p.note.includes('Promotion')).length;
+  document.getElementById('perf-stats').innerHTML=`
+    <div class="stat"><div class="stat-label">Reviews done</div><div class="stat-val">${done}/${myPerf.length}</div></div>
+    <div class="stat"><div class="stat-label">Avg rating</div><div class="stat-val">${avg||'—'}</div></div>
+    <div class="stat"><div class="stat-label">Promotions flagged</div><div class="stat-val" style="color:var(--accent)">${promo}</div></div>
+    <div class="stat"><div class="stat-label">Pending</div><div class="stat-val" style="color:var(--amber-tx)">${myPerf.length-done}</div></div>`;
+  document.getElementById('perf-table').innerHTML=myPerf.map(p=>{
+    const e=p.emp;
+    return`<tr><td><div style="display:flex;align-items:center;gap:6px">${avHtml(e.name,e.dept)}<span style="font-weight:500">${e.name}</span></div></td><td>${deptBadge(e.dept)}</td><td style="color:var(--text-2)">${e.role}</td><td>${stars(p.rating)}</td><td style="color:var(--text-2)">${p.kpis}</td><td><span class="badge ${p.status==='Done'?'b-green':p.status==='Pending'?'b-amber':'b-gray'}">${p.status}</span></td><td style="color:var(--text-3);font-size:11px">${p.note}</td></tr>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════
+//  ONBOARDING
+// ═══════════════════════════════════════════════
+function renderOnboarding(){
+  const ob=onboardData;
+  const avgPct=ob.length?Math.round(ob.reduce((s,o)=>s+o.progress/o.steps*100,0)/ob.length):0;
+  document.getElementById('onboard-stats').innerHTML=`
+    <div class="stat"><div class="stat-label">Active hires</div><div class="stat-val" style="color:var(--accent)">${ob.length}</div></div>
+    <div class="stat"><div class="stat-label">Avg progress</div><div class="stat-val">${ob.length?avgPct+'%':'—'}</div></div>
+    <div class="stat"><div class="stat-label">Completing soon</div><div class="stat-val">0</div><div class="stat-sub">Within 2 weeks</div></div>`;
+  const btn=document.getElementById('btn-add-onboard');
+  if(btn)btn.style.display=isAdmin()||isManager()?'inline-flex':'none';
+  document.getElementById('onboard-table').innerHTML=ob.map((o,i)=>{
+    const pct=Math.round(o.progress/o.steps*100);
+    const mgr=o.managerId?emp(o.managerId):null;
+    return`<tr><td><div style="display:flex;align-items:center;gap:6px">${avHtml(o.name,o.dept)}<span style="font-weight:500;cursor:pointer;color:var(--accent)" onclick="showObDetail(${i})">${o.name}</span></div></td><td>${deptBadge(o.dept)}</td><td style="color:var(--text-2)">${o.role}</td><td style="color:var(--text-3)">${o.start}</td><td style="min-width:100px"><div style="font-size:11px;color:var(--text-3);margin-bottom:2px">${o.progress}/${o.steps} steps</div><div class="pbar"><div class="pfill" style="width:${pct}%;background:var(--accent)"></div></div></td><td style="color:var(--text-3)">${mgr?mgr.name:'—'}</td><td><span class="badge b-blue">${o.status}</span></td></tr>`;
+  }).join('');
+  document.getElementById('onboard-detail').innerHTML='';
+  const dsel=document.getElementById('ob-dept');if(dsel)dsel.innerHTML=depts.map(d=>`<option>${d}</option>`).join('');
+  const msel=document.getElementById('ob-mgr');if(msel)msel.innerHTML='<option value="">Select manager</option>'+employees.filter(e=>e.sysRole==='manager'||e.sysRole==='admin').map(e=>`<option value="${e.id}">${e.name}</option>`).join('');
+}
+function showObDetail(i){
+  const o=onboardData[i];
+  const mgr=o.managerId?emp(o.managerId):null;
+  const stepDefs=[
+    'Contract and system access','Company and team introduction',
+    `${o.dept} product training — basics`,'Shadow 10 live interactions',
+    'Advanced product training','30-day check-in with manager','Certified for independent work'
+  ];
+  document.getElementById('onboard-detail').innerHTML=`<div class="card"><div class="card-head"><span class="card-head-title">${o.name} — checklist</span><span class="badge b-blue">${o.status}</span></div><div class="card-body">`+
+  stepDefs.map((label,idx)=>{
+    const done=idx<o.progress;const now=idx===o.progress;
+    return`<div class="ob-step"><div class="step-icon ${done?'s-done':now?'s-now':'s-todo'}"><i class="ti ti-${done?'check':now?'loader':'circle'}"></i></div><div><div style="font-size:13px;font-weight:500">${label}</div><div style="font-size:11px;color:var(--text-3);margin-top:2px">Manager: ${mgr?mgr.name:'—'}</div></div></div>`;
+  }).join('')+'</div></div>';
+}
+function addOnboard(){
+  if(!isAdmin()&&!isManager())return;
+  const name=document.getElementById('ob-name').value.trim();
+  const role=document.getElementById('ob-role').value.trim();
+  const dept=document.getElementById('ob-dept').value;
+  const date=document.getElementById('ob-date').value;
+  const mgrId=parseInt(document.getElementById('ob-mgr').value)||null;
+  if(!name)return;
+  const newId=Math.max(...employees.map(e=>e.id))+1;
+  employees.push({id:newId,name,role:role||'Employee',dept,loc:'',status:'Onboarding',managerId:mgrId,sysRole:'employee'});
+  onboardData.push({id:onboardData.length+1,name,dept,role:role||'Employee',start:date?new Date(date).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'Today',managerId:mgrId,progress:0,steps:7,status:'Day 1'});
+  ['ob-name','ob-role'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
+  closeModal('m-onboard');renderOnboarding();
+}
+
+// ═══════════════════════════════════════════════
+//  MANAGE (ADMIN)
+// ═══════════════════════════════════════════════
+function renderManage(){
+  document.getElementById('dept-list').innerHTML=depts.map((d,i)=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 14px;border-bottom:0.5px solid var(--border)">
+      <span class="badge" style="background:${deptBg(d)};color:${deptColor(d)}">${d}</span>
+      <span style="flex:1;font-size:12px;color:var(--text-3)">${employees.filter(e=>e.dept===d).length} employees</span>
+      <button class="btn btn-sm btn-danger" onclick="removeDept(${i})"><i class="ti ti-trash"></i></button>
+    </div>`).join('');
+}
+function addDept(){
+  if(!isAdmin())return;
+  const name=document.getElementById('dp-name').value.trim();
+  if(!name)return;
+  depts.push(name);
+  document.getElementById('dp-name').value='';
+  closeModal('m-dept');renderManage();
+}
+function removeDept(i){
+  if(!isAdmin())return;
+  if(!confirm(`Remove "${depts[i]}"? Employees in this dept will lose their dept.`))return;
+  depts.splice(i,1);renderManage();
+}
+
+// ═══════════════════════════════════════════════
+//  MODALS
+// ═══════════════════════════════════════════════
+function openModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open')}));
+
+// Init login role picker
+pickRole('admin',document.querySelector('.role-btn'));
+</script>
+</body>
+</html>

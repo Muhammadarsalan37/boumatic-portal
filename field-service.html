@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Field Service Time Registration</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+:root{
+  --accent:#2563eb;--accent-light:#eff6ff;--accent-dark:#1d4ed8;
+  --green-bg:#dcfce7;--green-tx:#166534;
+  --amber-bg:#fef9c3;--amber-tx:#854d0e;
+  --red-bg:#fee2e2;--red-tx:#991b1b;
+  --blue-bg:#dbeafe;--blue-tx:#1e40af;
+  --purple-bg:#ede9fe;--purple-tx:#5b21b6;
+  --orange-bg:#ffedd5;--orange-tx:#9a3412;
+  --gray-bg:#f3f4f6;--gray-tx:#374151;
+  --border:#e5e7eb;--border-strong:#d1d5db;
+  --surface:#ffffff;--page:#f9fafb;
+  --text:#111827;--text-2:#6b7280;--text-3:#9ca3af;
+  --radius:8px;--sidebar:240px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--page);color:var(--text);font-size:13px;line-height:1.5}
+
+/* ── Login ── */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#1e3a5f 0%,#2563eb 100%)}
+.login-card{background:var(--surface);border-radius:16px;padding:36px 32px;width:100%;max-width:400px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.login-logo{font-size:20px;font-weight:700;color:var(--accent);margin-bottom:4px}
+.login-brand{font-size:12px;color:var(--text-2);margin-bottom:24px}
+.role-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px}
+.role-card{border:1.5px solid var(--border);border-radius:var(--radius);padding:10px 6px;cursor:pointer;text-align:center;transition:all .15s}
+.role-card:hover,.role-card.sel{border-color:var(--accent);background:var(--accent-light)}
+.role-card.sel{border-width:2px}
+.role-card i{font-size:22px;display:block;margin-bottom:4px;color:var(--accent)}
+.role-card .rn{font-size:11px;font-weight:600}
+.role-card .rs{font-size:10px;color:var(--text-2)}
+.form-row{margin-bottom:12px}
+.form-row label{display:block;font-size:11px;font-weight:600;color:var(--text-2);margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
+.form-row input,.form-row select{width:100%;padding:9px 11px;border:1.5px solid var(--border-strong);border-radius:var(--radius);font-family:inherit;font-size:13px;color:var(--text);background:var(--surface)}
+.form-row input:focus,.form-row select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.btn-login{width:100%;padding:11px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:4px;letter-spacing:.02em}
+.btn-login:hover{background:var(--accent-dark)}
+
+/* ── App Shell ── */
+.app{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:var(--sidebar);min-width:var(--sidebar);background:#1e3a5f;display:flex;flex-direction:column;overflow-y:auto;transition:transform .25s}
+.brand{padding:18px 16px;border-bottom:1px solid rgba(255,255,255,.1)}
+.brand-name{font-size:14px;font-weight:700;color:#fff}
+.brand-sub{font-size:10px;color:rgba(255,255,255,.5);margin-top:2px}
+.user-pill{display:flex;align-items:center;gap:9px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.1)}
+.user-av{width:30px;height:30px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.user-name{font-size:12px;font-weight:500;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-role{font-size:10px;color:rgba(255,255,255,.5)}
+.nav-section{padding:14px 16px 4px;font-size:10px;font-weight:600;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.07em}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 16px;cursor:pointer;color:rgba(255,255,255,.65);font-size:12px;border-left:3px solid transparent;transition:all .12s}
+.nav-item:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav-item.active{background:rgba(37,99,235,.35);color:#fff;border-left-color:var(--accent)}
+.nav-item i{font-size:15px;flex-shrink:0}
+.nav-item .bc{margin-left:auto;background:var(--accent);color:#fff;font-size:10px;padding:1px 6px;border-radius:20px;font-weight:700}
+.logout-btn{margin:auto 12px 12px;padding:8px 12px;border:1px solid rgba(255,255,255,.2);border-radius:var(--radius);background:transparent;color:rgba(255,255,255,.65);font-family:inherit;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:6px}
+.logout-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+.main{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;gap:10px;padding:12px 20px;border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:5}
+.topbar-menu{display:none;background:none;border:none;font-size:20px;cursor:pointer;color:var(--text-2);padding:2px}
+.topbar h1{font-size:15px;font-weight:600;flex:1}
+.content{padding:20px;flex:1}
+.screen{display:none}.screen.active{display:block}
+
+/* ── Components ── */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+.stat-label{font-size:11px;color:var(--text-2);margin-bottom:3px;font-weight:500}
+.stat-val{font-size:22px;font-weight:700;line-height:1.1}
+.stat-sub{font-size:11px;color:var(--text-2);margin-top:3px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:14px;overflow:hidden}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);gap:8px;flex-wrap:wrap}
+.card-head-title{font-size:13px;font-weight:600}
+.card-body{padding:16px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;color:var(--text-2);font-weight:500;font-size:11px;padding:8px 12px;border-bottom:1px solid var(--border);white-space:nowrap;background:var(--page)}
+td{padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--page)}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border-radius:var(--radius);border:1px solid var(--border-strong);background:var(--surface);color:var(--text);font-size:12px;cursor:pointer;font-family:inherit;transition:all .12s;white-space:nowrap;font-weight:500}
+.btn:hover{background:var(--page)}
+.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}.btn-primary:hover{background:var(--accent-dark)}
+.btn-sm{padding:4px 10px;font-size:11px}
+.btn-danger{color:var(--red-tx);border-color:#fca5a5}.btn-danger:hover{background:var(--red-bg)}
+.btn-success{background:var(--green-bg);color:var(--green-tx);border-color:#86efac}.btn-success:hover{filter:brightness(.95)}
+.btn-warning{background:var(--amber-bg);color:var(--amber-tx);border-color:#fcd34d}.btn-warning:hover{filter:brightness(.95)}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap}
+.b-green{background:var(--green-bg);color:var(--green-tx)}
+.b-amber{background:var(--amber-bg);color:var(--amber-tx)}
+.b-red{background:var(--red-bg);color:var(--red-tx)}
+.b-blue{background:var(--blue-bg);color:var(--blue-tx)}
+.b-purple{background:var(--purple-bg);color:var(--purple-tx)}
+.b-orange{background:var(--orange-bg);color:var(--orange-tx)}
+.b-gray{background:var(--gray-bg);color:var(--gray-tx)}
+.av{border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
+.av-sm{width:26px;height:26px;font-size:10px;background:var(--blue-bg);color:var(--blue-tx)}
+input,select,textarea{font-family:'Inter',sans-serif;font-size:13px;padding:8px 10px;border:1px solid var(--border-strong);border-radius:var(--radius);background:var(--surface);color:var(--text);width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+textarea{resize:vertical;min-height:70px}
+.form-row2{margin-bottom:12px}
+.form-row2 label{display:block;font-size:11px;font-weight:600;color:var(--text-2);margin-bottom:4px;text-transform:uppercase;letter-spacing:.03em}
+.form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.form-grid-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto}
+.overlay.open{display:flex}
+.modal{background:var(--surface);border-radius:14px;border:1px solid var(--border);padding:24px;width:100%;max-width:600px;margin:auto;box-shadow:0 20px 60px rgba(0,0,0,.15)}
+.modal-title{font-size:15px;font-weight:700;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between}
+.close-x{background:none;border:none;font-size:18px;cursor:pointer;color:var(--text-3);line-height:1;padding:0;font-family:inherit}
+.close-x:hover{color:var(--text)}
+.tabs{display:flex;gap:0;margin-bottom:16px;border-bottom:1px solid var(--border)}
+.tab{padding:8px 16px;cursor:pointer;font-size:12px;font-weight:500;color:var(--text-2);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .12s}
+.tab:hover{color:var(--text)}.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.pbar{height:6px;background:var(--gray-bg);border-radius:3px;overflow:hidden}
+.pfill{height:100%;border-radius:3px}
+.divider{border:none;border-top:1px solid var(--border);margin:14px 0}
+.alert{padding:10px 14px;border-radius:var(--radius);font-size:12px;display:flex;align-items:flex-start;gap:8px;margin-bottom:12px}
+.alert-warning{background:var(--amber-bg);color:var(--amber-tx);border:1px solid #fcd34d}
+.alert-info{background:var(--blue-bg);color:var(--blue-tx);border:1px solid #93c5fd}
+.empty{text-align:center;padding:32px;color:var(--text-3);font-size:12px}
+.sidebar-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:49}
+.sidebar-backdrop.open{display:block}
+.ot-box{border:1px solid var(--border);border-radius:var(--radius);padding:12px;margin-top:10px}
+.ot-box-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-2);margin-bottom:8px}
+.ot-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px dashed var(--border);font-size:12px}
+.ot-row:last-child{border-bottom:none;font-weight:600}
+.audit-item{padding:10px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start}
+.audit-item:last-child{border-bottom:none}
+.audit-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:4px}
+.status-flow{display:flex;gap:4px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.status-step{display:flex;align-items:center;gap:4px;font-size:11px}
+.status-step .dot{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.status-step .label{font-size:11px;color:var(--text-2)}
+.status-arrow{color:var(--text-3);font-size:14px}
+.ot-summary{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
+.ot-chip{border:1px solid var(--border);border-radius:var(--radius);padding:8px 10px;font-size:12px}
+.ot-chip-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--text-2);margin-bottom:2px}
+.ot-chip-val{font-size:18px;font-weight:700}
+.entry-row{display:flex;gap:10px;align-items:flex-start;padding:12px 16px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.entry-row:last-child{border-bottom:none}
+.day-header{background:var(--page);padding:8px 16px;font-size:12px;font-weight:700;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.warn-badge{display:inline-flex;align-items:center;gap:4px;background:var(--amber-bg);color:var(--amber-tx);border:1px solid #fcd34d;border-radius:4px;padding:2px 6px;font-size:10px;font-weight:600}
+@media(max-width:768px){
+  .sidebar{position:fixed;left:0;top:0;bottom:0;z-index:50;transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .topbar-menu{display:block}
+  .main{height:100vh}
+  .stats{grid-template-columns:1fr 1fr}
+  .two-col,.form-grid-2,.form-grid-3,.form-grid-4{grid-template-columns:1fr}
+  .three-col{grid-template-columns:1fr 1fr}
+  .content{padding:14px}
+  .overlay{padding:12px}
+  .modal{max-width:100%}
+}
+@media(max-width:480px){.stats{grid-template-columns:1fr 1fr}.three-col{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="login-screen">
+  <div class="login-card">
+    <div class="login-logo"><i class="ti ti-clock-bolt"></i> Time Registration</div>
+    <div class="login-brand">BouMatic Field Service — SAC & BMR</div>
+    <div class="role-grid">
+      <div class="role-card sel" onclick="pickRole('employee',this)"><i class="ti ti-user"></i><div class="rn">Employee</div><div class="rs">SAC / BMR</div></div>
+      <div class="role-card" onclick="pickRole('manager',this)"><i class="ti ti-users"></i><div class="rn">Manager</div><div class="rs">Approve</div></div>
+      <div class="role-card" onclick="pickRole('hr',this)"><i class="ti ti-building"></i><div class="rn">HR / Admin</div><div class="rs">Export</div></div>
+    </div>
+    <div class="form-row"><label>Sign in as</label><select id="login-sel"><option value="">Choose account…</option></select></div>
+    <button class="btn-login" onclick="doLogin()"><i class="ti ti-login"></i> Sign in</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="app-screen" style="display:none">
+  <div class="sidebar" id="sidebar">
+    <div class="brand"><div class="brand-name"><i class="ti ti-clock-bolt"></i> Field Service</div><div class="brand-sub">Time Registration</div></div>
+    <div class="user-pill">
+      <div class="user-av" id="sb-av">?</div>
+      <div><div class="user-name" id="sb-name">—</div><div class="user-role" id="sb-role">—</div></div>
+    </div>
+    <div id="nav-links"></div>
+    <button class="logout-btn" onclick="logout()"><i class="ti ti-logout"></i> Sign out</button>
+  </div>
+  <div class="sidebar-backdrop" id="sb-backdrop" onclick="closeSb()"></div>
+  <div class="main">
+    <div class="topbar">
+      <button class="topbar-menu" onclick="toggleSb()"><i class="ti ti-menu-2"></i></button>
+      <h1 id="page-title">Dashboard</h1>
+      <div id="topbar-actions"></div>
+    </div>
+    <div class="content">
+
+      <!-- DASHBOARD -->
+      <div id="s-dashboard" class="screen active">
+        <div class="stats" id="dash-stats"></div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-head"><span class="card-head-title">Pending approvals</span></div>
+            <div id="dash-approvals"></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><span class="card-head-title">Recent submissions</span></div>
+            <div class="table-wrap"><table><thead><tr><th>Employee</th><th>Period</th><th>Group</th><th>Status</th></tr></thead><tbody id="dash-recent"></tbody></table></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-head-title">Overtime summary — current period</span></div>
+          <div class="table-wrap"><table><thead><tr><th>Employee</th><th>Normal hrs</th><th>OT 128%</th><th>OT 147%</th><th>OT 184%</th><th>Travel OT</th><th>Standby</th><th>Pref.</th></tr></thead><tbody id="dash-ot"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- MY REGISTRATIONS -->
+      <div id="s-my-reg" class="screen">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+          <select id="reg-month" onchange="renderMyReg()" style="width:auto;font-size:12px;padding:6px 10px"><option value="2026-05">May 2026</option><option value="2026-06">June 2026</option><option value="2026-09">September 2026</option></select>
+          <select id="reg-week" onchange="renderMyReg()" style="width:auto;font-size:12px;padding:6px 10px"><option value="">All weeks</option><option value="9">Week 9</option></select>
+          <div style="flex:1"></div>
+          <button class="btn btn-primary" onclick="openModal('m-entry')"><i class="ti ti-plus"></i>Add entry</button>
+          <button class="btn" onclick="openModal('m-submit')"><i class="ti ti-send"></i>Submit period</button>
+        </div>
+        <div id="reg-status-bar" style="margin-bottom:12px"></div>
+        <div class="card" id="reg-entries-card">
+          <div class="card-head">
+            <span class="card-head-title">Time entries</span>
+            <div style="display:flex;gap:8px;flex-wrap:wrap" id="reg-totals"></div>
+          </div>
+          <div id="reg-entries"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-head-title">Overtime calculation</span></div>
+          <div class="card-body">
+            <div class="ot-summary" id="ot-summary"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEW ENTRY (full page form) -->
+      <div id="s-new-entry" class="screen">
+        <div class="two-col" style="align-items:start">
+          <div>
+            <div class="card"><div class="card-head"><span class="card-head-title">Activity</span></div><div class="card-body">
+              <div class="form-row2"><label>Date</label><input type="date" id="ne-date" onchange="updateDay()"></div>
+              <div class="form-grid-2">
+                <div class="form-row2"><label>Day</label><input type="text" id="ne-day" readonly style="background:var(--page)"></div>
+                <div class="form-row2"><label>Work type</label>
+                  <select id="ne-type" onchange="toggleEntryFields()">
+                    <option value="On Site Nationaal">On Site — National</option>
+                    <option value="On Site Internationaal">On Site — International</option>
+                    <option value="Kantoorwerk">Office work</option>
+                    <option value="Thuis werk">Home working</option>
+                    <option value="Hotline Call">Hotline / Call-out</option>
+                    <option value="Reistijd">Travel time</option>
+                    <option value="Vrije Tijd">Vacation / Time-off</option>
+                    <option value="Bijzonder Verlof">Special leave</option>
+                    <option value="Feestdag">Public holiday</option>
+                    <option value="Ziek">Sick leave</option>
+                    <option value="ADV">ADV day</option>
+                    <option value="Standby">Standby duty (BMR)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row2"><label>Customer / Dealer / Client</label><input type="text" id="ne-customer" placeholder="e.g. Alltech, Mosida, Sotec"></div>
+              <div class="form-row2"><label>Work order / Project / Ticket number</label><input type="text" id="ne-ticket" placeholder="SO-16857 / WB-000.062"></div>
+              <div class="form-row2"><label>Work location</label><input type="text" id="ne-location" placeholder="City, Country"></div>
+              <div class="form-row2"><label>Notes / Description</label><textarea id="ne-notes" placeholder="Describe what was done, breakdown details, etc."></textarea></div>
+            </div></div>
+
+            <div class="card" id="ne-time-card"><div class="card-head"><span class="card-head-title">Working hours</span></div><div class="card-body">
+              <div class="form-grid-3">
+                <div class="form-row2"><label>Start time</label><input type="time" id="ne-start" onchange="calcHours()"></div>
+                <div class="form-row2"><label>End time</label><input type="time" id="ne-end" onchange="calcHours()"></div>
+                <div class="form-row2"><label>Break (min)</label><input type="number" id="ne-break" value="60" min="0" max="120" onchange="calcHours()" placeholder="60"></div>
+              </div>
+              <div class="form-row2"><label>Total hours (excl. break)</label><input type="text" id="ne-totalhrs" readonly style="background:var(--page);font-weight:700;color:var(--accent)"></div>
+              <div id="break-warning" class="alert alert-warning" style="display:none"><i class="ti ti-alert-triangle"></i>Minimum break of 30 min required when working more than 5.5 hours.</div>
+            </div></div>
+          </div>
+
+          <div>
+            <div class="card" id="ne-travel-card"><div class="card-head"><span class="card-head-title">Travel</span></div><div class="card-body">
+              <div class="alert alert-info" id="sac-rule" style="display:none"><i class="ti ti-info-circle"></i><span><strong>SAC rule:</strong> 30 min deducted from outward + 30 min from return journey.</span></div>
+              <div class="form-grid-2">
+                <div class="form-row2"><label>Depart from</label><input type="text" id="ne-from" placeholder="Home / Hotel"></div>
+                <div class="form-row2"><label>Arrive at</label><input type="text" id="ne-to" placeholder="Customer location"></div>
+              </div>
+              <div class="form-grid-4">
+                <div class="form-row2"><label>Travel start</label><input type="time" id="ne-tstart" onchange="calcTravel()"></div>
+                <div class="form-row2"><label>Travel end</label><input type="time" id="ne-tend" onchange="calcTravel()"></div>
+                <div class="form-row2"><label>Return start</label><input type="time" id="ne-rstart" onchange="calcTravel()"></div>
+                <div class="form-row2"><label>Return end</label><input type="time" id="ne-rend" onchange="calcTravel()"></div>
+              </div>
+              <div class="form-grid-2">
+                <div class="form-row2"><label>Kilometers</label><input type="number" id="ne-km" placeholder="0" min="0"></div>
+                <div class="form-row2"><label>Travel OT hours</label><input type="text" id="ne-travelot" readonly style="background:var(--page);font-weight:700;color:var(--accent)"></div>
+              </div>
+            </div></div>
+
+            <div class="card" id="ne-bmr-card" style="display:none"><div class="card-head"><span class="card-head-title">Standby / Call-out (BMR)</span></div><div class="card-body">
+              <div class="form-row2"><label>Standby day</label>
+                <select id="ne-standby"><option value="no">No</option><option value="weekday">Yes — weekday</option><option value="weekend">Yes — weekend / holiday</option></select>
+              </div>
+              <div id="ne-callout-section">
+                <div class="form-grid-2">
+                  <div class="form-row2"><label>Call start</label><input type="time" id="ne-callstart" onchange="calcCallout()"></div>
+                  <div class="form-row2"><label>Call end</label><input type="time" id="ne-callend" onchange="calcCallout()"></div>
+                </div>
+                <div class="form-row2"><label>Customer</label><input type="text" id="ne-callcust" placeholder="Spanje / Dio / Abemec"></div>
+                <div class="form-row2"><label>Calculated OT hours</label><input type="text" id="ne-callot" readonly style="background:var(--page);font-weight:700;color:var(--accent)"></div>
+                <div class="form-row2"><label>Standby allowance</label><input type="text" id="ne-standbyallow" readonly style="background:var(--page);font-weight:700"></div>
+              </div>
+            </div></div>
+
+            <div class="card"><div class="card-head"><span class="card-head-title">Overtime preference</span></div><div class="card-body">
+              <div class="form-row2"><label>Overtime handling</label>
+                <select id="ne-otpref">
+                  <option value="payout">Pay out (Uitbetalen)</option>
+                  <option value="tft">Save as time-for-time (Verlofsparen)</option>
+                </select>
+              </div>
+              <div id="ne-ot-preview" class="ot-box" style="display:none">
+                <div class="ot-box-title">Overtime preview</div>
+                <div id="ne-ot-rows"></div>
+              </div>
+            </div></div>
+
+            <button class="btn btn-primary" style="width:100%" onclick="saveEntry()"><i class="ti ti-device-floppy"></i> Save entry</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- APPROVALS -->
+      <div id="s-approvals" class="screen">
+        <div class="tabs">
+          <div class="tab active" onclick="appTab('pending',this)">Pending</div>
+          <div class="tab" onclick="appTab('returned',this)">Returned</div>
+          <div class="tab" onclick="appTab('done',this)">Approved</div>
+        </div>
+        <div id="app-list"></div>
+      </div>
+
+      <!-- HR EXPORT -->
+      <div id="s-export" class="screen">
+        <div class="three-col" id="hr-stats"></div>
+        <div class="two-col" style="align-items:start">
+          <div class="card">
+            <div class="card-head"><span class="card-head-title">Export & process</span></div>
+            <div class="card-body">
+              <div class="form-row2"><label>Period</label><select id="exp-period"><option>May 2026</option><option>June 2026</option><option>Week 9 — 2026</option></select></div>
+              <div class="form-row2"><label>Export format</label><select id="exp-format"><option value="xlsx">Excel (.xlsx) — AFAS ready</option><option value="csv">CSV</option><option value="pdf">PDF summary</option></select></div>
+              <div class="form-row2"><label>Employee group</label><select id="exp-group"><option value="">All</option><option value="SAC">SAC only</option><option value="BMR">BMR only</option></select></div>
+              <button class="btn btn-primary" style="width:100%;margin-bottom:8px" onclick="doExport()"><i class="ti ti-download"></i> Export approved hours</button>
+              <button class="btn" style="width:100%;margin-bottom:8px" onclick="lockPeriod()"><i class="ti ti-lock"></i> Lock period after processing</button>
+              <div class="divider"></div>
+              <div class="form-row2"><label>AFAS integration</label><div class="alert alert-info" style="margin-top:4px"><i class="ti ti-plug"></i>AFAS connection ready. Map fields before first export.</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head"><span class="card-head-title">Audit trail</span></div>
+            <div class="card-body" id="audit-trail"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-head-title">All registrations — current period</span></div>
+          <div class="table-wrap"><table><thead><tr><th>Employee</th><th>Group</th><th>Date</th><th>Type</th><th>Hours</th><th>OT 128%</th><th>OT 147%</th><th>OT 184%</th><th>Travel OT</th><th>Status</th><th></th></tr></thead><tbody id="hr-all-table"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- LEAVE -->
+      <div id="s-leave" class="screen">
+        <div class="tabs">
+          <div class="tab active" onclick="leaveTab('bal',this)">Balances</div>
+          <div class="tab" onclick="leaveTab('history',this)">History</div>
+        </div>
+        <div id="lt-bal">
+          <div class="card">
+            <div class="card-head"><span class="card-head-title">Leave balances — 2026</span></div>
+            <div class="table-wrap"><table><thead><tr><th>Leave type</th><th>Entitlement</th><th>Used</th><th>Remaining</th><th>Balance</th></tr></thead><tbody id="leave-table"></tbody></table></div>
+          </div>
+        </div>
+        <div id="lt-history" style="display:none">
+          <div class="card"><div class="table-wrap"><table><thead><tr><th>Date</th><th>Type</th><th>Hours</th><th>Status</th><th>Notes</th></tr></thead><tbody id="leave-history"></tbody></table></div></div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- MODALS -->
+<div id="m-entry" class="overlay"><div class="modal">
+  <div class="modal-title">Add time entry — quick<button class="close-x" onclick="closeModal('m-entry')">×</button></div>
+  <p style="font-size:12px;color:var(--text-2);margin-bottom:14px">For a detailed entry with travel and overtime, use the <strong>New Entry</strong> screen.</p>
+  <div class="form-grid-2">
+    <div class="form-row2"><label>Date</label><input type="date" id="qe-date"></div>
+    <div class="form-row2"><label>Type</label>
+      <select id="qe-type">
+        <option>On Site Nationaal</option><option>On Site Internationaal</option><option>Kantoorwerk</option><option>Thuis werk</option><option>Hotline Call</option><option>Reistijd</option><option>Vrije Tijd</option><option>Bijzonder Verlof</option><option>Feestdag</option><option>Ziek</option>
+      </select>
+    </div>
+    <div class="form-row2"><label>Start</label><input type="time" id="qe-start" value="08:00"></div>
+    <div class="form-row2"><label>End</label><input type="time" id="qe-end" value="17:00"></div>
+    <div class="form-row2"><label>Break (min)</label><input type="number" id="qe-break" value="60" min="0"></div>
+    <div class="form-row2"><label>Customer / Notes</label><input type="text" id="qe-cust" placeholder="Customer or note"></div>
+  </div>
+  <button class="btn btn-primary" style="width:100%;margin-top:6px" onclick="saveQuickEntry()"><i class="ti ti-check"></i> Save entry</button>
+</div></div>
+
+<div id="m-submit" class="overlay"><div class="modal">
+  <div class="modal-title">Submit period for approval<button class="close-x" onclick="closeModal('m-submit')">×</button></div>
+  <div id="submit-summary" style="margin-bottom:14px"></div>
+  <div class="form-row2"><label>Overtime preference (applies to whole period)</label>
+    <select id="sub-otpref"><option value="payout">Pay out (Uitbetalen)</option><option value="tft">Save as time-for-time (Verlofsparen)</option></select>
+  </div>
+  <div class="form-row2"><label>Notes to manager</label><textarea id="sub-notes" placeholder="Any clarification for the manager…"></textarea></div>
+  <button class="btn btn-primary" style="width:100%;margin-top:6px" onclick="submitPeriod()"><i class="ti ti-send"></i> Submit for approval</button>
+</div></div>
+
+<div id="m-review" class="overlay"><div class="modal" style="max-width:680px">
+  <div class="modal-title" id="review-title">Review submission<button class="close-x" onclick="closeModal('m-review')">×</button></div>
+  <div id="review-content"></div>
+  <div class="form-row2" style="margin-top:14px"><label>Comment</label><textarea id="review-comment" placeholder="Add a comment, correction request, or approval note…"></textarea></div>
+  <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+    <button class="btn btn-success" onclick="reviewAction('approve')"><i class="ti ti-check"></i> Approve</button>
+    <button class="btn btn-warning" onclick="reviewAction('return')"><i class="ti ti-arrow-back"></i> Return for correction</button>
+    <button class="btn btn-danger" onclick="reviewAction('reject')"><i class="ti ti-x"></i> Reject</button>
+  </div>
+</div></div>
+
+<script>
+// ──────────────────────────────────────────
+//  DATA
+// ──────────────────────────────────────────
+let users=[
+  {id:1,name:'John Blankvoort',group:'SAC',role:'employee',title:'Service Employee SAC'},
+  {id:2,name:'Anouk van den Ham',group:'BMR',role:'employee',title:'Service Employee BMR'},
+  {id:3,name:'Petra Manager',group:'',role:'manager',title:'Service Manager'},
+  {id:4,name:'HR Admin',group:'',role:'hr',title:'HR / Administration'},
+];
+
+let entries=[
+  // Anouk - May 2026 sample (from PDF)
+  {id:1,empId:2,date:'2026-05-01',type:'On Site Nationaal',customer:'',location:'NL',start:'08:00',end:'18:45',breakMin:60,hours:9.75,km:0,travelHrs:1.5+1.5,travelOt:1.75,ot128:0,ot147:0,ot184:0,notes:'',period:'2026-05'},
+  {id:2,empId:2,date:'2026-05-02',type:'Hotline Call',customer:'Spanje',location:'',start:'12:30',end:'14:30',breakMin:0,hours:2,km:0,travelHrs:0,travelOt:2,ot128:0,ot147:2,ot184:0,notes:'Weekend',period:'2026-05'},
+  {id:3,empId:2,date:'2026-05-04',type:'On Site Internationaal',customer:'Sotec',location:'',start:'10:00',end:'16:15',breakMin:45,hours:5.5,km:0,travelHrs:5.5,travelOt:5.5,ot128:0,ot147:0,ot184:0,notes:'Hotel overnight',period:'2026-05'},
+  {id:4,empId:2,date:'2026-05-11',type:'Kantoorwerk',customer:'',location:'Office',start:'08:00',end:'17:00',breakMin:60,hours:8,km:0,travelHrs:0,travelOt:0,ot128:0,ot147:0,ot184:0,notes:'',period:'2026-05'},
+  {id:5,empId:2,date:'2026-05-13',type:'Bijzonder Verlof',customer:'',location:'',start:'08:00',end:'17:00',breakMin:60,hours:8,km:0,travelHrs:0,travelOt:0,ot128:0,ot147:0,ot184:0,notes:'Uitvaart',period:'2026-05'},
+  // John - Week 9 2026 (from xlsx)
+  {id:6,empId:1,date:'2026-02-23',type:'On Site Internationaal',customer:'Alltech / Mosida',location:'Nebraska',ticket:'SO16857/WB000.062',start:'07:00',end:'17:30',breakMin:30,hours:9.5,km:0,travelHrs:0.5,travelOt:2.5,ot128:0.5,ot147:2,ot184:0,notes:'Montage 74 RIC2Discover',period:'2026-09'},
+  {id:7,empId:1,date:'2026-02-26',type:'On Site Internationaal',customer:'Alltech / Mosida',location:'Nebraska',ticket:'SO16857',start:'07:15',end:'17:30',breakMin:60,hours:9.25,km:0,travelHrs:0.5,travelOt:1.75,ot128:0.5,ot147:1.25,ot184:0,notes:'',period:'2026-09'},
+];
+
+let periods=[
+  {id:1,empId:2,period:'2026-05',label:'May 2026',status:'Submitted',submittedAt:'2026-06-01',otPref:'payout',managerComment:'',note:''},
+  {id:2,empId:1,period:'2026-09',label:'Week 9 / 2026',status:'Draft',submittedAt:null,otPref:'payout',managerComment:'',note:''},
+];
+let nextEntryId=20;let nextPeriodId=10;
+
+let auditLog=[
+  {ts:'2026-06-01 09:12',user:'Anouk van den Ham',action:'Submitted period May 2026 for approval'},
+  {ts:'2026-05-30 17:01',user:'John Blankvoort',action:'Added entry — On Site Internationaal (Alltech, Nebraska)'},
+  {ts:'2026-05-13 18:30',user:'Anouk van den Ham',action:'Added entry — Bijzonder Verlof (Uitvaart)'},
+];
+
+let leaveBalances=[
+  {type:'Vacation hours',entitlement:200,used:64,unit:'hrs'},
+  {type:'Time-for-time (TFT)',entitlement:0,used:0,unit:'hrs',accrued:16},
+  {type:'Special leave',entitlement:16,used:8,unit:'hrs'},
+  {type:'ADV days',entitlement:8,used:8,unit:'hrs'},
+  {type:'Emergency leave',entitlement:8,used:0,unit:'hrs'},
+];
+
+let currentUser=null;
+let selectedRole='employee';
+let reviewingPeriodId=null;
+
+// ──────────────────────────────────────────
+//  HELPERS
+// ──────────────────────────────────────────
+function av(n){return(n||'').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}
+function user(id){return users.find(u=>u.id===id)}
+function fmtH(h){return h?h.toFixed(2)+'h':'—'}
+function dayName(d){const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];return days[new Date(d+'T12:00:00').getDay()]}
+function isWeekend(d){const day=new Date(d+'T12:00:00').getDay();return day===0||day===6}
+function timeDiff(s,e){if(!s||!e)return 0;const[sh,sm]=s.split(':').map(Number);const[eh,em]=e.split(':').map(Number);let diff=(eh*60+em)-(sh*60+sm);if(diff<0)diff+=1440;return diff/60}
+function calcOt(date,hours,empGroup){
+  const weekend=isWeekend(date);
+  const dayOfWeek=new Date(date+'T12:00:00').getDay();
+  const isSat=dayOfWeek===6;const isSun=dayOfWeek===0;
+  const normal=8;let ot128=0,ot147=0,ot184=0;
+  if(isSun){ot184=Math.max(0,hours);}
+  else if(isSat){ot147=Math.max(0,hours);}
+  else{
+    const over=Math.max(0,hours-normal);
+    ot128=Math.min(2,over);
+    ot147=Math.max(0,over-2);
+  }
+  return{ot128,ot147,ot184};
+}
+function statusBadge(s){
+  const map={Draft:'b-gray',Submitted:'b-blue','Returned for correction':'b-amber','Approved by manager':'b-green','Approved by HR':'b-purple','Exported':'b-orange',Locked:'b-gray'};
+  return`<span class="badge ${map[s]||'b-gray'}">${s}</span>`;
+}
+function typeIcon(t){
+  const map={'On Site Nationaal':'ti-building','On Site Internationaal':'ti-world','Kantoorwerk':'ti-building-skyscraper','Thuis werk':'ti-home','Hotline Call':'ti-phone','Reistijd':'ti-car','Vrije Tijd':'ti-beach','Bijzonder Verlof':'ti-heart','Feestdag':'ti-star','Ziek':'ti-first-aid-kit','ADV':'ti-calendar','Standby':'ti-bell'};
+  return`<i class="ti ${map[t]||'ti-clock'}" style="color:var(--text-2)"></i>`;
+}
+function myEntries(){return entries.filter(e=>e.empId===currentUser.id)}
+function myPeriods(){return periods.filter(p=>p.empId===currentUser.id)}
+
+// ──────────────────────────────────────────
+//  LOGIN
+// ──────────────────────────────────────────
+function pickRole(role,el){
+  selectedRole=role;
+  document.querySelectorAll('.role-card').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');
+  const sel=document.getElementById('login-sel');
+  sel.innerHTML='<option value="">Choose account…</option>';
+  const list=role==='employee'?users.filter(u=>u.role==='employee'):role==='manager'?users.filter(u=>u.role==='manager'):users.filter(u=>u.role==='hr');
+  list.forEach(u=>sel.innerHTML+=`<option value="${u.id}">${u.name}${u.group?' — '+u.group:''}</option>`);
+}
+function doLogin(){
+  const id=parseInt(document.getElementById('login-sel').value);if(!id){alert('Choose an account.');return}
+  currentUser=users.find(u=>u.id===id);
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app-screen').style.display='flex';
+  buildSidebar();nav('dashboard',null);
+}
+function logout(){currentUser=null;document.getElementById('app-screen').style.display='none';document.getElementById('login-screen').style.display='flex';pickRole('employee',document.querySelector('.role-card'));}
+
+// ──────────────────────────────────────────
+//  SIDEBAR / NAV
+// ──────────────────────────────────────────
+function buildSidebar(){
+  const u=currentUser;
+  document.getElementById('sb-av').textContent=av(u.name);
+  document.getElementById('sb-name').textContent=u.name;
+  document.getElementById('sb-role').textContent=u.title;
+
+  const pendingCount=periods.filter(p=>p.status==='Submitted').length;
+  let navDefs=[];
+  if(u.role==='employee'){
+    navDefs=[
+      {section:'My work',items:[
+        {id:'dashboard',icon:'ti-layout-dashboard',label:'Dashboard'},
+        {id:'my-reg',icon:'ti-clock',label:'My registrations'},
+        {id:'new-entry',icon:'ti-plus',label:'New entry'},
+        {id:'leave',icon:'ti-beach',label:'Leave & balances'},
+      ]}
+    ];
+  } else if(u.role==='manager'){
+    navDefs=[
+      {section:'Team',items:[
+        {id:'dashboard',icon:'ti-layout-dashboard',label:'Dashboard'},
+        {id:'approvals',icon:'ti-check',label:'Approvals',badge:pendingCount},
+        {id:'my-reg',icon:'ti-clock',label:'All registrations'},
+        {id:'leave',icon:'ti-beach',label:'Leave overview'},
+      ]}
+    ];
+  } else {
+    navDefs=[
+      {section:'HR / Admin',items:[
+        {id:'dashboard',icon:'ti-layout-dashboard',label:'Dashboard'},
+        {id:'approvals',icon:'ti-check',label:'Final approval',badge:pendingCount},
+        {id:'export',icon:'ti-download',label:'Export & payroll'},
+        {id:'leave',icon:'ti-beach',label:'Leave overview'},
+      ]}
+    ];
+  }
+  let html='';
+  navDefs.forEach(g=>{
+    html+=`<div class="nav-section">${g.section}</div>`;
+    g.items.forEach(item=>{
+      const badge=item.badge?`<span class="bc">${item.badge}</span>`:'';
+      html+=`<div class="nav-item" id="nav-${item.id}" onclick="nav('${item.id}',this)"><i class="ti ${item.icon}"></i>${item.label}${badge}</div>`;
+    });
+  });
+  document.getElementById('nav-links').innerHTML=html;
+}
+function toggleSb(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sb-backdrop').classList.toggle('open')}
+function closeSb(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sb-backdrop').classList.remove('open')}
+const pageTitles={dashboard:'Dashboard','my-reg':'My registrations','new-entry':'New time entry','approvals':'Approvals','export':'Export & payroll','leave':'Leave & balances'};
+function nav(id,el){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s-'+id)?.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('nav-'+id)?.classList.add('active');
+  document.getElementById('page-title').textContent=pageTitles[id]||id;
+  document.getElementById('topbar-actions').innerHTML='';closeSb();
+  const renders={dashboard:renderDashboard,'my-reg':renderMyReg,'approvals':renderApprovals,'export':renderExport,'leave':renderLeave,};
+  if(renders[id])renders[id]();
+  if(id==='new-entry'){initNewEntry();}
+}
+
+// ──────────────────────────────────────────
+//  DASHBOARD
+// ──────────────────────────────────────────
+function renderDashboard(){
+  const allEntries=entries;
+  const totalH=allEntries.reduce((s,e)=>s+e.hours,0);
+  const totalOt=allEntries.reduce((s,e)=>s+(e.ot128+e.ot147+e.ot184),0);
+  const pending=periods.filter(p=>p.status==='Submitted');
+  document.getElementById('dash-stats').innerHTML=`
+    <div class="stat"><div class="stat-label">Total entries</div><div class="stat-val">${allEntries.length}</div><div class="stat-sub">All employees</div></div>
+    <div class="stat"><div class="stat-label">Normal hours logged</div><div class="stat-val">${totalH.toFixed(1)}</div><div class="stat-sub">Current period</div></div>
+    <div class="stat"><div class="stat-label">Overtime hours</div><div class="stat-val" style="color:var(--accent)">${totalOt.toFixed(1)}</div><div class="stat-sub">Incl. 128/147/184%</div></div>
+    <div class="stat"><div class="stat-label">Pending approval</div><div class="stat-val" style="color:var(--amber-tx)">${pending.length}</div><div class="stat-sub">Awaiting review</div></div>`;
+
+  const appHtml=pending.length?pending.map(p=>{
+    const u=user(p.empId);
+    return`<div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border)">
+      <span class="av av-sm">${av(u?.name||'?')}</span>
+      <div style="flex:1"><div style="font-weight:600;font-size:12px">${u?.name||'?'}</div><div style="font-size:11px;color:var(--text-2)">${p.label} · ${u?.group||'—'} · ${p.otPref==='payout'?'Pay out':'Time-for-time'}</div></div>
+      <button class="btn btn-sm btn-success" onclick="openReview(${p.id})"><i class="ti ti-check"></i>Review</button>
+    </div>`;
+  }).join(''):'<div class="empty">No pending approvals.</div>';
+  document.getElementById('dash-approvals').innerHTML=appHtml;
+
+  document.getElementById('dash-recent').innerHTML=periods.map(p=>{
+    const u=user(p.empId);
+    return`<tr><td><div style="display:flex;align-items:center;gap:6px"><span class="av av-sm">${av(u?.name||'?')}</span>${u?.name||'?'}</div></td><td>${p.label}</td><td><span class="badge b-blue">${u?.group||'—'}</span></td><td>${statusBadge(p.status)}</td></tr>`;
+  }).join('');
+
+  const otData=[
+    {name:'Anouk van den Ham',group:'BMR',normal:111.75,ot128:9.0,ot147:8.67,ot184:2.25,travelOt:20.15,standby:'€75',pref:'Pay out'},
+    {name:'John Blankvoort',group:'SAC',normal:40,ot128:1.0,ot147:3.25,ot184:0,travelOt:4.25,standby:'—',pref:'Pay out'},
+  ];
+  document.getElementById('dash-ot').innerHTML=otData.map(r=>`<tr><td><strong>${r.name}</strong></td><td><span class="badge b-blue">${r.group}</span></td><td>${r.normal}h</td><td style="color:var(--blue-tx)">${r.ot128}h</td><td style="color:var(--orange-tx)">${r.ot147}h</td><td style="color:var(--red-tx)">${r.ot184}h</td><td style="color:var(--purple-tx)">${r.travelOt}h</td><td>${r.standby}</td><td><span class="badge b-gray">${r.pref}</span></td></tr>`).join('');
+}
+
+// ──────────────────────────────────────────
+//  MY REGISTRATIONS
+// ──────────────────────────────────────────
+function renderMyReg(){
+  const period=document.getElementById('reg-month')?.value||'2026-05';
+  let list=currentUser.role==='employee'?myEntries().filter(e=>e.period===period||e.date.startsWith(period)):entries;
+
+  // status bar
+  const p=myPeriods().find(x=>x.period===period)||{status:'Draft'};
+  document.getElementById('reg-status-bar').innerHTML=`<div class="status-flow">
+    ${['Draft','Submitted','Approved by manager','Approved by HR','Exported'].map((s,i)=>{
+      const active=p.status===s;const done=['Draft','Submitted','Approved by manager','Approved by HR','Exported'].indexOf(p.status)>i;
+      return`<div class="status-step"><div class="dot" style="background:${done||active?'var(--accent)':'var(--border)'};color:${done||active?'#fff':'var(--text-3)'}">${done?'✓':(i+1)}</div><div class="label">${s}</div></div>${i<4?'<div class="status-arrow">›</div>':''}`}).join('')}
+  </div>`;
+
+  if(!list.length){document.getElementById('reg-entries').innerHTML='<div class="empty">No entries for this period. Click "Add entry" to start.</div>';document.getElementById('reg-totals').innerHTML='';return;}
+
+  // group by date
+  const byDate={};
+  list.forEach(e=>{if(!byDate[e.date])byDate[e.date]=[];byDate[e.date].push(e)});
+
+  let html='';
+  Object.keys(byDate).sort().forEach(date=>{
+    const dayEntries=byDate[date];
+    const dayHrs=dayEntries.reduce((s,e)=>s+e.hours,0);
+    const isWE=isWeekend(date);
+    const breakWarning=dayEntries.some(e=>e.hours>5.5&&(e.breakMin||0)<30);
+    html+=`<div class="day-header">${dayName(date)}, ${date} <span style="margin-left:auto;color:var(--text-2);font-weight:400">${dayHrs.toFixed(2)}h</span>${isWE?'<span class="badge b-purple" style="margin-left:8px">Weekend</span>':''}${breakWarning?'<span class="warn-badge"><i class="ti ti-alert-triangle"></i>Break!</span>':''}</div>`;
+    dayEntries.forEach(e=>{
+      const ot=e.ot128+e.ot147+e.ot184;
+      html+=`<div class="entry-row">
+        <div>${typeIcon(e.type)}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:600;font-size:12px">${e.type}${e.customer?` — ${e.customer}`:''}</div>
+          <div style="font-size:11px;color:var(--text-2)">${e.start&&e.end?e.start+' – '+e.end+' (break '+e.breakMin+'min)':'All day'}${e.location?' · '+e.location:''}${e.ticket?' · '+e.ticket:''}</div>
+          ${e.notes?`<div style="font-size:11px;color:var(--text-3);font-style:italic">${e.notes}</div>`:''}
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div style="font-weight:700;font-size:13px">${e.hours.toFixed(2)}h</div>
+          ${ot>0?`<div style="font-size:11px;color:var(--accent)">OT: ${ot.toFixed(2)}h</div>`:''}
+          ${e.travelHrs>0?`<div style="font-size:11px;color:var(--text-2)">Travel: ${e.travelHrs.toFixed(2)}h</div>`:''}
+        </div>
+        ${p.status==='Draft'?`<button class="btn btn-sm btn-danger" onclick="removeEntry(${e.id})"><i class="ti ti-trash"></i></button>`:''}
+      </div>`;
+    });
+  });
+  document.getElementById('reg-entries').innerHTML=html;
+
+  // totals chips
+  const totalHrs=list.reduce((s,e)=>s+e.hours,0);
+  const total128=list.reduce((s,e)=>s+e.ot128,0);
+  const total147=list.reduce((s,e)=>s+e.ot147,0);
+  const total184=list.reduce((s,e)=>s+e.ot184,0);
+  const totalTravel=list.reduce((s,e)=>s+e.travelHrs,0);
+  document.getElementById('reg-totals').innerHTML=`
+    <span class="badge b-gray">Normal: ${totalHrs.toFixed(1)}h</span>
+    ${total128>0?`<span class="badge b-blue">128%: ${total128.toFixed(1)}h</span>`:''}
+    ${total147>0?`<span class="badge b-orange">147%: ${total147.toFixed(1)}h</span>`:''}
+    ${total184>0?`<span class="badge b-red">184%: ${total184.toFixed(1)}h</span>`:''}
+    ${totalTravel>0?`<span class="badge b-purple">Travel OT: ${totalTravel.toFixed(1)}h</span>`:''}`;
+
+  document.getElementById('ot-summary').innerHTML=`
+    <div class="ot-chip"><div class="ot-chip-label">Normal hours</div><div class="ot-chip-val">${totalHrs.toFixed(2)}h</div></div>
+    <div class="ot-chip" style="border-color:#93c5fd"><div class="ot-chip-label">OT 128% (weekday 0–2h)</div><div class="ot-chip-val" style="color:var(--blue-tx)">${total128.toFixed(2)}h</div></div>
+    <div class="ot-chip" style="border-color:#fdba74"><div class="ot-chip-label">OT 147% (weekday >2h & Sat)</div><div class="ot-chip-val" style="color:var(--orange-tx)">${total147.toFixed(2)}h</div></div>
+    <div class="ot-chip" style="border-color:#fca5a5"><div class="ot-chip-label">OT 184% (Sun / holiday)</div><div class="ot-chip-val" style="color:var(--red-tx)">${total184.toFixed(2)}h</div></div>
+    <div class="ot-chip" style="border-color:#c4b5fd"><div class="ot-chip-label">Travel OT</div><div class="ot-chip-val" style="color:var(--purple-tx)">${totalTravel.toFixed(2)}h</div></div>
+    <div class="ot-chip" style="border-color:var(--border)"><div class="ot-chip-label">OT preference</div><div class="ot-chip-val" style="font-size:14px">${p.otPref==='payout'?'Pay out':'Time-for-time'}</div></div>`;
+}
+function removeEntry(id){if(!confirm('Remove this entry?'))return;const i=entries.findIndex(e=>e.id===id);if(i>-1)entries.splice(i,1);renderMyReg();}
+
+// ──────────────────────────────────────────
+//  NEW ENTRY SCREEN
+// ──────────────────────────────────────────
+function initNewEntry(){
+  document.getElementById('ne-date').valueAsDate=new Date();updateDay();
+  if(currentUser.group==='SAC')document.getElementById('sac-rule').style.display='flex';
+  if(currentUser.group==='BMR')document.getElementById('ne-bmr-card').style.display='block';
+  toggleEntryFields();
+}
+function updateDay(){
+  const d=document.getElementById('ne-date').value;
+  document.getElementById('ne-day').value=d?dayName(d):'';
+  calcHours();
+}
+function toggleEntryFields(){
+  const t=document.getElementById('ne-type').value;
+  const hasTime=['On Site Nationaal','On Site Internationaal','Kantoorwerk','Thuis werk','Hotline Call','Reistijd'].includes(t);
+  const hasTravel=['On Site Nationaal','On Site Internationaal','Reistijd'].includes(t);
+  document.getElementById('ne-time-card').style.display=hasTime?'block':'none';
+  document.getElementById('ne-travel-card').style.display=hasTravel?'block':'none';
+}
+function calcHours(){
+  const s=document.getElementById('ne-start').value;
+  const e=document.getElementById('ne-end').value;
+  const b=parseInt(document.getElementById('ne-break').value)||0;
+  if(!s||!e){document.getElementById('ne-totalhrs').value='';return}
+  const raw=timeDiff(s,e);
+  const total=Math.max(0,raw-b/60);
+  document.getElementById('ne-totalhrs').value=total.toFixed(2)+' hours';
+  document.getElementById('break-warning').style.display=(raw>5.5&&b<30)?'flex':'none';
+  // OT preview
+  const date=document.getElementById('ne-date').value;
+  if(date&&total>0){
+    const {ot128,ot147,ot184}=calcOt(date,total,currentUser.group);
+    if(ot128+ot147+ot184>0){
+      document.getElementById('ne-ot-preview').style.display='block';
+      document.getElementById('ne-ot-rows').innerHTML=`
+        ${ot128>0?`<div class="ot-row"><span>OT 128% (first 2h)</span><span>${ot128.toFixed(2)}h</span></div>`:''}
+        ${ot147>0?`<div class="ot-row"><span>OT 147% (>2h / Sat)</span><span>${ot147.toFixed(2)}h</span></div>`:''}
+        ${ot184>0?`<div class="ot-row"><span>OT 184% (Sun / holiday)</span><span>${ot184.toFixed(2)}h</span></div>`:''}
+        <div class="ot-row"><span>Total OT</span><span>${(ot128+ot147+ot184).toFixed(2)}h</span></div>`;
+    } else document.getElementById('ne-ot-preview').style.display='none';
+  }
+}
+function calcTravel(){
+  const ts=document.getElementById('ne-tstart').value;const te=document.getElementById('ne-tend').value;
+  const rs=document.getElementById('ne-rstart').value;const re=document.getElementById('ne-rend').value;
+  let outbound=ts&&te?timeDiff(ts,te):0;
+  let ret=rs&&re?timeDiff(rs,re):0;
+  if(currentUser.group==='SAC'){outbound=Math.max(0,outbound-.5);ret=Math.max(0,ret-.5);}
+  const tot=(outbound+ret).toFixed(2);
+  document.getElementById('ne-travelot').value=tot+'h outside normal hours';
+}
+function calcCallout(){
+  const s=document.getElementById('ne-callstart').value;const e=document.getElementById('ne-callend').value;
+  if(!s||!e)return;
+  const dur=timeDiff(s,e);
+  const ot=dur<=0.5?0.5:dur;
+  document.getElementById('ne-callot').value=ot.toFixed(2)+'h';
+  const sb=document.getElementById('ne-standby').value;
+  document.getElementById('ne-standbyallow').value=sb==='weekend'?'€75 gross':sb==='weekday'?'€40 gross':'—';
+}
+function saveEntry(){
+  const date=document.getElementById('ne-date').value;
+  const type=document.getElementById('ne-type').value;
+  if(!date){alert('Select a date.');return}
+  const s=document.getElementById('ne-start').value;const e=document.getElementById('ne-end').value;
+  const b=parseInt(document.getElementById('ne-break').value)||0;
+  const raw=s&&e?timeDiff(s,e):8;
+  const hours=Math.max(0,raw-b/60);
+  const {ot128,ot147,ot184}=calcOt(date,hours,currentUser.group);
+  const ts=document.getElementById('ne-tstart').value;const te=document.getElementById('ne-tend').value;
+  const rs=document.getElementById('ne-rstart').value;const re=document.getElementById('ne-rend').value;
+  let travelHrs=0;
+  if(ts&&te){let o=timeDiff(ts,te);if(currentUser.group==='SAC')o=Math.max(0,o-.5);travelHrs+=o;}
+  if(rs&&re){let r=timeDiff(rs,re);if(currentUser.group==='SAC')r=Math.max(0,r-.5);travelHrs+=r;}
+  const period=date.slice(0,7);
+  entries.push({id:nextEntryId++,empId:currentUser.id,date,type,customer:document.getElementById('ne-customer').value,location:document.getElementById('ne-location').value,ticket:document.getElementById('ne-ticket').value,start:s,end:e,breakMin:b,hours,km:parseInt(document.getElementById('ne-km').value)||0,travelHrs,ot128,ot147,ot184,notes:document.getElementById('ne-notes').value,period});
+  if(!periods.find(p=>p.empId===currentUser.id&&p.period===period))periods.push({id:nextPeriodId++,empId:currentUser.id,period,label:period,status:'Draft',otPref:'payout',managerComment:'',note:''});
+  auditLog.unshift({ts:new Date().toLocaleString(),user:currentUser.name,action:`Added entry — ${type} on ${date}`});
+  alert('Entry saved!');nav('my-reg',null);
+}
+
+// ──────────────────────────────────────────
+//  QUICK ENTRY
+// ──────────────────────────────────────────
+function saveQuickEntry(){
+  const date=document.getElementById('qe-date').value;if(!date){alert('Select date.');return}
+  const type=document.getElementById('qe-type').value;
+  const s=document.getElementById('qe-start').value;const e=document.getElementById('qe-end').value;
+  const b=parseInt(document.getElementById('qe-break').value)||0;
+  const raw=s&&e?timeDiff(s,e):8;const hours=Math.max(0,raw-b/60);
+  const {ot128,ot147,ot184}=calcOt(date,hours,currentUser.group);
+  const period=date.slice(0,7);
+  entries.push({id:nextEntryId++,empId:currentUser.id,date,type,customer:document.getElementById('qe-cust').value,start:s,end:e,breakMin:b,hours,km:0,travelHrs:0,ot128,ot147,ot184,notes:'',period});
+  if(!periods.find(p=>p.empId===currentUser.id&&p.period===period))periods.push({id:nextPeriodId++,empId:currentUser.id,period,label:period,status:'Draft',otPref:'payout',managerComment:'',note:''});
+  closeModal('m-entry');renderMyReg();
+}
+
+// ──────────────────────────────────────────
+//  SUBMIT PERIOD
+// ──────────────────────────────────────────
+function submitPeriod(){
+  const period=document.getElementById('reg-month')?.value||'2026-05';
+  const p=periods.find(x=>x.empId===currentUser.id&&x.period===period);
+  if(!p){alert('No period found.');return}
+  p.status='Submitted';p.submittedAt=new Date().toISOString().slice(0,10);
+  p.otPref=document.getElementById('sub-otpref').value;p.note=document.getElementById('sub-notes').value;
+  auditLog.unshift({ts:new Date().toLocaleString(),user:currentUser.name,action:`Submitted period ${period} for approval`});
+  closeModal('m-submit');buildSidebar();renderMyReg();alert('Submitted for approval!');
+}
+
+// ──────────────────────────────────────────
+//  APPROVALS
+// ──────────────────────────────────────────
+function renderApprovals(){appTabContent('pending')}
+function appTab(tab,el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');appTabContent(tab);}
+function appTabContent(tab){
+  const statusMap={pending:['Submitted'],returned:['Returned for correction'],done:['Approved by manager','Approved by HR','Exported','Locked']};
+  const statuses=statusMap[tab]||[];
+  const list=periods.filter(p=>statuses.includes(p.status));
+  if(!list.length){document.getElementById('app-list').innerHTML='<div class="empty">Nothing here.</div>';return}
+  document.getElementById('app-list').innerHTML=list.map(p=>{
+    const u=user(p.empId);
+    const pEntries=entries.filter(e=>e.empId===p.empId&&e.period===p.period);
+    const totalH=pEntries.reduce((s,e)=>s+e.hours,0);
+    const totalOt=pEntries.reduce((s,e)=>s+e.ot128+e.ot147+e.ot184,0);
+    return`<div class="card">
+      <div class="card-head">
+        <div><span style="font-weight:700">${u?.name||'?'}</span> <span class="badge b-blue">${u?.group||'—'}</span> <span style="color:var(--text-2);font-size:12px">· ${p.label}</span></div>
+        <div style="display:flex;gap:8px;align-items:center">${statusBadge(p.status)}<button class="btn btn-sm btn-primary" onclick="openReview(${p.id})"><i class="ti ti-eye"></i>Review</button></div>
+      </div>
+      <div class="card-body">
+        <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:12px;margin-bottom:8px">
+          <span><strong>${pEntries.length}</strong> entries</span>
+          <span><strong>${totalH.toFixed(1)}h</strong> normal</span>
+          <span style="color:var(--accent)"><strong>${totalOt.toFixed(1)}h</strong> overtime</span>
+          <span>Pref: <strong>${p.otPref==='payout'?'Pay out':'Time-for-time'}</strong></span>
+          ${p.submittedAt?`<span style="color:var(--text-2)">Submitted: ${p.submittedAt}</span>`:''}
+        </div>
+        ${p.note?`<div style="font-size:12px;color:var(--text-2);font-style:italic">"${p.note}"</div>`:''}
+        ${p.managerComment?`<div class="alert alert-warning" style="margin-top:8px"><i class="ti ti-message"></i>${p.managerComment}</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openReview(pid){
+  reviewingPeriodId=pid;
+  const p=periods.find(x=>x.id===pid);if(!p)return;
+  const u=user(p.empId);
+  const pEntries=entries.filter(e=>e.empId===p.empId&&e.period===p.period);
+  document.getElementById('review-title').innerHTML=`Review: ${u?.name} — ${p.label} <button class="close-x" onclick="closeModal('m-review')">×</button>`;
+  const rows=pEntries.map(e=>`<tr><td>${e.date}</td><td>${dayName(e.date)}</td><td>${e.type}</td><td>${e.customer||'—'}</td><td>${e.hours.toFixed(2)}</td><td>${e.ot128>0?e.ot128.toFixed(2):'—'}</td><td>${e.ot147>0?e.ot147.toFixed(2):'—'}</td><td>${e.ot184>0?e.ot184.toFixed(2):'—'}</td><td>${e.notes||'—'}</td></tr>`).join('');
+  document.getElementById('review-content').innerHTML=`<div class="table-wrap"><table><thead><tr><th>Date</th><th>Day</th><th>Type</th><th>Customer</th><th>Hours</th><th>OT128%</th><th>OT147%</th><th>OT184%</th><th>Notes</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  document.getElementById('review-comment').value=p.managerComment||'';
+  openModal('m-review');
+}
+function reviewAction(action){
+  const p=periods.find(x=>x.id===reviewingPeriodId);if(!p)return;
+  const comment=document.getElementById('review-comment').value;
+  if(action==='approve'){
+    p.status=currentUser.role==='hr'?'Approved by HR':'Approved by manager';
+    p.managerComment=comment;
+    auditLog.unshift({ts:new Date().toLocaleString(),user:currentUser.name,action:`Approved period ${p.label} for ${user(p.empId)?.name}`});
+  } else if(action==='return'){
+    p.status='Returned for correction';p.managerComment=comment;
+    auditLog.unshift({ts:new Date().toLocaleString(),user:currentUser.name,action:`Returned ${p.label} for correction (${user(p.empId)?.name}): ${comment}`});
+  } else {
+    p.status='Draft';p.managerComment=comment;
+    auditLog.unshift({ts:new Date().toLocaleString(),user:currentUser.name,action:`Rejected ${p.label} for ${user(p.empId)?.name}`});
+  }
+  closeModal('m-review');buildSidebar();renderApprovals();
+}
+
+// ──────────────────────────────────────────
+//  EXPORT (HR)
+// ──────────────────────────────────────────
+function renderExport(){
+  const approved=periods.filter(p=>['Approved by manager','Approved by HR'].includes(p.status));
+  document.getElementById('hr-stats').innerHTML=`
+    <div class="stat"><div class="stat-label">Periods to export</div><div class="stat-val" style="color:var(--accent)">${approved.length}</div></div>
+    <div class="stat"><div class="stat-label">Total OT hours</div><div class="stat-val">${entries.reduce((s,e)=>s+e.ot128+e.ot147+e.ot184,0).toFixed(1)}</div></div>
+    <div class="stat"><div class="stat-label">Locked periods</div><div class="stat-val">${periods.filter(p=>p.status==='Locked').length}</div></div>`;
+
+  document.getElementById('audit-trail').innerHTML=auditLog.map(a=>`<div class="audit-item"><div class="audit-dot"></div><div><div style="font-size:12px;font-weight:500">${a.user}</div><div style="font-size:11px;color:var(--text-2)">${a.action}</div><div style="font-size:10px;color:var(--text-3)">${a.ts}</div></div></div>`).join('');
+
+  document.getElementById('hr-all-table').innerHTML=entries.map(e=>{
+    const u=user(e.empId);const p=periods.find(x=>x.empId===e.empId&&x.period===e.period);
+    return`<tr><td><strong>${u?.name||'?'}</strong></td><td><span class="badge b-blue">${u?.group||'—'}</span></td><td>${e.date}</td><td>${e.type}</td><td>${e.hours.toFixed(2)}</td><td style="color:var(--blue-tx)">${e.ot128>0?e.ot128.toFixed(2):'—'}</td><td style="color:var(--orange-tx)">${e.ot147>0?e.ot147.toFixed(2):'—'}</td><td style="color:var(--red-tx)">${e.ot184>0?e.ot184.toFixed(2):'—'}</td><td style="color:var(--purple-tx)">${e.travelHrs>0?e.travelHrs.toFixed(2):'—'}</td><td>${statusBadge(p?.status||'Draft')}</td><td>${p&&['Approved by manager','Approved by HR'].includes(p.status)?`<button class="btn btn-sm btn-success" onclick="exportOne(${p.id})"><i class="ti ti-download"></i></button>`:''}</td></tr>`;
+  }).join('');
+}
+function doExport(){
+  const approved=periods.filter(p=>['Approved by manager','Approved by HR'].includes(p.status));
+  if(!approved.length){alert('No approved periods to export.');return}
+  approved.forEach(p=>p.status='Exported');
+  auditLog.unshift({ts:new Date().toLocaleString(),user:currentUser.name,action:`Exported ${approved.length} period(s) to payroll`});
+  alert(`Exported ${approved.length} period(s). In production this would generate an AFAS-compatible file.`);renderExport();
+}
+function lockPeriod(){auditLog.unshift({ts:new Date().toLocaleString(),user:currentUser.name,action:'Locked exported periods'});periods.filter(p=>p.status==='Exported').forEach(p=>p.status='Locked');alert('Periods locked.');renderExport();}
+function exportOne(pid){const p=periods.find(x=>x.id===pid);if(p)p.status='Exported';auditLog.unshift({ts:new Date().toLocaleString(),user:currentUser.name,action:`Exported period ${p?.label} for ${user(p?.empId)?.name}`});renderExport();}
+
+// ──────────────────────────────────────────
+//  LEAVE
+// ──────────────────────────────────────────
+function renderLeave(){leaveTab('bal',document.querySelector('.tab'))}
+function leaveTab(tab,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el?.classList.add('active');
+  document.getElementById('lt-bal').style.display=tab==='bal'?'block':'none';
+  document.getElementById('lt-history').style.display=tab==='history'?'block':'none';
+  if(tab==='bal'){
+    document.getElementById('leave-table').innerHTML=leaveBalances.map(l=>{
+      const rem=(l.entitlement+(l.accrued||0))-l.used;const pct=l.entitlement>0?Math.round(l.used/(l.entitlement+(l.accrued||0))*100):0;
+      return`<tr><td><strong>${l.type}</strong></td><td>${l.entitlement+(l.accrued||0)}${l.unit}</td><td>${l.used}${l.unit}</td><td><span class="badge ${rem>20?'b-green':rem>8?'b-amber':'b-red'}">${rem}${l.unit}</span></td><td style="min-width:100px"><div class="pbar"><div class="pfill" style="width:${pct}%;background:var(--accent)"></div></div></td></tr>`;
+    }).join('');
+  } else {
+    const leaveEntries=entries.filter(e=>['Vrije Tijd','Bijzonder Verlof','Ziek','Feestdag','ADV'].includes(e.type));
+    document.getElementById('leave-history').innerHTML=leaveEntries.length?leaveEntries.map(e=>`<tr><td>${e.date}</td><td>${e.type}</td><td>${e.hours}h</td><td><span class="badge b-green">Registered</span></td><td>${e.notes||'—'}</td></tr>`).join(''):'<tr><td colspan="5" style="text-align:center;color:var(--text-3);padding:20px">No leave entries.</td></tr>';
+  }
+}
+
+// ──────────────────────────────────────────
+//  MODALS
+// ──────────────────────────────────────────
+function openModal(id){document.getElementById(id).classList.add('open');if(id==='m-submit')buildSubmitSummary()}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open')}));
+
+function buildSubmitSummary(){
+  const period=document.getElementById('reg-month')?.value||'2026-05';
+  const pEntries=currentUser?entries.filter(e=>e.empId===currentUser.id&&e.period===period):[];
+  const totalH=pEntries.reduce((s,e)=>s+e.hours,0);
+  const totalOt=pEntries.reduce((s,e)=>s+e.ot128+e.ot147+e.ot184,0);
+  document.getElementById('submit-summary').innerHTML=`<div class="ot-box"><div class="ot-box-title">Period summary — ${period}</div>
+    <div class="ot-row"><span>Entries</span><span>${pEntries.length}</span></div>
+    <div class="ot-row"><span>Normal hours</span><span>${totalH.toFixed(2)}h</span></div>
+    <div class="ot-row"><span>Total overtime</span><span style="color:var(--accent)">${totalOt.toFixed(2)}h</span></div>
+  </div>`;
+}
+
+// init login
+pickRole('employee',document.querySelector('.role-card'));
+</script>
+</body>
+</html>
