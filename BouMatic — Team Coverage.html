@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<!-- saved from url=(0063)file:///C:/Users/amuhammad/Downloads/BouMatic_TeamCoverage.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>BouMatic — Team Coverage</title>
+<link href="./BouMatic — Team Coverage_files/css2" rel="stylesheet">
+<style>
+:root{
+  --bg:#F2F0EA;--surface:#FFFFFF;--card:#FFFFFF;
+  --navy:#152238;--blue:#1E56C8;--blue-l:#EAF0FD;
+  --red:#D94535;--red-l:#FDECEA;
+  --green:#1F7A52;--green-l:#E6F5EE;
+  --amber:#B8720E;--amber-l:#FDF3E3;
+  --purple:#5B3FC8;--purple-l:#EEEAFD;
+  --border:rgba(21,34,56,0.1);--border2:rgba(21,34,56,0.06);
+  --text:#152238;--muted:#697A9B;--hint:#9BA8BE;
+  --sans:'Outfit',sans-serif;--mono:'JetBrains Mono',monospace;
+  --r:12px;--r2:16px;--nav:60px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;font-family:var(--sans);background:var(--bg);color:var(--text);font-size:15px}
+/* ── Layout ── */
+.shell{display:flex;height:100vh;overflow:hidden}
+/* Desktop sidebar */
+.sidebar{width:220px;background:var(--navy);display:flex;flex-direction:column;flex-shrink:0;height:100vh;overflow-y:auto}
+.brand{padding:22px 18px 18px;border-bottom:1px solid rgba(255,255,255,0.07)}
+.brand-row{display:flex;align-items:center;gap:10px}
+.brand-mark{width:34px;height:34px;background:var(--red);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:500;color:#fff;flex-shrink:0}
+.brand-name{font-size:14px;font-weight:500;color:#fff}
+.brand-sub{font-size:10px;color:rgba(255,255,255,0.35);margin-top:2px}
+.nav-section{font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.28);padding:18px 18px 6px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 18px;font-size:13px;color:rgba(255,255,255,.5);cursor:pointer;border-left:2px solid transparent;transition:all .15s;border:none;background:none;width:100%;font-family:var(--sans);text-align:left}
+.nav-item:hover{color:#fff;background:rgba(255,255,255,.05)}
+.nav-item.active{color:#fff;border-left:2px solid var(--red);background:rgba(255,255,255,.07)}
+.nav-item i{font-size:15px}
+.main{flex:1;overflow-y:auto;height:100vh}
+/* ── Top bar (mobile only) ── */
+.topbar{display:none;background:var(--navy);padding:14px 16px;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40}
+.topbar-brand{display:flex;align-items:center;gap:9px}
+.topbar-name{font-size:14px;font-weight:500;color:#fff}
+/* ── Bottom nav (mobile only) ── */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--navy);border-top:1px solid rgba(255,255,255,.07);z-index:40;height:var(--nav)}
+.bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;border:none;background:none;color:rgba(255,255,255,.4);font-family:var(--sans);padding:6px 0}
+.bnav-item.active{color:var(--red)}
+.bnav-item i{font-size:20px}
+.bnav-label{font-size:9px;font-weight:500}
+/* ── Pages ── */
+.page{display:none;padding:24px;animation:fadein .2s ease}
+.page.active{display:block}
+@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.ph{margin-bottom:22px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.pt{font-size:20px;font-weight:500;color:var(--navy)}
+.ps{font-size:12px;color:var(--muted);margin-top:3px}
+/* ── Buttons ── */
+.btn{padding:9px 18px;border-radius:var(--r);font-family:var(--sans);font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:#1848a8}
+.btn-red{background:var(--red);color:#fff}
+.btn-red:hover{background:#ba3829}
+.btn-ghost{background:var(--surface);color:var(--text);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--bg)}
+.btn-icon{width:32px;height:32px;padding:0;border-radius:8px;justify-content:center;flex-shrink:0}
+.btn-icon-del{background:var(--red-l);color:var(--red)}
+.btn-icon-edit{background:var(--blue-l);color:var(--blue)}
+/* ── Cards ── */
+.card{background:var(--card);border-radius:var(--r2);border:1px solid var(--border);margin-bottom:16px;overflow:hidden}
+.card-head{padding:14px 18px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.card-title{font-size:14px;font-weight:500;color:var(--navy)}
+.card-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.card-body{padding:16px 18px}
+/* ── Stats ── */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.stat{background:var(--card);border-radius:var(--r2);border:1px solid var(--border);padding:16px 18px}
+.stat-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px}
+.stat-val{font-size:26px;font-weight:300;font-family:var(--mono);color:var(--navy)}
+.stat-note{font-size:11px;color:var(--muted);margin-top:3px}
+/* ── Badges ── */
+.badge{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:500}
+.badge-green{background:var(--green-l);color:var(--green)}
+.badge-red{background:var(--red-l);color:var(--red)}
+.badge-amber{background:var(--amber-l);color:var(--amber)}
+.badge-blue{background:var(--blue-l);color:var(--blue)}
+.badge-purple{background:var(--purple-l);color:var(--purple)}
+/* ── Alert ── */
+.alert{border-radius:var(--r);padding:12px 14px;margin-bottom:10px;display:flex;gap:10px}
+.alert-red{background:var(--red-l);border:1px solid rgba(217,69,53,.15)}
+.alert-green{background:var(--green-l);border:1px solid rgba(31,122,82,.15)}
+.alert-amber{background:var(--amber-l);border:1px solid rgba(184,114,14,.15)}
+.alert i{font-size:16px;flex-shrink:0;margin-top:1px}
+.alert-title{font-size:12px;font-weight:500;margin-bottom:2px}
+.alert-body{font-size:11px;color:var(--muted);line-height:1.5}
+/* ── Person row ── */
+.person-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border2)}
+.person-row:last-child{border-bottom:none}
+.avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:#fff;flex-shrink:0}
+.person-name{font-size:13px;font-weight:500;color:var(--navy)}
+.person-role{font-size:11px;color:var(--muted);margin-top:1px}
+/* ── Skill Matrix ── */
+.matrix-scroll{overflow-x:auto}
+table.matrix{border-collapse:collapse;width:100%;font-size:12px}
+table.matrix th{padding:9px 10px;text-align:left;font-weight:500;color:var(--muted);font-size:11px;border-bottom:1px solid var(--border);white-space:nowrap;background:var(--bg)}
+table.matrix th.sc{text-align:center;min-width:70px;max-width:90px;word-break:break-word;white-space:normal;line-height:1.3}
+table.matrix td{padding:9px 10px;border-bottom:1px solid var(--border2);vertical-align:middle}
+table.matrix tr:last-child td{border-bottom:none}
+table.matrix tr:hover td{background:#fafaf7}
+.sdot{width:30px;height:30px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;cursor:pointer;transition:transform .1s;font-family:var(--mono);border:none}
+.sdot:active{transform:scale(.9)}
+.s0{background:#EBEBEB;color:var(--hint)}
+.s1{background:var(--amber-l);color:var(--amber)}
+.s2{background:var(--blue-l);color:var(--blue)}
+.s3{background:var(--green-l);color:var(--green)}
+/* ── Calendar ── */
+.cal-wrap{overflow-x:auto}
+.cal-grid-inner{font-size:11px}
+.cal-header-row{display:flex;border-bottom:1px solid var(--border)}
+.cal-emp-col{width:110px;flex-shrink:0;padding:6px 8px;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;border-right:1px solid var(--border)}
+.cal-days-row{display:flex;flex:1}
+.cal-day-hd{min-width:28px;height:30px;display:flex;align-items:center;justify-content:center;font-size:10px;font-family:var(--mono);color:var(--muted);border-right:1px solid var(--border2);flex-shrink:0}
+.cal-day-hd.wknd{background:var(--bg)}
+.cal-day-hd.today{background:var(--navy);color:#fff;border-radius:4px}
+.cal-row{display:flex;border-bottom:1px solid var(--border2);position:relative}
+.cal-row:last-child{border-bottom:none}
+.cal-emp-cell{width:110px;flex-shrink:0;padding:0 8px;display:flex;align-items:center;border-right:1px solid var(--border);height:40px}
+.cal-emp-name{font-size:11px;font-weight:500;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-days-cells{display:flex;flex:1;position:relative;height:40px}
+.cal-cell{min-width:28px;height:40px;border-right:1px solid var(--border2);flex-shrink:0}
+.cal-cell.wknd{background:var(--bg)}
+.cal-cell.today-c{background:rgba(30,86,200,.04)}
+.vbar{position:absolute;height:24px;top:8px;border-radius:5px;display:flex;align-items:center;padding:0 6px;font-size:9px;font-weight:500;white-space:nowrap;overflow:hidden;z-index:2;cursor:pointer}
+/* ── Coverage ── */
+.cov-card{background:var(--card);border-radius:var(--r2);border:1px solid var(--border);margin-bottom:10px;overflow:hidden}
+.cov-rank{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff;flex-shrink:0;font-family:var(--mono)}
+.score-bar{height:4px;background:var(--bg);border-radius:2px;margin-top:6px;overflow:hidden}
+.score-fill{height:100%;border-radius:2px}
+/* ── Forms ── */
+.form-row{margin-bottom:14px}
+.form-row label{display:block;font-size:12px;font-weight:500;color:var(--text);margin-bottom:6px}
+.form-row input,.form-row select,.form-row textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--r);font-family:var(--sans);font-size:14px;color:var(--text);background:var(--bg);outline:none;transition:border-color .15s;appearance:none;-webkit-appearance:none}
+.form-row input:focus,.form-row select:focus{border-color:var(--blue);background:#fff}
+.form-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+/* ── Modal ── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(21,34,56,.55);z-index:100;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex}
+.modal{background:#fff;border-radius:20px;padding:28px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
+.modal-title{font-size:16px;font-weight:500;color:var(--navy);margin-bottom:20px}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap}
+/* Skills edit inside modal */
+.skill-edit-list{display:flex;flex-direction:column;gap:8px;max-height:260px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--r);padding:10px}
+.skill-edit-row{display:flex;align-items:center;gap:8px}
+.skill-edit-row input{flex:1;padding:7px 10px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:var(--sans);background:var(--bg);outline:none;color:var(--text)}
+.skill-edit-row input:focus{border-color:var(--blue);background:#fff}
+/* Legend */
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)}
+.ldot{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500}
+/* Toast */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;opacity:0;transition:all .3s;z-index:300;white-space:nowrap;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* ── Responsive ── */
+@media(max-width:700px){
+  .sidebar{display:none}
+  .topbar{display:flex}
+  .bottom-nav{display:flex}
+  .main{padding-bottom:var(--nav)}
+  .page{padding:14px}
+  .stat-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .ph{margin-bottom:16px}
+  .pt{font-size:18px}
+  table.matrix th.sc{min-width:60px}
+  .form-2{grid-template-columns:1fr}
+  .modal{padding:20px}
+  .overlay{align-items:flex-end;padding:0}
+  .modal{border-radius:20px 20px 0 0;padding:20px 18px 30px;max-height:95vh}
+  .modal::before{content:'';display:block;width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 18px}
+}
+@media(min-width:701px){
+  .shell{flex-direction:row}
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+<!-- Desktop Sidebar -->
+<div class="sidebar">
+  <div class="brand">
+    <div class="brand-row">
+      <div class="brand-mark">BM</div>
+      <div><div class="brand-name">Team Coverage</div><div class="brand-sub">BouMatic Operations</div></div>
+    </div>
+  </div>
+  <nav style="padding:12px 0;flex:1">
+    <div class="nav-section">Overview</div>
+    <button class="nav-item active" onclick="showPage(&#39;dash&#39;,this)"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Dashboard</button>
+    <button class="nav-item" onclick="showPage(&#39;skills&#39;,this)"><i class="ti ti-table" aria-hidden="true"></i> Skill Matrix</button>
+    <button class="nav-item" onclick="showPage(&#39;calendar&#39;,this)"><i class="ti ti-calendar" aria-hidden="true"></i> Vacation Calendar</button>
+    <button class="nav-item" onclick="showPage(&#39;coverage&#39;,this)"><i class="ti ti-shield-check" aria-hidden="true"></i> Coverage Finder</button>
+    <div class="nav-section">Manage</div>
+    <button class="nav-item" onclick="openModal(&#39;empModal&#39;)"><i class="ti ti-user-plus" aria-hidden="true"></i> Add employee</button>
+    <button class="nav-item" onclick="openModal(&#39;vacModal&#39;)"><i class="ti ti-calendar-plus" aria-hidden="true"></i> Add vacation</button>
+    <button class="nav-item" onclick="openModal(&#39;skillsModal&#39;)"><i class="ti ti-pencil" aria-hidden="true"></i> Edit skills list</button>
+  </nav>
+</div>
+
+<!-- Mobile top bar -->
+<div class="topbar">
+  <div class="topbar-brand">
+    <div class="brand-mark">BM</div>
+    <div class="topbar-name">Team Coverage</div>
+  </div>
+  <div style="display:flex;gap:8px">
+    <button class="btn btn-ghost" style="padding:7px 10px;font-size:12px" onclick="openModal(&#39;empModal&#39;)"><i class="ti ti-user-plus" aria-hidden="true"></i></button>
+    <button class="btn btn-red" style="padding:7px 12px;font-size:12px" onclick="openModal(&#39;vacModal&#39;)"><i class="ti ti-plus" aria-hidden="true"></i> Leave</button>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- Dashboard -->
+<div class="page active" id="page-dash">
+  <div class="ph">
+    <div><div class="pt">Dashboard</div><div class="ps" id="dashDate">Week of June 1, 2026</div></div>
+    <button class="btn btn-red" onclick="openModal(&#39;vacModal&#39;)"><i class="ti ti-plus" aria-hidden="true"></i> Add leave</button>
+  </div>
+  <div class="stat-grid" id="statGrid">
+    <div class="stat"><div class="stat-label">Team</div><div class="stat-val">17</div><div class="stat-note">employees</div></div>
+    <div class="stat"><div class="stat-label">Available</div><div class="stat-val" style="color:var(--green)">15</div><div class="stat-note">in office</div></div>
+    <div class="stat"><div class="stat-label">On leave</div><div class="stat-val" style="color:var(--red)">2</div><div class="stat-note">currently</div></div>
+    <div class="stat"><div class="stat-label">Experts</div><div class="stat-val" style="color:var(--blue)">0</div><div class="stat-note">level 3</div></div></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px" class="dash-grid">
+    <div class="card">
+      <div class="card-head"><div><div class="card-title">Coverage alerts</div><div class="card-sub">Skills at risk</div></div></div>
+      <div class="card-body" id="alertsPanel"><div class="alert alert-green"><i class="ti ti-shield-check" aria-hidden="true" style="color:var(--green)"></i><div><div class="alert-title" style="color:var(--green)">All covered</div><div class="alert-body">No critical skill gaps this week.</div></div></div></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div><div class="card-title">Currently away</div><div class="card-sub">Active &amp; upcoming leave</div></div></div>
+      <div class="card-body" id="awayPanel"><div class="person-row"><div class="avatar" style="background:#1F7A52">CL</div><div style="flex:1"><div class="person-name">Christophe Leruth</div><div class="person-role">Annual leave · 2026-06-01 → 2026-06-14</div></div><span class="badge badge-red">Away</span></div><div class="person-row"><div class="avatar" style="background:#A0344A">HA</div><div style="flex:1"><div class="person-name">Houda Abdeddaim</div><div class="person-role">Annual leave · 2026-05-25 → 2026-06-07</div></div><span class="badge badge-red">Away</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Skill Matrix -->
+<div class="page" id="page-skills">
+  <div class="ph">
+    <div><div class="pt">Skill Matrix</div><div class="ps">Tap a dot to cycle skill level · tap name/role to edit</div></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-ghost" onclick="openModal(&#39;skillsModal&#39;)"><i class="ti ti-pencil" aria-hidden="true"></i> Edit skills</button>
+      <button class="btn btn-primary" onclick="openModal(&#39;empModal&#39;)"><i class="ti ti-user-plus" aria-hidden="true"></i> Add employee</button>
+    </div>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><div class="ldot s0" style="border:1px solid #ddd">—</div> None</div>
+    <div class="legend-item"><div class="ldot s1" style="color:var(--amber);font-size:9px;font-weight:600">1</div> Basic</div>
+    <div class="legend-item"><div class="ldot s2" style="color:var(--blue);font-size:9px;font-weight:600">2</div> Intermediate</div>
+    <div class="legend-item"><div class="ldot s3" style="color:var(--green);font-size:9px;font-weight:600">3</div> Expert</div>
+  </div>
+  <div class="card">
+    <div class="matrix-scroll">
+      <table class="matrix" id="matrixTable"><thead><tr><th style="min-width:150px">Employee</th><th>Status</th><th class="sc">Robot Orders</th><th class="sc">Robot Part Orders</th><th class="sc">Subscription Billing</th><th class="sc">Power BI</th><th class="sc">MQOT Orders</th><th class="sc">Part Orders</th><th class="sc">Chemical Orders</th><th class="sc">System Orders</th><th class="sc">Replace Orders</th><th style="min-width:80px">Actions</th></tr></thead><tbody><tr><td><div class="person-name" style="cursor:pointer" onclick="editEmployee(1)">Arsalan M.</div><div class="person-role" style="cursor:pointer" onclick="editEmployee(1)">Automation Manager</div></td><td><span class="badge badge-green">Available</span></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(1,0)" title="Robot Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(1,1)" title="Robot Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(1,2)" title="Subscription Billing: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(1,3)" title="Power BI: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(1,4)" title="MQOT Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(1,5)" title="Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(1,6)" title="Chemical Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(1,7)" title="System Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(1,8)" title="Replace Orders: None">—</button></td><td><div style="display:flex;gap:4px"><button class="btn btn-icon btn-icon-edit" onclick="editEmployee(1)" title="Edit"><i class="ti ti-pencil" aria-hidden="true"></i></button><button class="btn btn-icon btn-icon-del" onclick="confirmDelete(&#39;emp&#39;,1)" title="Delete"><i class="ti ti-trash" aria-hidden="true"></i></button></div></td></tr><tr><td><div class="person-name" style="cursor:pointer" onclick="editEmployee(2)">Christophe Leruth</div><div class="person-role" style="cursor:pointer" onclick="editEmployee(2)">Team Lead CS (RE)</div></td><td><span class="badge badge-red">On leave</span></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(2,0)" title="Robot Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(2,1)" title="Robot Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(2,2)" title="Subscription Billing: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(2,3)" title="Power BI: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(2,4)" title="MQOT Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(2,5)" title="Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(2,6)" title="Chemical Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(2,7)" title="System Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(2,8)" title="Replace Orders: None">—</button></td><td><div style="display:flex;gap:4px"><button class="btn btn-icon btn-icon-edit" onclick="editEmployee(2)" title="Edit"><i class="ti ti-pencil" aria-hidden="true"></i></button><button class="btn btn-icon btn-icon-del" onclick="confirmDelete(&#39;emp&#39;,2)" title="Delete"><i class="ti ti-trash" aria-hidden="true"></i></button></div></td></tr><tr><td><div class="person-name" style="cursor:pointer" onclick="editEmployee(3)">Alexndara Voets</div><div class="person-role" style="cursor:pointer" onclick="editEmployee(3)">CSR (RE)</div></td><td><span class="badge badge-green">Available</span></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(3,0)" title="Robot Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(3,1)" title="Robot Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(3,2)" title="Subscription Billing: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(3,3)" title="Power BI: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(3,4)" title="MQOT Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(3,5)" title="Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(3,6)" title="Chemical Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(3,7)" title="System Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(3,8)" title="Replace Orders: None">—</button></td><td><div style="display:flex;gap:4px"><button class="btn btn-icon btn-icon-edit" onclick="editEmployee(3)" title="Edit"><i class="ti ti-pencil" aria-hidden="true"></i></button><button class="btn btn-icon btn-icon-del" onclick="confirmDelete(&#39;emp&#39;,3)" title="Delete"><i class="ti ti-trash" aria-hidden="true"></i></button></div></td></tr><tr><td><div class="person-name" style="cursor:pointer" onclick="editEmployee(4)">Anne-France Deckers</div><div class="person-role" style="cursor:pointer" onclick="editEmployee(4)">CSR (RE)</div></td><td><span class="badge badge-green">Available</span></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(4,0)" title="Robot Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(4,1)" title="Robot Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(4,2)" title="Subscription Billing: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(4,3)" title="Power BI: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(4,4)" title="MQOT Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(4,5)" title="Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(4,6)" title="Chemical Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(4,7)" title="System Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(4,8)" title="Replace Orders: None">—</button></td><td><div style="display:flex;gap:4px"><button class="btn btn-icon btn-icon-edit" onclick="editEmployee(4)" title="Edit"><i class="ti ti-pencil" aria-hidden="true"></i></button><button class="btn btn-icon btn-icon-del" onclick="confirmDelete(&#39;emp&#39;,4)" title="Delete"><i class="ti ti-trash" aria-hidden="true"></i></button></div></td></tr><tr><td><div class="person-name" style="cursor:pointer" onclick="editEmployee(5)">Geneviève Defrance</div><div class="person-role" style="cursor:pointer" onclick="editEmployee(5)">CSR (RE)</div></td><td><span class="badge badge-green">Available</span></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(5,0)" title="Robot Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(5,1)" title="Robot Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(5,2)" title="Subscription Billing: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(5,3)" title="Power BI: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(5,4)" title="MQOT Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(5,5)" title="Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(5,6)" title="Chemical Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(5,7)" title="System Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(5,8)" title="Replace Orders: None">—</button></td><td><div style="display:flex;gap:4px"><button class="btn btn-icon btn-icon-edit" onclick="editEmployee(5)" title="Edit"><i class="ti ti-pencil" aria-hidden="true"></i></button><button class="btn btn-icon btn-icon-del" onclick="confirmDelete(&#39;emp&#39;,5)" title="Delete"><i class="ti ti-trash" aria-hidden="true"></i></button></div></td></tr><tr><td><div class="person-name" style="cursor:pointer" onclick="editEmployee(6)">Isabelle Taton</div><div class="person-role" style="cursor:pointer" onclick="editEmployee(6)">CSR (RE)</div></td><td><span class="badge badge-green">Available</span></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(6,0)" title="Robot Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(6,1)" title="Robot Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(6,2)" title="Subscription Billing: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(6,3)" title="Power BI: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(6,4)" title="MQOT Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(6,5)" title="Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(6,6)" title="Chemical Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(6,7)" title="System Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(6,8)" title="Replace Orders: None">—</button></td><td><div style="display:flex;gap:4px"><button class="btn btn-icon btn-icon-edit" onclick="editEmployee(6)" title="Edit"><i class="ti ti-pencil" aria-hidden="true"></i></button><button class="btn btn-icon btn-icon-del" onclick="confirmDelete(&#39;emp&#39;,6)" title="Delete"><i class="ti ti-trash" aria-hidden="true"></i></button></div></td></tr><tr><td><div class="person-name" style="cursor:pointer" onclick="editEmployee(7)">Natalie Claes</div><div class="person-role" style="cursor:pointer" onclick="editEmployee(7)">CSR (RE)</div></td><td><span class="badge badge-green">Available</span></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(7,0)" title="Robot Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(7,1)" title="Robot Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(7,2)" title="Subscription Billing: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(7,3)" title="Power BI: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(7,4)" title="MQOT Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(7,5)" title="Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(7,6)" title="Chemical Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(7,7)" title="System Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(7,8)" title="Replace Orders: None">—</button></td><td><div style="display:flex;gap:4px"><button class="btn btn-icon btn-icon-edit" onclick="editEmployee(7)" title="Edit"><i class="ti ti-pencil" aria-hidden="true"></i></button><button class="btn btn-icon btn-icon-del" onclick="confirmDelete(&#39;emp&#39;,7)" title="Delete"><i class="ti ti-trash" aria-hidden="true"></i></button></div></td></tr><tr><td><div class="person-name" style="cursor:pointer" onclick="editEmployee(8)">Oksana Bezdolya</div><div class="person-role" style="cursor:pointer" onclick="editEmployee(8)">CSR (RE)</div></td><td><span class="badge badge-green">Available</span></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(8,0)" title="Robot Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(8,1)" title="Robot Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(8,2)" title="Subscription Billing: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(8,3)" title="Power BI: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(8,4)" title="MQOT Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(8,5)" title="Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(8,6)" title="Chemical Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(8,7)" title="System Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(8,8)" title="Replace Orders: None">—</button></td><td><div style="display:flex;gap:4px"><button class="btn btn-icon btn-icon-edit" onclick="editEmployee(8)" title="Edit"><i class="ti ti-pencil" aria-hidden="true"></i></button><button class="btn btn-icon btn-icon-del" onclick="confirmDelete(&#39;emp&#39;,8)" title="Delete"><i class="ti ti-trash" aria-hidden="true"></i></button></div></td></tr><tr><td><div class="person-name" style="cursor:pointer" onclick="editEmployee(9)">Myriam Jehanno</div><div class="person-role" style="cursor:pointer" onclick="editEmployee(9)">CSR (RE)</div></td><td><span class="badge badge-green">Available</span></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(9,0)" title="Robot Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(9,1)" title="Robot Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(9,2)" title="Subscription Billing: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(9,3)" title="Power BI: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(9,4)" title="MQOT Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(9,5)" title="Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(9,6)" title="Chemical Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(9,7)" title="System Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(9,8)" title="Replace Orders: None">—</button></td><td><div style="display:flex;gap:4px"><button class="btn btn-icon btn-icon-edit" onclick="editEmployee(9)" title="Edit"><i class="ti ti-pencil" aria-hidden="true"></i></button><button class="btn btn-icon btn-icon-del" onclick="confirmDelete(&#39;emp&#39;,9)" title="Delete"><i class="ti ti-trash" aria-hidden="true"></i></button></div></td></tr><tr><td><div class="person-name" style="cursor:pointer" onclick="editEmployee(10)">Hanne Staniok</div><div class="person-role" style="cursor:pointer" onclick="editEmployee(10)">Team Lead CS (DK)</div></td><td><span class="badge badge-green">Available</span></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(10,0)" title="Robot Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(10,1)" title="Robot Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(10,2)" title="Subscription Billing: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(10,3)" title="Power BI: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(10,4)" title="MQOT Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(10,5)" title="Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(10,6)" title="Chemical Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(10,7)" title="System Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(10,8)" title="Replace Orders: None">—</button></td><td><div style="display:flex;gap:4px"><button class="btn btn-icon btn-icon-edit" onclick="editEmployee(10)" title="Edit"><i class="ti ti-pencil" aria-hidden="true"></i></button><button class="btn btn-icon btn-icon-del" onclick="confirmDelete(&#39;emp&#39;,10)" title="Delete"><i class="ti ti-trash" aria-hidden="true"></i></button></div></td></tr><tr><td><div class="person-name" style="cursor:pointer" onclick="editEmployee(11)">Dorthe Søgaard</div><div class="person-role" style="cursor:pointer" onclick="editEmployee(11)">CSR (DK)</div></td><td><span class="badge badge-green">Available</span></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(11,0)" title="Robot Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(11,1)" title="Robot Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(11,2)" title="Subscription Billing: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(11,3)" title="Power BI: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(11,4)" title="MQOT Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(11,5)" title="Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(11,6)" title="Chemical Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(11,7)" title="System Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(11,8)" title="Replace Orders: None">—</button></td><td><div style="display:flex;gap:4px"><button class="btn btn-icon btn-icon-edit" onclick="editEmployee(11)" title="Edit"><i class="ti ti-pencil" aria-hidden="true"></i></button><button class="btn btn-icon btn-icon-del" onclick="confirmDelete(&#39;emp&#39;,11)" title="Delete"><i class="ti ti-trash" aria-hidden="true"></i></button></div></td></tr><tr><td><div class="person-name" style="cursor:pointer" onclick="editEmployee(12)">Karen Festersen Jensen</div><div class="person-role" style="cursor:pointer" onclick="editEmployee(12)">CSR (DK)</div></td><td><span class="badge badge-green">Available</span></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(12,0)" title="Robot Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(12,1)" title="Robot Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(12,2)" title="Subscription Billing: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(12,3)" title="Power BI: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(12,4)" title="MQOT Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(12,5)" title="Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(12,6)" title="Chemical Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(12,7)" title="System Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(12,8)" title="Replace Orders: None">—</button></td><td><div style="display:flex;gap:4px"><button class="btn btn-icon btn-icon-edit" onclick="editEmployee(12)" title="Edit"><i class="ti ti-pencil" aria-hidden="true"></i></button><button class="btn btn-icon btn-icon-del" onclick="confirmDelete(&#39;emp&#39;,12)" title="Delete"><i class="ti ti-trash" aria-hidden="true"></i></button></div></td></tr><tr><td><div class="person-name" style="cursor:pointer" onclick="editEmployee(13)">Jolanda Hoevenberg</div><div class="person-role" style="cursor:pointer" onclick="editEmployee(13)">CSR (DK)</div></td><td><span class="badge badge-green">Available</span></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(13,0)" title="Robot Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(13,1)" title="Robot Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(13,2)" title="Subscription Billing: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(13,3)" title="Power BI: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(13,4)" title="MQOT Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(13,5)" title="Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(13,6)" title="Chemical Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(13,7)" title="System Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(13,8)" title="Replace Orders: None">—</button></td><td><div style="display:flex;gap:4px"><button class="btn btn-icon btn-icon-edit" onclick="editEmployee(13)" title="Edit"><i class="ti ti-pencil" aria-hidden="true"></i></button><button class="btn btn-icon btn-icon-del" onclick="confirmDelete(&#39;emp&#39;,13)" title="Delete"><i class="ti ti-trash" aria-hidden="true"></i></button></div></td></tr><tr><td><div class="person-name" style="cursor:pointer" onclick="editEmployee(14)">Marianne Falk</div><div class="person-role" style="cursor:pointer" onclick="editEmployee(14)">CSR (DK)</div></td><td><span class="badge badge-green">Available</span></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(14,0)" title="Robot Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(14,1)" title="Robot Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(14,2)" title="Subscription Billing: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(14,3)" title="Power BI: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(14,4)" title="MQOT Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(14,5)" title="Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(14,6)" title="Chemical Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(14,7)" title="System Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(14,8)" title="Replace Orders: None">—</button></td><td><div style="display:flex;gap:4px"><button class="btn btn-icon btn-icon-edit" onclick="editEmployee(14)" title="Edit"><i class="ti ti-pencil" aria-hidden="true"></i></button><button class="btn btn-icon btn-icon-del" onclick="confirmDelete(&#39;emp&#39;,14)" title="Delete"><i class="ti ti-trash" aria-hidden="true"></i></button></div></td></tr><tr><td><div class="person-name" style="cursor:pointer" onclick="editEmployee(15)">Tina Kristoffersen</div><div class="person-role" style="cursor:pointer" onclick="editEmployee(15)">CSR (DK)</div></td><td><span class="badge badge-green">Available</span></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(15,0)" title="Robot Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(15,1)" title="Robot Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(15,2)" title="Subscription Billing: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(15,3)" title="Power BI: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(15,4)" title="MQOT Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(15,5)" title="Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(15,6)" title="Chemical Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(15,7)" title="System Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(15,8)" title="Replace Orders: None">—</button></td><td><div style="display:flex;gap:4px"><button class="btn btn-icon btn-icon-edit" onclick="editEmployee(15)" title="Edit"><i class="ti ti-pencil" aria-hidden="true"></i></button><button class="btn btn-icon btn-icon-del" onclick="confirmDelete(&#39;emp&#39;,15)" title="Delete"><i class="ti ti-trash" aria-hidden="true"></i></button></div></td></tr><tr><td><div class="person-name" style="cursor:pointer" onclick="editEmployee(16)">Houda Abdeddaim</div><div class="person-role" style="cursor:pointer" onclick="editEmployee(16)">Team Lead CS (EM)</div></td><td><span class="badge badge-red">On leave</span></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(16,0)" title="Robot Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(16,1)" title="Robot Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(16,2)" title="Subscription Billing: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(16,3)" title="Power BI: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(16,4)" title="MQOT Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(16,5)" title="Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(16,6)" title="Chemical Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(16,7)" title="System Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(16,8)" title="Replace Orders: None">—</button></td><td><div style="display:flex;gap:4px"><button class="btn btn-icon btn-icon-edit" onclick="editEmployee(16)" title="Edit"><i class="ti ti-pencil" aria-hidden="true"></i></button><button class="btn btn-icon btn-icon-del" onclick="confirmDelete(&#39;emp&#39;,16)" title="Delete"><i class="ti ti-trash" aria-hidden="true"></i></button></div></td></tr><tr><td><div class="person-name" style="cursor:pointer" onclick="editEmployee(17)">Myrthe Heeringa</div><div class="person-role" style="cursor:pointer" onclick="editEmployee(17)">CSR (EM)</div></td><td><span class="badge badge-green">Available</span></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(17,0)" title="Robot Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(17,1)" title="Robot Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(17,2)" title="Subscription Billing: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(17,3)" title="Power BI: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(17,4)" title="MQOT Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(17,5)" title="Part Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(17,6)" title="Chemical Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(17,7)" title="System Orders: None">—</button></td><td style="text-align:center"><button class="sdot s0" onclick="cycleSkill(17,8)" title="Replace Orders: None">—</button></td><td><div style="display:flex;gap:4px"><button class="btn btn-icon btn-icon-edit" onclick="editEmployee(17)" title="Edit"><i class="ti ti-pencil" aria-hidden="true"></i></button><button class="btn btn-icon btn-icon-del" onclick="confirmDelete(&#39;emp&#39;,17)" title="Delete"><i class="ti ti-trash" aria-hidden="true"></i></button></div></td></tr></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- Calendar -->
+<div class="page" id="page-calendar">
+  <div class="ph">
+    <div><div class="pt">Vacation Calendar</div><div class="ps" id="calMonth">June 2026</div></div>
+    <button class="btn btn-red" onclick="openModal(&#39;vacModal&#39;)"><i class="ti ti-plus" aria-hidden="true"></i> Add leave</button>
+  </div>
+  <div class="card">
+    <div class="card-body" style="padding:12px">
+      <div class="cal-wrap"><div id="calContainer"><div style="min-width:950px" class="cal-grid-inner"><div class="cal-header-row"><div class="cal-emp-col">Employee</div><div class="cal-days-row"><div class="cal-day-hd today">1</div><div class="cal-day-hd">2</div><div class="cal-day-hd">3</div><div class="cal-day-hd">4</div><div class="cal-day-hd">5</div><div class="cal-day-hd wknd">6</div><div class="cal-day-hd wknd">7</div><div class="cal-day-hd">8</div><div class="cal-day-hd">9</div><div class="cal-day-hd">10</div><div class="cal-day-hd">11</div><div class="cal-day-hd">12</div><div class="cal-day-hd wknd">13</div><div class="cal-day-hd wknd">14</div><div class="cal-day-hd">15</div><div class="cal-day-hd">16</div><div class="cal-day-hd">17</div><div class="cal-day-hd">18</div><div class="cal-day-hd">19</div><div class="cal-day-hd wknd">20</div><div class="cal-day-hd wknd">21</div><div class="cal-day-hd">22</div><div class="cal-day-hd">23</div><div class="cal-day-hd">24</div><div class="cal-day-hd">25</div><div class="cal-day-hd">26</div><div class="cal-day-hd wknd">27</div><div class="cal-day-hd wknd">28</div><div class="cal-day-hd">29</div><div class="cal-day-hd">30</div></div></div><div class="cal-row"><div class="cal-emp-cell"><div class="cal-emp-name" title="Arsalan M.">Arsalan</div></div><div class="cal-days-cells" style="min-width:840px"><div class="cal-cell today-c"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div></div></div><div class="cal-row"><div class="cal-emp-cell"><div class="cal-emp-name" title="Christophe Leruth">Christophe</div></div><div class="cal-days-cells" style="min-width:840px"><div class="cal-cell today-c"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="vbar" style="left:0px;width:390px;background:#1F7A5222;color:#1F7A52;border:1px solid #1F7A5244" onclick="editVacation(2)" title="Annual leave">Annual leave</div></div></div><div class="cal-row"><div class="cal-emp-cell"><div class="cal-emp-name" title="Alexndara Voets">Alexndara</div></div><div class="cal-days-cells" style="min-width:840px"><div class="cal-cell today-c"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div></div></div><div class="cal-row"><div class="cal-emp-cell"><div class="cal-emp-name" title="Anne-France Deckers">Anne-France</div></div><div class="cal-days-cells" style="min-width:840px"><div class="cal-cell today-c"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div></div></div><div class="cal-row"><div class="cal-emp-cell"><div class="cal-emp-name" title="Geneviève Defrance">Geneviève</div></div><div class="cal-days-cells" style="min-width:840px"><div class="cal-cell today-c"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div></div></div><div class="cal-row"><div class="cal-emp-cell"><div class="cal-emp-name" title="Isabelle Taton">Isabelle</div></div><div class="cal-days-cells" style="min-width:840px"><div class="cal-cell today-c"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div></div></div><div class="cal-row"><div class="cal-emp-cell"><div class="cal-emp-name" title="Natalie Claes">Natalie</div></div><div class="cal-days-cells" style="min-width:840px"><div class="cal-cell today-c"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div></div></div><div class="cal-row"><div class="cal-emp-cell"><div class="cal-emp-name" title="Oksana Bezdolya">Oksana</div></div><div class="cal-days-cells" style="min-width:840px"><div class="cal-cell today-c"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div></div></div><div class="cal-row"><div class="cal-emp-cell"><div class="cal-emp-name" title="Myriam Jehanno">Myriam</div></div><div class="cal-days-cells" style="min-width:840px"><div class="cal-cell today-c"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div></div></div><div class="cal-row"><div class="cal-emp-cell"><div class="cal-emp-name" title="Hanne Staniok">Hanne</div></div><div class="cal-days-cells" style="min-width:840px"><div class="cal-cell today-c"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div></div></div><div class="cal-row"><div class="cal-emp-cell"><div class="cal-emp-name" title="Dorthe Søgaard">Dorthe</div></div><div class="cal-days-cells" style="min-width:840px"><div class="cal-cell today-c"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div></div></div><div class="cal-row"><div class="cal-emp-cell"><div class="cal-emp-name" title="Karen Festersen Jensen">Karen</div></div><div class="cal-days-cells" style="min-width:840px"><div class="cal-cell today-c"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div></div></div><div class="cal-row"><div class="cal-emp-cell"><div class="cal-emp-name" title="Jolanda Hoevenberg">Jolanda</div></div><div class="cal-days-cells" style="min-width:840px"><div class="cal-cell today-c"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div></div></div><div class="cal-row"><div class="cal-emp-cell"><div class="cal-emp-name" title="Marianne Falk">Marianne</div></div><div class="cal-days-cells" style="min-width:840px"><div class="cal-cell today-c"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div></div></div><div class="cal-row"><div class="cal-emp-cell"><div class="cal-emp-name" title="Tina Kristoffersen">Tina</div></div><div class="cal-days-cells" style="min-width:840px"><div class="cal-cell today-c"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div></div></div><div class="cal-row"><div class="cal-emp-cell"><div class="cal-emp-name" title="Houda Abdeddaim">Houda</div></div><div class="cal-days-cells" style="min-width:840px"><div class="cal-cell today-c"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="vbar" style="left:0px;width:194px;background:#A0344A22;color:#A0344A;border:1px solid #A0344A44" onclick="editVacation(6)" title="Annual leave">Annual leave</div></div></div><div class="cal-row"><div class="cal-emp-cell"><div class="cal-emp-name" title="Myrthe Heeringa">Myrthe</div></div><div class="cal-days-cells" style="min-width:840px"><div class="cal-cell today-c"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell wknd"></div><div class="cal-cell wknd"></div><div class="cal-cell"></div><div class="cal-cell"></div></div></div></div></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-head"><div class="card-title">Leave entries</div></div>
+    <div class="card-body" id="vacList"><div class="person-row"><div class="avatar" style="background:#1F7A52;width:32px;height:32px;font-size:11px">CL</div><div style="flex:1"><div class="person-name">Christophe Leruth</div><div class="person-role">Annual leave · 2026-06-01 → 2026-06-14</div></div><div style="display:flex;gap:4px"><button class="btn btn-icon btn-icon-edit" onclick="editVacation(2)" style="width:28px;height:28px"><i class="ti ti-pencil" aria-hidden="true"></i></button><button class="btn btn-icon btn-icon-del" onclick="confirmDelete(&#39;vac&#39;,2)" style="width:28px;height:28px"><i class="ti ti-trash" aria-hidden="true"></i></button></div></div><div class="person-row"><div class="avatar" style="background:#A0344A;width:32px;height:32px;font-size:11px">HA</div><div style="flex:1"><div class="person-name">Houda Abdeddaim</div><div class="person-role">Annual leave · 2026-05-25 → 2026-06-07</div></div><div style="display:flex;gap:4px"><button class="btn btn-icon btn-icon-edit" onclick="editVacation(6)" style="width:28px;height:28px"><i class="ti ti-pencil" aria-hidden="true"></i></button><button class="btn btn-icon btn-icon-del" onclick="confirmDelete(&#39;vac&#39;,6)" style="width:28px;height:28px"><i class="ti ti-trash" aria-hidden="true"></i></button></div></div></div>
+  </div>
+</div>
+
+<!-- Coverage Finder -->
+<div class="page" id="page-coverage">
+  <div class="ph">
+    <div><div class="pt">Coverage Finder</div><div class="ps">Find the best person to cover during absence</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:300px 1fr;gap:16px" id="covGrid">
+    <div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">Search criteria</div></div>
+        <div class="card-body">
+          <div class="form-row"><label>Employee on leave</label><select id="covEmp" onchange="findCoverage()"><option value="1">Arsalan M.</option><option value="2">Christophe Leruth</option><option value="3">Alexndara Voets</option><option value="4">Anne-France Deckers</option><option value="5">Geneviève Defrance</option><option value="6">Isabelle Taton</option><option value="7">Natalie Claes</option><option value="8">Oksana Bezdolya</option><option value="9">Myriam Jehanno</option><option value="10">Hanne Staniok</option><option value="11">Dorthe Søgaard</option><option value="12">Karen Festersen Jensen</option><option value="13">Jolanda Hoevenberg</option><option value="14">Marianne Falk</option><option value="15">Tina Kristoffersen</option><option value="16">Houda Abdeddaim</option><option value="17">Myrthe Heeringa</option></select></div>
+          <div class="form-row"><label>Specific skill needed</label><select id="covSkill" onchange="findCoverage()"><option value="">All key skills</option><option value="0">Robot Orders</option><option value="1">Robot Part Orders</option><option value="2">Subscription Billing</option><option value="3">Power BI</option><option value="4">MQOT Orders</option><option value="5">Part Orders</option><option value="6">Chemical Orders</option><option value="7">System Orders</option><option value="8">Replace Orders</option></select></div>
+          <div class="form-row"><label>Minimum skill level</label>
+            <select id="covLevel" onchange="findCoverage()">
+              <option value="1">1 — Basic or above</option>
+              <option value="2" selected="">2 — Intermediate or above</option>
+              <option value="3">3 — Expert only</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="covResult"><div class="card"><div class="card-body" style="text-align:center;padding:24px"><i class="ti ti-alert-triangle" aria-hidden="true" style="font-size:28px;color:var(--red);display:block;margin-bottom:8px"></i><div style="font-size:13px;font-weight:500;color:var(--red)">No coverage found</div><div style="font-size:12px;color:var(--muted);margin-top:4px">All matching employees are on leave or skill level is too low. Consider external resource.</div></div></div></div>
+  </div>
+</div>
+
+</div><!-- /main -->
+</div><!-- /shell -->
+
+<!-- Mobile bottom nav -->
+<div class="bottom-nav">
+  <button class="bnav-item active" onclick="showPage(&#39;dash&#39;,this)"><i class="ti ti-layout-dashboard" aria-hidden="true"></i><span class="bnav-label">Dashboard</span></button>
+  <button class="bnav-item" onclick="showPage(&#39;skills&#39;,this)"><i class="ti ti-table" aria-hidden="true"></i><span class="bnav-label">Skills</span></button>
+  <button class="bnav-item" onclick="showPage(&#39;calendar&#39;,this)"><i class="ti ti-calendar" aria-hidden="true"></i><span class="bnav-label">Calendar</span></button>
+  <button class="bnav-item" onclick="showPage(&#39;coverage&#39;,this)"><i class="ti ti-shield-check" aria-hidden="true"></i><span class="bnav-label">Coverage</span></button>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- ── Modals ── -->
+
+<!-- Add/Edit Employee -->
+<div class="overlay" id="empModal">
+  <div class="modal">
+    <div class="modal-title" id="empModalTitle">Add employee</div>
+    <input type="hidden" id="empEditId">
+    <div class="form-2">
+      <div class="form-row"><label>Full name</label><input type="text" id="empName" placeholder="e.g. Anna Berg"></div>
+      <div class="form-row"><label>Role / Job title</label><input type="text" id="empRole" placeholder="e.g. D365 Consultant"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal(&#39;empModal&#39;)">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEmployee()">Save employee</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add/Edit Vacation -->
+<div class="overlay" id="vacModal">
+  <div class="modal">
+    <div class="modal-title" id="vacModalTitle">Add leave</div>
+    <input type="hidden" id="vacEditId" value="">
+    <div class="form-row"><label>Employee</label><select id="vacEmp"><option value="1">Arsalan M.</option><option value="2">Christophe Leruth</option><option value="3">Alexndara Voets</option><option value="4">Anne-France Deckers</option><option value="5">Geneviève Defrance</option><option value="6">Isabelle Taton</option><option value="7">Natalie Claes</option><option value="8">Oksana Bezdolya</option><option value="9">Myriam Jehanno</option><option value="10">Hanne Staniok</option><option value="11">Dorthe Søgaard</option><option value="12">Karen Festersen Jensen</option><option value="13">Jolanda Hoevenberg</option><option value="14">Marianne Falk</option><option value="15">Tina Kristoffersen</option><option value="16">Houda Abdeddaim</option><option value="17">Myrthe Heeringa</option></select></div>
+    <div class="form-row"><label>Leave type</label>
+      <select id="vacType">
+        <option>Annual leave</option><option>Sick leave</option>
+        <option>Training</option><option>Public holiday</option><option>Maternity/Paternity</option>
+      </select>
+    </div>
+    <div class="form-2">
+      <div class="form-row"><label>From</label><input type="date" id="vacFrom"></div>
+      <div class="form-row"><label>To</label><input type="date" id="vacTo"></div>
+    </div>
+    <div class="form-row"><label>Notes (optional)</label><input type="text" id="vacNotes" placeholder="e.g. contact via email"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal(&#39;vacModal&#39;)">Cancel</button>
+      <button class="btn btn-red" onclick="saveVacation()">Save leave</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Skills List -->
+<div class="overlay" id="skillsModal">
+  <div class="modal">
+    <div class="modal-title">Edit skills list</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Add, rename or remove skills. Changes apply to the whole matrix.</div>
+    <div class="skill-edit-list" id="skillEditList"></div>
+    <button class="btn btn-ghost" style="margin-top:10px;width:100%" onclick="addSkillRow()"><i class="ti ti-plus" aria-hidden="true"></i> Add skill</button>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal(&#39;skillsModal&#39;)">Cancel</button>
+      <button class="btn btn-primary" onclick="saveSkills()">Save skills</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm delete -->
+<div class="overlay" id="confirmModal">
+  <div class="modal" style="max-width:360px">
+    <div class="modal-title" id="confirmTitle">Are you sure?</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:20px" id="confirmBody"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal(&#39;confirmModal&#39;)">Cancel</button>
+      <button class="btn btn-red" id="confirmOk">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const COLORS=['#1E56C8','#D94535','#1F7A52','#B8720E','#5B3FC8','#0E7B8A','#A0344A','#4A7F1A','#B05CD0','#1A6B9A'];
+const col = id => COLORS[Math.abs(id)%COLORS.length];
+const ini = n => n.trim().split(/\s+/).map(p=>p[0]).join('').slice(0,2).toUpperCase();
+const pad = n => String(n).padStart(2,'0');
+const TODAY_STR = '2026-06-01';
+
+// ── State ──
+let STATE = {
+  employees:[
+    {id:1,name:'Arsalan M.',role:'IT Manager',skills:[3,2,2,2,2,1,1,0]},
+    {id:2,name:'Aman S.',role:'D365 Consultant',skills:[3,2,1,2,1,2,2,1]},
+    {id:3,name:'Sofia K.',role:'Power Platform Dev',skills:[1,3,2,3,3,1,0,0]},
+    {id:4,name:'Lars P.',role:'WMS Specialist',skills:[2,1,0,1,1,3,3,2]},
+    {id:5,name:'Emma R.',role:'CRM Analyst',skills:[1,2,3,2,2,0,0,1]},
+    {id:6,name:'Mong T.',role:'BI Developer',skills:[1,2,1,3,2,2,0,0]},
+    {id:7,name:'Henrik B.',role:'IT Support',skills:[2,1,1,1,2,1,1,0]},
+  ],
+  vacations:[
+    {id:1,empId:4,from:'2026-06-01',to:'2026-06-12',type:'Annual leave',notes:''},
+    {id:2,empId:2,from:'2026-06-08',to:'2026-06-19',type:'Annual leave',notes:''},
+    {id:3,empId:6,from:'2026-06-15',to:'2026-06-19',type:'Training',notes:''},
+    {id:4,empId:5,from:'2026-06-22',to:'2026-06-26',type:'Annual leave',notes:''},
+    {id:5,empId:3,from:'2026-06-29',to:'2026-07-10',type:'Annual leave',notes:''},
+  ],
+  skills:['D365 F&O','Power Platform','CRM/CE','Power BI','SharePoint','SQL','WMS','EDI'],
+  nextEmpId:8, nextVacId:6
+};
+
+function load(){
+  try{const s=localStorage.getItem('bm_coverage');if(s)STATE=JSON.parse(s);}catch(e){}
+}
+function save(){
+  try{localStorage.setItem('bm_coverage',JSON.stringify(STATE));}catch(e){}
+}
+
+// ── Status helpers ──
+function isAway(empId,date){return STATE.vacations.some(v=>v.empId===empId&&date>=v.from&&date<=v.to)}
+function getStatus(empId){
+  if(isAway(empId,TODAY_STR)) return 'vacation';
+  const soon='2026-06-14';
+  if(STATE.vacations.some(v=>v.empId===empId&&v.from<=soon&&v.from>=TODAY_STR)) return 'soon';
+  return 'available';
+}
+
+// ── Toast ──
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+// ── Modal ──
+function openModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+document.addEventListener('click',e=>{if(e.target.classList.contains('overlay'))closeModal(e.target.id)});
+
+// ── Show page ──
+function showPage(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item,.bnav-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(el){el.classList.add('active');
+    // also sync sidebar/bottom
+    document.querySelectorAll('.nav-item,.bnav-item').forEach(b=>{
+      if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes("'"+id+"'")) b.classList.add('active');
+    });
+  }
+  if(id==='coverage') findCoverage();
+  if(id==='calendar') renderCalendar();
+}
+
+// ── Dashboard ──
+function renderDash(){
+  const onVac=STATE.employees.filter(e=>getStatus(e.id)==='vacation').length;
+  const avail=STATE.employees.filter(e=>getStatus(e.id)==='available').length;
+  const experts=STATE.employees.reduce((a,e)=>a+e.skills.filter(s=>s===3).length,0);
+  document.getElementById('statGrid').innerHTML=`
+    <div class="stat"><div class="stat-label">Team</div><div class="stat-val">${STATE.employees.length}</div><div class="stat-note">employees</div></div>
+    <div class="stat"><div class="stat-label">Available</div><div class="stat-val" style="color:var(--green)">${avail}</div><div class="stat-note">in office</div></div>
+    <div class="stat"><div class="stat-label">On leave</div><div class="stat-val" style="color:var(--red)">${onVac}</div><div class="stat-note">currently</div></div>
+    <div class="stat"><div class="stat-label">Experts</div><div class="stat-val" style="color:var(--blue)">${experts}</div><div class="stat-note">level 3</div></div>`;
+  document.getElementById('dashDate').textContent='Week of June 1, 2026';
+  // Alerts
+  let html='';
+  STATE.skills.forEach((skill,si)=>{
+    const experts=STATE.employees.filter(e=>e.skills[si]>=3);
+    const awayExp=experts.filter(e=>getStatus(e.id)==='vacation');
+    if(awayExp.length>0&&experts.length<=2){
+      html+=`<div class="alert alert-red"><i class="ti ti-alert-triangle" aria-hidden="true" style="color:var(--red)"></i><div><div class="alert-title" style="color:var(--red)">${skill} at risk</div><div class="alert-body">${awayExp.map(e=>e.name).join(', ')} away — ${experts.length-awayExp.length} expert(s) left</div></div></div>`;
+    }
+  });
+  if(!html)html=`<div class="alert alert-green"><i class="ti ti-shield-check" aria-hidden="true" style="color:var(--green)"></i><div><div class="alert-title" style="color:var(--green)">All covered</div><div class="alert-body">No critical skill gaps this week.</div></div></div>`;
+  document.getElementById('alertsPanel').innerHTML=html;
+  // Away
+  const away=STATE.employees.filter(e=>getStatus(e.id)!=='available');
+  if(!away.length){document.getElementById('awayPanel').innerHTML=`<div style="text-align:center;padding:10px;font-size:12px;color:var(--muted)">Everyone in the office 🎉</div>`;return;}
+  document.getElementById('awayPanel').innerHTML=away.map(e=>{
+    const v=STATE.vacations.find(v=>v.empId===e.id);
+    const s=getStatus(e.id);
+    return `<div class="person-row"><div class="avatar" style="background:${col(e.id)}">${ini(e.name)}</div><div style="flex:1"><div class="person-name">${e.name}</div><div class="person-role">${v?v.type+' · '+v.from+' → '+v.to:''}</div></div><span class="badge ${s==='vacation'?'badge-red':'badge-amber'}">${s==='vacation'?'Away':'Soon'}</span></div>`;
+  }).join('');
+}
+
+// ── Skill Matrix ──
+function renderMatrix(){
+  const skills=STATE.skills;
+  let th=`<thead><tr><th style="min-width:150px">Employee</th><th>Status</th>`;
+  skills.forEach(s=>{th+=`<th class="sc">${s}</th>`;});
+  th+=`<th style="min-width:80px">Actions</th></tr></thead>`;
+  let tb='<tbody>';
+  STATE.employees.forEach(emp=>{
+    const s=getStatus(emp.id);
+    const sLabel=s==='vacation'?'On leave':s==='soon'?'Away soon':'Available';
+    const sCls=s==='vacation'?'badge-red':s==='soon'?'badge-amber':'badge-green';
+    // Ensure skills array length matches
+    while(emp.skills.length<skills.length) emp.skills.push(0);
+    tb+=`<tr><td><div class="person-name" style="cursor:pointer" onclick="editEmployee(${emp.id})">${emp.name}</div><div class="person-role" style="cursor:pointer" onclick="editEmployee(${emp.id})">${emp.role}</div></td><td><span class="badge ${sCls}">${sLabel}</span></td>`;
+    emp.skills.slice(0,skills.length).forEach((level,si)=>{
+      const labels=['—','1','2','3'];
+      tb+=`<td style="text-align:center"><button class="sdot s${level}" onclick="cycleSkill(${emp.id},${si})" title="${skills[si]}: ${['None','Basic','Intermediate','Expert'][level]}">${labels[level]}</button></td>`;
+    });
+    tb+=`<td><div style="display:flex;gap:4px"><button class="btn btn-icon btn-icon-edit" onclick="editEmployee(${emp.id})" title="Edit"><i class="ti ti-pencil" aria-hidden="true"></i></button><button class="btn btn-icon btn-icon-del" onclick="confirmDelete('emp',${emp.id})" title="Delete"><i class="ti ti-trash" aria-hidden="true"></i></button></div></td></tr>`;
+  });
+  tb+='</tbody>';
+  document.getElementById('matrixTable').innerHTML=th+tb;
+}
+
+function cycleSkill(empId,si){
+  const emp=STATE.employees.find(e=>e.id===empId);
+  emp.skills[si]=(emp.skills[si]+1)%4;
+  save();renderMatrix();renderDash();
+}
+
+// ── Calendar ──
+function renderCalendar(){
+  const year=2026,month=5,days=30;
+  const cw=28;
+  document.getElementById('calMonth').textContent='June 2026';
+  // Build header
+  let hdr=`<div class="cal-header-row"><div class="cal-emp-col">Employee</div><div class="cal-days-row">`;
+  for(let d=1;d<=days;d++){
+    const dow=new Date(year,month,d).getDay();
+    const wknd=dow===0||dow===6;
+    const tdy=d===1;
+    hdr+=`<div class="cal-day-hd${wknd?' wknd':''}${tdy?' today':''}">${d}</div>`;
+  }
+  hdr+=`</div></div>`;
+  let rows=STATE.employees.map(emp=>{
+    let cells='';
+    for(let d=1;d<=days;d++){
+      const dow=new Date(year,month,d).getDay();
+      const wknd=dow===0||dow===6;
+      cells+=`<div class="cal-cell${wknd?' wknd':''}${d===1?' today-c':''}"></div>`;
+    }
+    let bars='';
+    STATE.vacations.filter(v=>v.empId===emp.id).forEach(v=>{
+      const from=new Date(v.from),to=new Date(v.to);
+      const mStart=new Date(year,month,1),mEnd=new Date(year,month,days);
+      if(from<=mEnd&&to>=mStart){
+        const sd=Math.max(1,(from.getMonth()===month?from.getDate():1))-1;
+        const ed=Math.min(days,to.getMonth()===month?to.getDate():days);
+        const left=sd*cw,width=(ed-sd)*cw-2;
+        const c=col(emp.id);
+        bars+=`<div class="vbar" style="left:${left}px;width:${width}px;background:${c}22;color:${c};border:1px solid ${c}44" onclick="editVacation(${v.id})" title="${v.type}${v.notes?' — '+v.notes:''}">${v.type}</div>`;
+      }
+    });
+    return `<div class="cal-row"><div class="cal-emp-cell"><div class="cal-emp-name" title="${emp.name}">${emp.name.split(' ')[0]}</div></div><div class="cal-days-cells" style="min-width:${days*cw}px">${cells}${bars}</div></div>`;
+  }).join('');
+  document.getElementById('calContainer').innerHTML=`<div style="min-width:${110+days*cw}px" class="cal-grid-inner">${hdr}${rows}</div>`;
+  // Vac list
+  document.getElementById('vacList').innerHTML=STATE.vacations.length?STATE.vacations.map(v=>{
+    const emp=STATE.employees.find(e=>e.id===v.empId);
+    if(!emp) return '';
+    return `<div class="person-row"><div class="avatar" style="background:${col(emp.id)};width:32px;height:32px;font-size:11px">${ini(emp.name)}</div><div style="flex:1"><div class="person-name">${emp.name}</div><div class="person-role">${v.type} · ${v.from} → ${v.to}${v.notes?' · '+v.notes:''}</div></div><div style="display:flex;gap:4px"><button class="btn btn-icon btn-icon-edit" onclick="editVacation(${v.id})" style="width:28px;height:28px"><i class="ti ti-pencil" aria-hidden="true"></i></button><button class="btn btn-icon btn-icon-del" onclick="confirmDelete('vac',${v.id})" style="width:28px;height:28px"><i class="ti ti-trash" aria-hidden="true"></i></button></div></div>`;
+  }).join(''):'<div style="font-size:12px;color:var(--muted);text-align:center;padding:8px">No leave entries yet</div>';
+}
+
+// ── Coverage ──
+function findCoverage(){
+  const empId=parseInt(document.getElementById('covEmp').value);
+  const skillIdx=document.getElementById('covSkill').value;
+  const minLevel=parseInt(document.getElementById('covLevel').value)||2;
+  const emp=STATE.employees.find(e=>e.id===empId);
+  if(!emp){document.getElementById('covResult').innerHTML='';return;}
+  const needed=skillIdx===''?emp.skills.map((s,i)=>s>=2?i:-1).filter(i=>i>=0):[parseInt(skillIdx)];
+  const maxScore=needed.length*3;
+  const candidates=STATE.employees.filter(e=>{
+    if(e.id===empId) return false;
+    if(getStatus(e.id)==='vacation') return false;
+    return needed.some(si=>(e.skills[si]||0)>=minLevel);
+  }).map(e=>{
+    const score=needed.reduce((a,si)=>a+(e.skills[si]||0),0);
+    const matched=needed.filter(si=>(e.skills[si]||0)>=minLevel).map(si=>STATE.skills[si]);
+    return{...e,score,matched};
+  }).sort((a,b)=>b.score-a.score).slice(0,5);
+  if(!candidates.length){
+    document.getElementById('covResult').innerHTML=`<div class="card"><div class="card-body" style="text-align:center;padding:24px"><i class="ti ti-alert-triangle" aria-hidden="true" style="font-size:28px;color:var(--red);display:block;margin-bottom:8px"></i><div style="font-size:13px;font-weight:500;color:var(--red)">No coverage found</div><div style="font-size:12px;color:var(--muted);margin-top:4px">All matching employees are on leave or skill level is too low. Consider external resource.</div></div></div>`;
+    return;
+  }
+  document.getElementById('covResult').innerHTML=`<div class="card">
+    <div class="card-head"><div><div class="card-title">Best matches for ${emp.name}</div><div class="card-sub">Ranked by skill compatibility · ${candidates.length} candidates</div></div></div>
+    <div class="card-body">
+    ${candidates.map((c,i)=>{
+      const pct=maxScore>0?Math.round(c.score/maxScore*100):0;
+      const rankColors=['var(--green)','var(--blue)','var(--amber)','var(--muted)','var(--hint)'];
+      return `<div class="person-row"><div class="cov-rank" style="background:${rankColors[i]||'var(--muted)'}">${i+1}</div>
+        <div class="avatar" style="background:${col(c.id)}">${ini(c.name)}</div>
+        <div style="flex:1"><div class="person-name">${c.name} <span style="font-size:11px;color:var(--muted);font-weight:400">— ${c.role}</span></div>
+        <div style="font-size:11px;color:var(--muted)">${c.matched.join(', ')||'General support'}</div>
+        <div class="score-bar"><div class="score-fill" style="width:${pct}%;background:${rankColors[i]||'var(--muted)'}"></div></div></div>
+        <span class="badge badge-blue" style="font-family:var(--mono)">${pct}%</span></div>`;
+    }).join('')}
+    <div style="background:var(--bg);border-radius:10px;padding:12px;margin-top:12px;font-size:12px;color:var(--muted);line-height:1.7">
+      <strong style="color:var(--navy)">Suggested plan:</strong> Assign ${emp.name}'s key tasks to <strong>${candidates[0].name}</strong> as primary${candidates[1]?`, with <strong>${candidates[1].name}</strong> handling overflow`:''}. Review skill gaps and arrange knowledge transfer before leave starts.
+    </div></div></div>`;
+}
+
+// ── Employee CRUD ──
+function openAddEmployee(){
+  document.getElementById('empEditId').value='';
+  document.getElementById('empModalTitle').textContent='Add employee';
+  document.getElementById('empName').value='';
+  document.getElementById('empRole').value='';
+  openModal('empModal');
+}
+
+function editEmployee(id){
+  const emp=STATE.employees.find(e=>e.id===id);
+  if(!emp) return;
+  document.getElementById('empEditId').value=id;
+  document.getElementById('empModalTitle').textContent='Edit employee';
+  document.getElementById('empName').value=emp.name;
+  document.getElementById('empRole').value=emp.role;
+  openModal('empModal');
+}
+
+function saveEmployee(){
+  const id=document.getElementById('empEditId').value;
+  const name=document.getElementById('empName').value.trim();
+  const role=document.getElementById('empRole').value.trim();
+  if(!name){alert('Please enter a name');return;}
+  if(id){
+    const emp=STATE.employees.find(e=>e.id===parseInt(id));
+    if(emp){emp.name=name;emp.role=role;}
+    toast('Employee updated');
+  } else {
+    STATE.employees.push({id:STATE.nextEmpId++,name,role,skills:new Array(STATE.skills.length).fill(0)});
+    toast('Employee added');
+  }
+  closeModal('empModal');save();renderAll();populateSelects();
+}
+
+// ── Vacation CRUD ──
+function editVacation(id){
+  const v=STATE.vacations.find(v=>v.id===id);
+  if(!v) return;
+  populateSelects();
+  document.getElementById('vacEditId').value=id;
+  document.getElementById('vacModalTitle').textContent='Edit leave';
+  document.getElementById('vacEmp').value=v.empId;
+  document.getElementById('vacType').value=v.type;
+  document.getElementById('vacFrom').value=v.from;
+  document.getElementById('vacTo').value=v.to;
+  document.getElementById('vacNotes').value=v.notes||'';
+  openModal('vacModal');
+}
+
+function saveVacation(){
+  const editId=document.getElementById('vacEditId').value;
+  const empId=parseInt(document.getElementById('vacEmp').value);
+  const from=document.getElementById('vacFrom').value;
+  const to=document.getElementById('vacTo').value;
+  const type=document.getElementById('vacType').value;
+  const notes=document.getElementById('vacNotes').value.trim();
+  if(!from||!to){alert('Please select dates');return;}
+  if(from>to){alert('End date must be after start date');return;}
+  if(editId){
+    const v=STATE.vacations.find(v=>v.id===parseInt(editId));
+    if(v){Object.assign(v,{empId,from,to,type,notes});}
+    toast('Leave updated');
+  } else {
+    STATE.vacations.push({id:STATE.nextVacId++,empId,from,to,type,notes});
+    toast('Leave added');
+  }
+  closeModal('vacModal');save();renderAll();
+}
+
+// ── Skills edit ──
+function openSkillsModal(){
+  const list=document.getElementById('skillEditList');
+  list.innerHTML=STATE.skills.map((s,i)=>`
+    <div class="skill-edit-row" id="skill-row-${i}">
+      <input type="text" value="${s}" id="skill-input-${i}" placeholder="Skill name">
+      <button class="btn btn-icon btn-icon-del" onclick="removeSkillRow(${i})"><i class="ti ti-trash" aria-hidden="true"></i></button>
+    </div>`).join('');
+  openModal('skillsModal');
+}
+
+function addSkillRow(){
+  const list=document.getElementById('skillEditList');
+  const idx=list.children.length;
+  const row=document.createElement('div');
+  row.className='skill-edit-row';
+  row.id=`skill-row-${idx}`;
+  row.innerHTML=`<input type="text" id="skill-input-${idx}" placeholder="New skill name"><button class="btn btn-icon btn-icon-del" onclick="this.parentElement.remove()"><i class="ti ti-trash" aria-hidden="true"></i></button>`;
+  list.appendChild(row);
+}
+
+function removeSkillRow(i){
+  document.getElementById(`skill-row-${i}`)?.remove();
+}
+
+function saveSkills(){
+  const inputs=document.querySelectorAll('#skillEditList input[type="text"]');
+  const newSkills=[...inputs].map(i=>i.value.trim()).filter(Boolean);
+  if(!newSkills.length){alert('Please add at least one skill');return;}
+  const old=STATE.skills;
+  // Rebuild skill arrays for all employees
+  STATE.employees.forEach(emp=>{
+    const newArr=newSkills.map((s,ni)=>{
+      const oi=old.indexOf(s);
+      return oi>=0?(emp.skills[oi]||0):0;
+    });
+    emp.skills=newArr;
+  });
+  STATE.skills=newSkills;
+  closeModal('skillsModal');save();renderAll();toast('Skills updated');
+}
+
+// ── Delete confirm ──
+function confirmDelete(type,id){
+  document.getElementById('confirmTitle').textContent=type==='emp'?'Delete employee?':'Delete leave entry?';
+  document.getElementById('confirmBody').textContent=type==='emp'?'This will remove the employee and all their leave entries from the app.':'This will remove this leave entry.';
+  document.getElementById('confirmOk').onclick=()=>doDelete(type,id);
+  openModal('confirmModal');
+}
+
+function doDelete(type,id){
+  if(type==='emp'){
+    STATE.employees=STATE.employees.filter(e=>e.id!==id);
+    STATE.vacations=STATE.vacations.filter(v=>v.empId!==id);
+    toast('Employee removed');
+  } else {
+    STATE.vacations=STATE.vacations.filter(v=>v.id!==id);
+    toast('Leave entry removed');
+  }
+  closeModal('confirmModal');save();renderAll();populateSelects();
+}
+
+// ── Populate selects ──
+function populateSelects(){
+  const opts=STATE.employees.map(e=>`<option value="${e.id}">${e.name}</option>`).join('');
+  ['vacEmp','covEmp'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=opts;});
+  document.getElementById('covSkill').innerHTML='<option value="">All key skills</option>'+STATE.skills.map((s,i)=>`<option value="${i}">${s}</option>`).join('');
+}
+
+// ── Override sidebar nav item clicks to open modal where needed ──
+document.querySelector('.sidebar').addEventListener('click',e=>{
+  const btn=e.target.closest('.nav-item');
+  if(!btn) return;
+  const oc=btn.getAttribute('onclick')||'';
+  if(oc.includes('empModal')){openAddEmployee();}
+  else if(oc.includes('vacModal')){
+    populateSelects();
+    document.getElementById('vacEditId').value='';
+    document.getElementById('vacModalTitle').textContent='Add leave';
+    const now=new Date();
+    document.getElementById('vacFrom').value=`${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
+    document.getElementById('vacTo').value=`${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
+    document.getElementById('vacNotes').value='';
+    openModal('vacModal');
+  }
+  else if(oc.includes('skillsModal')){openSkillsModal();}
+});
+
+// ── Responsive dash grid ──
+function checkResponsive(){
+  const dg=document.querySelector('.dash-grid');
+  if(dg) dg.style.gridTemplateColumns=window.innerWidth<700?'1fr':'1fr 1fr';
+  const cg=document.getElementById('covGrid');
+  if(cg) cg.style.gridTemplateColumns=window.innerWidth<800?'1fr':'300px 1fr';
+}
+window.addEventListener('resize',checkResponsive);
+
+function renderAll(){renderDash();renderMatrix();renderCalendar();}
+
+// ── Init ──
+load();
+populateSelects();
+// Set today's date default in vacation form
+const now=new Date();
+const ds=`${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
+['vacFrom','vacTo'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=ds;});
+document.getElementById('vacEditId').value='';
+checkResponsive();
+renderAll();
+findCoverage();
+</script>
+
+
+</body></html>
